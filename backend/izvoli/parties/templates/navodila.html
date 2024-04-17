@@ -1,0 +1,34 @@
+{% extends "./base.html" %}
+
+{% block content %}
+
+<div class="quiz-body">
+    <h1>NAVODILA ZA SODELOVANJE</h1>
+
+    <p>Na tej strani najdete 33 trditev, vezanih na pomembnejše evropske teme, ki bodo vključene v volilno aplikacijo Izvoli.eu.</p>
+    
+    <p>Prosimo vas, da za vsako od trditev izberete, ali se z njo strinjate (v tem primeru stališče označite z DA), se z njo ne
+    strinjate (v tem primeru stališče označite z NE) ali pa ste do nje neopredeljeni (v tem primeru izberete možnost
+    NEOPREDELJENO). Prosimo vas, da se zadnji možnosti v največji meri izogibate, saj želimo zagotoviti čim bolj jasno
+    analizo vaših političnih stališč.</p>
+
+    <p>Za vsako od trditev lahko podate tudi krajši komentar, s katerim dodatno pojasnite svoje mnenje (omejeno na 500 znakov).</p>
+    
+    <p>Vseh odgovorov ni treba podati v enem kosu, saj lahko vmesno delo shranjujete s pritiskom na gumb “Shrani”, ki ga
+    najdete na dnu strani. K izpolnjevanju se lahko vrnete kadar koli, pri čemer lahko spreminjate že postavljene odgovore
+    (a ne pozabite shraniti vašega dela).</p>
+
+    <p>Ko boste zaključili z odgovarjanjem, se bo v sklopu “Zaključek” prikazal gumb “Oddaj”. S klikom nanj boste dokončno
+    oddali odgovore, teh pa nato ne bo več mogoče spreminjati.</p>
+
+    <p>Prosimo vas, da vprašalnik izpolnete do ponedeljka, 29. aprila 2024, do 12. ure. Za vsa morebitna vprašanja ali dodatne
+    informacije smo vam na razpolago na <a href="mailto:info@izvoli.eu">info@izvoli.eu</a>.</p>
+
+    <p>Že vnaprej se vam zahvaljujemo za sodelovanje.</p>
+    
+    <div class="button-wrapper">
+        <a href="/{{ election_slug }}/stranke/vprasalnik" class="button">Začnite</a>
+    </div>
+</div>
+
+{% endblock %}

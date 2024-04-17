@@ -1,0 +1,30 @@
+{% extends "./base.html" %}
+{% load static %}
+
+{% block content %}
+<div>
+    <div class="summary">
+        <h3>POVZETEK ODGOVOROV</h3>
+    </div>
+    {% for answer in answers %}
+        <div class="summary">
+            <h3>{{ forloop.counter }}. {{ answer.statement.title }}</h3>
+            {% if answer.statement.description %}
+                <p>{{ answer.statement.description }}</p>
+            {% endif %}
+            <p>
+                {% if answer.answer == "YES" %}
+                DA
+                {% elif answer.answer == "NO" %}
+                NE
+                {% else %}
+                NEOPREDELJENO
+                {% endif %}</p>
+            {% if answer.comment %}
+                <h5>Komentar:</h6>
+                <p>{{ answer.comment }}</p>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

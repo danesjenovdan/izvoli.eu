@@ -1,0 +1,11 @@
+# IDEs
+.vscode
+.idea
+
+# kustomize secrets
+/kustomize/secrets.yaml
+.env
+
+.DS_Store
+
+*.dump

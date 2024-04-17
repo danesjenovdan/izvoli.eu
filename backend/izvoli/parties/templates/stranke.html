@@ -1,0 +1,70 @@
+{% extends "./base.html" %}
+
+{% block content %}
+
+<div class="demand-quiz">
+    <form method="POST" class="demand-quiz-form" autocomplete="off">
+        {% csrf_token %}
+        {{ formset.management_form }}
+        
+        {% for form in forms %}
+        <div class="demand-answer-form">
+            <h1>{{ forloop.counter }}. {{ form.title }}</h1>
+
+            {% if form.description %}
+            <p>{{ form.description }}</p>
+            {% endif %}
+            
+            <div class="form-agree-radio">
+                <label for="id_form-{{ forloop.counter0 }}-answer_0">
+                    <input 
+                        type="radio" 
+                        name="form-{{ forloop.counter0 }}-answer" 
+                        value="YES" 
+                        id="id_form-{{ forloop.counter0 }}-answer_0" {% if form.answer == "YES" %} checked {% endif %}
+                        onclick="party_quiz_radio_click(this);"
+                    >
+                    DA
+                </label>
+            </div>
+            <div class="form-agree-radio">
+                <label for="id_form-{{ forloop.counter0 }}-answer_1">
+                    <input 
+                        type="radio" 
+                        name="form-{{ forloop.counter0 }}-answer" 
+                        value="NO" 
+                        id="id_form-{{ forloop.counter0 }}-answer_1" {% if form.answer == "NO" %} checked {% endif %}
+                        onclick="party_quiz_radio_click(this);"
+                    >
+                    NE
+                </label>
+            </div>
+            <div class="form-agree-radio">
+                <label for="id_form-{{ forloop.counter0 }}-answer_2">
+                    <input type="radio" name="form-{{ forloop.counter0 }}-answer" value="NEUTRAL"
+                        id="id_form-{{ forloop.counter0 }}-answer_2" {% if form.answer == "NEUTRAL" %} checked {% endif %}
+                        onclick="party_quiz_radio_click(this);">
+                    NEOPREDELJENO
+                </label>
+            </div>
+            
+            <div class="form-comment">
+                <h4>Če želite, lahko dodate komentar: (največ 500 znakov)</h4>
+                <textarea name="form-{{ forloop.counter0 }}-comment" cols="40" rows="10" id="id_form-{{ forloop.counter0 }}-comment" maxlength="500">{{ form.comment }}</textarea>
+            </div>
+
+            <input type="hidden" name="form-{{ forloop.counter0 }}-statement" id="id_form-{{ forloop.counter0 }}-statement" value="{{ form.statement }}">
+            <input type="hidden" name="form-{{ forloop.counter0 }}-party" id="id_form-{{ forloop.counter0 }}-party" value="{{ form.party }}">
+
+        </div>
+        
+        {% endfor %}
+
+
+        <div class="button-wrapper">
+            <button class="submit" type="submit">Shrani in nadaljuj</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

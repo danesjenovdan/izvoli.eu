@@ -1,0 +1,56 @@
+{% load static %}
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
+    
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="Izvoli.eu">
+        <meta property="og:description" content="">
+        <!-- <meta property="og:image" content="{% static 'img/glas-ljudstva-og.png' %}"> -->
+    
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="Izvoli.eu">
+        <meta name="twitter:description" content="">
+        <!-- <meta name="twitter:image" content="{% static 'img/glas-ljudstva-og.png' %}"> -->
+    
+        <meta name="author" content="Izvoli.eu">
+    
+        <title>Izvoli.eu</title>
+    
+        <!-- <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/apple-touch-icon.png' %}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32x32.png' %}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon-16x16.png' %}">
+        <link rel="manifest" href="{% static 'img/site.webmanifest' %}">
+        <link rel="mask-icon" href="{% static 'img/safari-pinned-tab.svg' %}" color="#5bbad5">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="theme-color" content="#ffffff"> -->
+    
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <!-- <script defer data-domain="glas-ljudstva.si" src="https://plausible.lb.djnd.si/js/plausible.js"></script> -->
+    </head>
+    
+    <body>
+        <div class="container">
+            <div class="row stranke">
+                <div class="sidebar">
+                    <div {% if step == 1 %}class="active" {% endif %}>
+                        <a href="/{{ election_slug }}/stranke/navodila">Navodila</a>
+                    </div>
+                    <div {% if step == 2 %}class="active" {% endif %}>
+                        <a href="/{{ election_slug }}/stranke/vprasalnik">Vprašalnik</a>
+                    </div>
+                    <div {% if step == 3 %}class="active" {% endif %}>
+                        <a href="/{{ election_slug }}/stranke/oddaja">Zaključek</a>
+                    </div>
+                </div>
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="{% static 'js/script.js' %}?v=2"></script>
+    </body>
+</html>

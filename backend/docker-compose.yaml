@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  backend:
+    build: ./izvoli
+    ports:
+      - 8000:8000
+    environment:
+      PYTHONUNBUFFERED: 1
+      DJANGO_DEBUG: "yes"
+      DJANGO_SECRET_KEY: make-me-secret
+      DJANGO_DATABASE_HOST: db
+      MAUTIC_URL: http://mautic.hostname/api/
+      MAUTIC_USER: change_mautic_user
+      MAUTIC_PASSWORD: change_mautic_password
+    volumes:
+      - ./izvoli:/app:delegated,rw
+    depends_on:
+      - db
+
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: izvoli
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
