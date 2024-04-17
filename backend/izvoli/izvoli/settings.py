@@ -44,6 +44,7 @@ DEBUG = env["DEBUG"]
 
 # ALLOWED_HOSTS = ["izvoli-eu.lb.djnd.si"]
 ALLOWED_HOSTS = ["*"]
+CSRF_TRUSTED_ORIGINS = ["https://*.izvoli-eu.lb.djnd.si"]
 
 # Application definition
 
