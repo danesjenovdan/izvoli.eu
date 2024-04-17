@@ -4,11 +4,11 @@
 {% block content %}
 <div>
     <div class="summary">
-        <h3>POVZETEK ODGOVOROV</h3>
+        <h1>Povzetek odgovorov</h1>
     </div>
     {% for answer in answers %}
         <div class="summary">
-            <h3>{{ forloop.counter }}. {{ answer.statement.title }}</h3>
+            <h2>{{ forloop.counter }}. {{ answer.statement.title }}</h2>
             {% if answer.statement.description %}
                 <p>{{ answer.statement.description }}</p>
             {% endif %}
@@ -21,7 +21,7 @@
                 NEOPREDELJENO
                 {% endif %}</p>
             {% if answer.comment %}
-                <h5>Komentar:</h6>
+                <p><strong>Komentar:</strong></p>
                 <p>{{ answer.comment }}</p>
             {% endif %}
         </div>
