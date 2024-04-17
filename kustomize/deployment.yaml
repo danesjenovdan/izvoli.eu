@@ -1,0 +1,115 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: izvoli
+  labels:
+    app: izvoli
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: izvoli
+  template:
+    metadata:
+      labels:
+        app: izvoli
+    spec:
+      securityContext:
+        fsGroup: 1000
+      volumes:
+        - name: izvoli-storage
+          emptyDir: {}
+      initContainers:
+        - name: collectstatic
+          image: izvoli
+          volumeMounts:
+            - name: izvoli-storage
+              mountPath: /storage
+          command:
+            - python
+            - manage.py
+            - collectstatic
+            - --no-input
+          env:
+            - name: DJANGO_SETTINGS_MODULE
+              value: izvoli.settings
+          envFrom:
+            - secretRef:
+                name: izvoli-credentials
+          resources:
+            requests:
+              memory: 1Gi
+              cpu: 500m
+            limits:
+              memory: 1Gi
+              cpu: 500m
+        - name: migrate
+          image: izvoli
+          command:
+            - python
+            - manage.py
+            - migrate
+            - --noinput
+          env:
+            - name: DJANGO_SETTINGS_MODULE
+              value: izvoli.settings
+          envFrom:
+            - secretRef:
+                name: izvoli-credentials
+          resources:
+            requests:
+              memory: 1Gi
+              cpu: 500m
+            limits:
+              memory: 1Gi
+              cpu: 500m
+      containers:
+        - name: izvoli
+          image: izvoli
+          volumeMounts:
+            - name: izvoli-storage
+              mountPath: /storage
+          command:
+            - gunicorn
+            - rog.wsgi:application
+            - -b
+            - 0.0.0.0:8000
+            - --log-level
+            - DEBUG
+            - --workers
+            - "1"
+            - --threads
+            - "3"
+            - --timeout
+            - "90"
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - secretRef:
+                name: izvoli-credentials
+          env:
+            - name: DJANGO_SETTINGS_MODULE
+              value: izvoli.settings
+          resources:
+            requests:
+              memory: 1Gi
+              cpu: 500m
+            limits:
+              memory: 1Gi
+              cpu: 1500m
+        - name: izvoli-nginx
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          image: nginx:alpine
+          volumeMounts:
+            - name: izvoli-storage
+              mountPath: /usr/share/nginx/html
+          resources:
+            requests:
+              memory: 200Mi
+              cpu: 100m
+            limits:
+              memory: 200Mi
+              cpu: 100m
