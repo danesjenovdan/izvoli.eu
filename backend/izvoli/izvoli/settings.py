@@ -30,8 +30,6 @@ env = dict(
     DATABASE_PASSWORD=os.getenv("DJANGO_DATABASE_PASSWORD", "postgres"),
     STATIC_ROOT=os.getenv("DJANGO_STATIC_ROOT", os.path.join(BASE_DIR, "../static")),
     STATIC_URL=os.getenv("DJANGO_STATIC_URL_BASE", "/static/"),
-    MEDIA_ROOT=os.getenv("DJANGO_MEDIA_ROOT", os.path.join(BASE_DIR, "media")),
-    MEDIA_URL=os.getenv("DJANGO_MEDIA_URL_BASE", "/media/"),
 )
 
 
@@ -152,8 +150,8 @@ STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesSto
 STATIC_ROOT = env["STATIC_ROOT"]
 STATIC_URL = env["STATIC_URL"]
 
-MEDIA_ROOT = env["MEDIA_ROOT"]
-MEDIA_URL = env["MEDIA_URL"]
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = "/media/"
 
 if os.getenv("DJANGO_ENABLE_S3", False):
     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
