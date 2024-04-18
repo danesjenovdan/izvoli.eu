@@ -1,0 +1,28 @@
+{% extends "registration/base.html" %}
+
+{% block title %}Prijava{% endblock %}
+
+{% block content %}
+
+
+<form method="POST" class="registration-form">
+  {% csrf_token %}
+  <p>
+    <label for="id_username">Uporabniško ime</label>
+    {{ form.username }}
+  </p>
+  {{ form.username.errors }}
+
+  <p>
+    <label for="id_password">Geslo:</label>
+    {{ form.password }}
+  </p>
+  {{ form.password.errors }}
+
+  <p class="error">Napaka:</p>
+  {{ form.non_field_errors }}
+
+  <button type="submit" class="button">Prijava</button>
+
+</form>
+{% endblock %}
