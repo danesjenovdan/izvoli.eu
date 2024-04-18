@@ -104,6 +104,21 @@ a {
     text-decoration: none !important;
 }
 
+.registration-form label {
+    font-weight: 800;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.registration-form .button {
+    margin-top: 20px;
+}
+
+.registration-form .error {
+    font-weight: 800;
+    color: red;
+}
+
 .menu {
     flex-direction: column; 
     align-items: flex-end;
@@ -634,8 +649,8 @@ button {
     padding: 20px 0;
 }
 
-.quiz-body .button,
-.demand-quiz .button {
+.button,
+.button {
     display: inline-block;
     border: 2px solid black;
     font-size: 20px;
@@ -645,8 +660,8 @@ button {
     text-decoration: none;
 }
 
-.quiz-body .button:hover,
-.demand-quiz .button:hover {
+.button:hover,
+.button:hover {
     background-color: #FEE268;
 }
 
