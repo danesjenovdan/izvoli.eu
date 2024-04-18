@@ -156,3 +156,22 @@ if os.getenv("DJANGO_ENABLE_S3", False):
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = "/login/"
+
+if sentry_url := os.getenv("DJANGO_SENTRY_URL", False):
+    import sentry_sdk
+    from sentry_sdk.integrations.django import DjangoIntegration
+
+    sentry_sdk.init(
+        dsn=sentry_url,
+        integrations=[
+            DjangoIntegration(),
+        ],
+        # Set traces_sample_rate to 1.0 to capture 100%
+        # of transactions for performance monitoring.
+        traces_sample_rate=1.0,
+        # Set profiles_sample_rate to 1.0 to profile 100%
+        # of sampled transactions.
+        # We recommend adjusting this value in production.
+        profiles_sample_rate=1.0,
+        send_default_pii=True,
+    )
