@@ -42,8 +42,7 @@ SECRET_KEY = env["SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env["DEBUG"]
 
-# ALLOWED_HOSTS = ["izvoli-eu.lb.djnd.si"]
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["localhost", "izvoli-eu.lb.djnd.si"]
 CSRF_TRUSTED_ORIGINS = ["https://*.izvoli-eu.lb.djnd.si"]
 
 # Application definition
