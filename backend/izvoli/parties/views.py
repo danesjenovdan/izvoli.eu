@@ -31,7 +31,7 @@ def party(request, election_slug=None):
         election = Election.objects.get(slug=election_slug)
 
     if party.finished_quiz:
-        return redirect(f"/{election.slug}/stranke/povzetek")
+        return redirect(f"/{election.slug}/stranke/oddaja")
     else:
         return redirect(f"/{election.slug}/stranke/navodila")
 
@@ -52,7 +52,7 @@ def party_instructions(request, election_slug=None):
         election = Election.objects.get(slug=election_slug)
 
     if party.finished_quiz:
-        return redirect(f"/{election_slug}/stranke/povzetek")
+        return redirect(f"/{election_slug}/stranke/oddaja")
 
     # categories = WorkGroup.objects.filter(election=election).order_by("id")
 
@@ -95,8 +95,8 @@ def party_finish(request, election_slug=None):
     else:
         election = Election.objects.get(slug=election_slug)
 
-    if party.finished_quiz:
-        return redirect(f"/{election.slug}/stranke/povzetek")
+    # if party.finished_quiz:
+    #     return redirect(f"/{election.slug}/stranke/oddaja")
 
     # categories = WorkGroup.objects.filter(election=election).order_by("id")
     # for cat in categories:
@@ -146,7 +146,7 @@ def party_save(request, election_slug=None):
     party.finished_quiz = True
     party.save()
 
-    return redirect(f"/{election.slug}/stranke/povzetek")
+    return redirect(f"/{election.slug}/stranke/oddaja")
 
 
 @login_required
@@ -197,7 +197,7 @@ class PartyDemand(View):
             election = Election.objects.get(slug=election_slug)
 
         if party.finished_quiz:
-            return redirect(f"/{election.slug}/stranke/povzetek")
+            return redirect(f"/{election.slug}/stranke/oddaja")
 
         statements = Statement.objects.filter(election=election)
 

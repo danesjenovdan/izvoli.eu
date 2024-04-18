@@ -50,7 +50,7 @@
             
             <div class="form-comment">
                 <label for="form-{{ forloop.counter0 }}-comment">Če želite, lahko dodate komentar: (največ 500 znakov)</label>
-                <textarea name="form-{{ forloop.counter0 }}-comment" cols="40" rows="10" id="id_form-{{ forloop.counter0 }}-comment" maxlength="500">{{ form.comment }}</textarea>
+                <textarea name="form-{{ forloop.counter0 }}-comment" cols="40" rows="10" id="id_form-{{ forloop.counter0 }}-comment" maxlength="500">{% if form.comment %}{{ form.comment }}{% endif %}</textarea>
             </div>
 
             <input type="hidden" name="form-{{ forloop.counter0 }}-statement" id="id_form-{{ forloop.counter0 }}-statement" value="{{ form.statement }}">
