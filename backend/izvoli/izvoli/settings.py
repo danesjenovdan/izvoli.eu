@@ -16,31 +16,17 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-env = dict(
-    SECRET_KEY=os.getenv(
-        "DJANGO_SECRET_KEY", "r^&^$8c*g$6db1s!s7uk9c!v%*ps)_0)h$!f3m7$%(o4b+5qwk"
-    ),
-    DEBUG=os.getenv("DJANGO_DEBUG", False),
-    DATABASE_HOST=os.getenv("DJANGO_DATABASE_HOST", "db"),
-    DATABASE_PORT=os.getenv("DJANGO_DATABASE_PORT", "5432"),
-    DATABASE_NAME=os.getenv("DJANGO_DATABASE_NAME", "izvoli"),
-    DATABASE_USER=os.getenv("DJANGO_DATABASE_USERNAME", "postgres"),
-    DATABASE_PASSWORD=os.getenv("DJANGO_DATABASE_PASSWORD", "postgres"),
-    STATIC_ROOT=os.getenv("DJANGO_STATIC_ROOT", os.path.join(BASE_DIR, "../static")),
-    STATIC_URL=os.getenv("DJANGO_STATIC_URL_BASE", "/static/"),
-)
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env["SECRET_KEY"]
+SECRET_KEY = SECRET_KEY = os.getenv(
+    "DJANGO_SECRET_KEY", "r^&^$8c*g$6db1s!s7uk9c!v%*ps)_0)h$!f3m7$%(o4b+5qwk"
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env["DEBUG"]
+DEBUG = os.getenv("DJANGO_DEBUG", False)
 
 ALLOWED_HOSTS = ["localhost", "izvoli-eu.lb.djnd.si"]
 CSRF_TRUSTED_ORIGINS = ["https://*.izvoli-eu.lb.djnd.si"]
@@ -95,11 +81,11 @@ WSGI_APPLICATION = 'izvoli.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "HOST": env["DATABASE_HOST"],
-        "PORT": env["DATABASE_PORT"],
-        "NAME": env["DATABASE_NAME"],
-        "USER": env["DATABASE_USER"],
-        "PASSWORD": env["DATABASE_PASSWORD"],
+        "HOST": os.getenv("DJANGO_DATABASE_HOST", "db"),
+        "PORT": os.getenv("DJANGO_DATABASE_PORT", "5432"),
+        "NAME": os.getenv("DJANGO_DATABASE_NAME", "izvoli"),
+        "USER": os.getenv("DJANGO_DATABASE_USERNAME", "postgres"),
+        "PASSWORD": os.getenv("DJANGO_DATABASE_PASSWORD", "postgres"),
     }
 }
 
@@ -137,22 +123,13 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
-STATICFILES_FINDERS = [
-    "django.contrib.staticfiles.finders.FileSystemFinder",
-    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-]
-
-STATICFILES_DIRS = [
-    os.path.join(PROJECT_DIR, "static"),
-]
 
 STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
 
-STATIC_ROOT = env["STATIC_ROOT"]
-STATIC_URL = env["STATIC_URL"]
-
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-MEDIA_URL = "/media/"
+STATIC_ROOT = os.getenv("DJANGO_STATIC_ROOT", os.path.join(BASE_DIR, "static"))
+STATIC_URL = os.getenv("DJANGO_STATIC_URL_BASE", "/static/")
+MEDIA_ROOT = os.getenv("DJANGO_MEDIA_ROOT", os.path.join(BASE_DIR, "media"))
+MEDIA_URL = os.getenv("DJANGO_MEDIA_URL", "/media/")
 
 if os.getenv("DJANGO_ENABLE_S3", False):
     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
