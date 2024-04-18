@@ -4,18 +4,21 @@
 
 <div class="quiz-body">    
     {% if allow_submit and not finished_quiz %}
-    <p>Po oddaji vaših odgovorov ne bo več mogoče spreminjati. Če ste prepričani, da oddani odgovori v celoti predstavljajo vaša stališča, ki jih bodo spremljali tudi volivci in volivke, lahko vprašalnik oddate.</p>
+    <p>Po oddaji vaših odgovorov ne bo več mogoče spreminjati. Če ste prepričani, da oddani odgovori v celoti predstavljajo
+    stališča vaše stranke oziroma kandidatne liste, lahko vprašalnik oddate.</p>
     <div class="button-wrapper">
-        <a href="/{{ election_slug }}/stranke/oddaj" class="button">Oddaj</a>
+        <a href="/{{ election_slug }}/stranke/oddaj" class="button">Oddajte</a>
     </div>
-    {% else %}
-    <p>Ko boste odgovorili na vse zahteve, se bo tukaj prikazal gumb za oddajo vprašalnika.</p>
-    {% endif %}
-
-    {% if finished_quiz %}
+    {% elif allow_submit and finished_quiz %}
+    <p>Hvala za sodelovanje.</p>
+    <p>Vaše odgovore smo uspešno shranili in jih bomo uporabili v volilni aplikaciji Izvoli.eu, ki bo javnosti predvidoma
+    predstavljena 9. maja 2024. Do takrat si lahko ogledate povzetek vašega vnosa, ki je na voljo s klikom na spodnji gumb.</p>
+    <p>V primeru, da imate kakršna koli dodatna vprašanja, smo vam na razpolago na <a href="mailto:info@izvoli.eu">info@izvoli.eu</a>.</p>
     <div class="button-wrapper">
         <a href="/{{ election_slug }}/stranke/povzetek" target="_blank" class="button">Povzetek</a>
     </div>
+    {% else %}
+    <p>Ko boste odgovorili na vse trditve, se bo tukaj prikazal gumb za oddajo vprašalnika.</p>
     {% endif %}
 </div>
 
