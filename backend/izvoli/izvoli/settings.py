@@ -29,7 +29,7 @@ SECRET_KEY = SECRET_KEY = os.getenv(
 DEBUG = os.getenv("DJANGO_DEBUG", False)
 
 ALLOWED_HOSTS = ["localhost", "izvoli-eu.lb.djnd.si", "izvoli.eu"]
-CSRF_TRUSTED_ORIGINS = ["https://*.izvoli-eu.lb.djnd.si"]
+CSRF_TRUSTED_ORIGINS = ["https://*.izvoli-eu.lb.djnd.si", "https://izvoli.eu"]
 
 # Application definition
 
