@@ -29,7 +29,7 @@ SECRET_KEY = SECRET_KEY = os.getenv(
 DEBUG = os.getenv("DJANGO_DEBUG", False)
 
 ALLOWED_HOSTS = ["localhost", "izvoli-eu.lb.djnd.si", "izvoli.eu"]
-CSRF_TRUSTED_ORIGINS = ["https://*.izvoli-eu.lb.djnd.si", "https://izvoli.eu"]
+CSRF_TRUSTED_ORIGINS = ["https://*.izvoli-eu.lb.djnd.si", "https://izvoli.eu", "https://*.izvoli.eu"]
 
 # Application definition
 
@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'corsheaders',
     'parties',
     'home'
 ]
@@ -47,6 +49,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -156,6 +159,8 @@ if os.getenv("DJANGO_ENABLE_S3", False):
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = "/login/"
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 if sentry_url := os.getenv("DJANGO_SENTRY_URL", False):
     import sentry_sdk

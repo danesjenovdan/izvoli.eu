@@ -4,10 +4,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views import View
 from django import forms
+from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 
 from .models import Party, Election, Statement, StatementAnswer
 from .forms import StatementAnswerForm
+from .serializers import PartySerializer
 
 # Create your views here.
 @login_required
@@ -294,3 +298,56 @@ class PartyDemand(View):
                 da.save()
 
         return redirect(f"/{election.slug}/stranke/oddaja")
+
+
+class Volitvomat(APIView):
+    # @staticmethod
+    # def twist_answers(answers):
+    #     return {key: not answers[key] for key in answers.keys()}
+
+    # @method_decorator(cache_page(60 * 60 * 24 * 40))
+    def get(self, request, format=None, election_id=None):
+
+        if election_id is None:
+            election = Election.objects.first()
+        else:
+            election = Election.objects.get(id=election_id)
+
+        parties = Party.objects.filter(election=election, finished_quiz=True)
+        statements = Statement.objects.filter(election=election)
+
+        statements_dict = {}
+
+        for s in statements:
+            title = s.title
+            description = s.description
+            party_answer = {}
+            for party in parties:
+                try:
+                    answer = StatementAnswer.objects.get(party=party, statement=s)
+                    party_answer[party.id] = {
+                        "name": party.name,
+                        "answer": answer.answer,
+                        "comment": answer.comment
+                    }
+                except:
+                    party_answer[party.id] = None
+
+            # category = question.workgroup.id if question.workgroup else None
+
+            statements_dict[s.id] = {
+                "title": title,
+                "description": description,
+                "parties": party_answer,
+                # "category": category,
+            }
+
+        party_serializer = PartySerializer(parties, many=True)
+
+        return Response(
+            {
+                "statements": statements_dict,
+                "parties": party_serializer.data,
+            }
+        )
+    
