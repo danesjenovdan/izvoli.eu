@@ -318,24 +318,23 @@ class Volitvomat(APIView):
 
         statements_dict = {}
 
-        for s in statements:
-            title = s.title
-            description = s.description
-            party_answer = {}
-            statement_answers = StatementAnswer.objects.filter(statement=s, party__finished_quiz=True)
-            for answer in statement_answers:
-                party_answer[answer.party.id] = {
-                    "answer": answer.answer,
-                    "comment": answer.comment
-                }
+        statement_answers = StatementAnswer.objects.filter(
+            statement__in=statements,
+            party__finished_quiz=True
+        )
 
-            # category = question.workgroup.id if question.workgroup else None
+        for statement in statements:
+            statements_dict[statement.id] = {
+                "title": statement.title,
+                "description": statement.description,
+                "parties": {},
+                # "category": question.workgroup.id if question.workgroup else None,
+            }
 
-            statements_dict[s.id] = {
-                "title": title,
-                "description": description,
-                "parties": party_answer,
-                # "category": category,
+        for statement_answer in statement_answers:
+            statements_dict[statement_answer.statement_id]["parties"][statement_answer.party_id] = {
+                "answer": statement_answer.answer,
+                "comment": statement_answer.comment
             }
 
         party_serializer = PartySerializer(parties, many=True)
