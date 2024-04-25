@@ -1,12 +1,11 @@
-
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: izvoli-eu
 resources:
-  - deployment.yaml
-  - service.yaml
-  - ingress.yaml
+  - backend/deployment.yaml
+  - backend/service.yaml
+  - backend/ingress.yaml
 images:
   - name: izvoli
     newName: rg.fr-par.scw.cloud/djnd/izvoli
-    newTag: '8b7d75f1f41dbc42b583b06cd060d81e620bc8f5'
+    newTag: "8b7d75f1f41dbc42b583b06cd060d81e620bc8f5"
