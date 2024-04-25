@@ -21,6 +21,8 @@ services:
       dockerfile: Dockerfile.dev
     ports:
       - 5173:5173
+    environment:
+      - VITE_API_URL_BASE=http://localhost:8000/api
     volumes:
       - ./frontend/izvoli/public:/app/public:delegated,rw
       - ./frontend/izvoli/src:/app/src:delegated,rw
