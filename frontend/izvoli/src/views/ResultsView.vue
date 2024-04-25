@@ -331,7 +331,7 @@ h1 {
     }
 
     .party-name {
-        font-family: 'Manrope', sans-serif;
+        font-family: 'wf-manrope', sans-serif;
         font-size: 20px;
         font-weight: 400;
     }
@@ -411,7 +411,7 @@ p.fine-print {
 }
 
 .white-button-border {
-    font-family: 'Manrope', sans-serif;
+    font-family: 'wf-manrope', sans-serif;
     font-size: 16px;
     padding: 0;
 

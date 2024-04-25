@@ -1,7 +1,6 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import Footer from "@/components/Footer.vue";
-
+import Footer from '@/components/Footer.vue'
 </script>
 
 <template>
@@ -13,7 +12,8 @@ import Footer from "@/components/Footer.vue";
 </template>
 
 <style lang="scss">
-@import "@/assets/base.css";
+@import '@/assets/fonts/selfhosted.css';
+@import '@/assets/base.css';
 
 .header-wrapper {
   text-align: center;

@@ -17,7 +17,7 @@ body {
   color: black;
   background: #7FB2FF;
   transition: color 0.5s, background-color 0.5s;
-  font-family: 'Manrope', sans-serif;
+  font-family: 'wf-manrope', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 16px;
