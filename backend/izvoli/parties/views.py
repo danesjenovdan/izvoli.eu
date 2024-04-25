@@ -322,17 +322,12 @@ class Volitvomat(APIView):
             title = s.title
             description = s.description
             party_answer = {}
-            for party in parties:
-                try:
-                    answer = StatementAnswer.objects.get(party=party, statement=s)
-                    party_answer[party.id] = {
-                        "name": party.name,
-                        "image": party.image.url,
-                        "answer": answer.answer,
-                        "comment": answer.comment
-                    }
-                except:
-                    party_answer[party.id] = None
+            statement_answers = StatementAnswer.objects.filter(statement=s, party__finished_quiz=True)
+            for answer in statement_answers:
+                party_answer[answer.party.id] = {
+                    "answer": answer.answer,
+                    "comment": answer.comment
+                }
 
             # category = question.workgroup.id if question.workgroup else None
 
