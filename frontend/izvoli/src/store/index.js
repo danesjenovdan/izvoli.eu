@@ -4,8 +4,7 @@ import axios from 'axios'
 const store = createStore({
   state() {
     return {
-      // apiUrl: 'https://glas-ljudstva.si',
-      apiUrl: 'http://localhost:8000',
+      apiUrl: import.meta.env.VITE_API_URL_BASE,
       storeInitialized: false,
       parties: {},
       questions: {},
@@ -192,7 +191,7 @@ const store = createStore({
       return state.quizFinished
     },
     async getData({ commit, state }) {
-      const response = await axios.get(`${state.apiUrl}/api/volitvomat`)
+      const response = await axios.get(`${state.apiUrl}/volitvomat`)
       commit('setQuestions', {
         questions: response.data['statements']
       })
