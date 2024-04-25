@@ -361,7 +361,7 @@ h1 {
         font-weight: 600;
         color: #161615;
         text-decoration: none;
-        background-image: url("@/assets/img/bel-gumb.png");
+        // background-image: url("@/assets/img/bel-gumb.png"); // FIXME: this fails the build
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
