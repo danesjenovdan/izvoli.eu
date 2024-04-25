@@ -1,0 +1,49 @@
+version: '3'
+
+services:
+  backend:
+    build: ./backend/izvoli
+    ports:
+      - 8000:8000
+    environment:
+      PYTHONUNBUFFERED: 1
+      DJANGO_DEBUG: "yes"
+      DJANGO_SECRET_KEY: make-me-secret
+      DJANGO_DATABASE_HOST: db
+    volumes:
+      - ./backend/izvoli:/app:delegated,rw
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend/izvoli
+      dockerfile: Dockerfile.dev
+    ports:
+      - 5173:5173
+    environment:
+      - VITE_API_URL_BASE=http://localhost:8000/api
+    volumes:
+      - ./frontend/izvoli/public:/app/public:delegated,rw
+      - ./frontend/izvoli/src:/app/src:delegated,rw
+      - ./frontend/izvoli/.eslintrc.cjs:/app/.eslintrc.cjs:delegated,rw
+      - ./frontend/izvoli/.prettierrc.json:/app/.prettierrc.json:delegated,rw
+      - ./frontend/izvoli/index.html:/app/index.html:delegated,rw
+      - ./frontend/izvoli/jsconfig.json:/app/jsconfig.json:delegated,rw
+      - ./frontend/izvoli/vite.config.js:/app/vite.config.js:delegated,rw
+    depends_on:
+      - backend
+
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: izvoli
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

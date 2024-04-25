@@ -82,7 +82,7 @@ body {
 
 .back-button {
   display: inline-block;
-  background-image: url("@/assets/img/nazaj.svg");
+  /* background-image: url("@/assets/img/nazaj.svg"); // FIXME: this fails the build */
   background-position: center;
   background-repeat: no-repeat;
   width: 40px;
@@ -91,7 +91,7 @@ body {
 
 .skip-button {
   display: inline-block;
-  background-image: url("@/assets/img/preskoci.svg");
+  /* background-image: url("@/assets/img/preskoci.svg"); // FIXME: this fails the build */
   background-position: center;
   background-repeat: no-repeat;
   width: 40px;
@@ -100,7 +100,7 @@ body {
 
 .yes-button {
   display: inline-block;
-  background-image: url("@/assets/img/da.svg");
+  /* background-image: url("@/assets/img/da.svg"); // FIXME: this fails the build */
   background-position: center;
   background-repeat: no-repeat;
   width: 50px;
@@ -109,7 +109,7 @@ body {
 
 .no-button {
   display: inline-block;
-  background-image: url("@/assets/img/ne.svg");
+  /* background-image: url("@/assets/img/ne.svg"); // FIXME: this fails the build */
   background-position: center;
   background-repeat: no-repeat;
   width: 50px;
@@ -118,7 +118,7 @@ body {
 
 .info-button {
   display: inline-block;
-  background-image: url("@/assets/img/info.svg");
+  /* background-image: url("@/assets/img/info.svg"); // FIXME: this fails the build */
   background-position: center;
   background-repeat: no-repeat;
   width: 40px;
@@ -131,7 +131,7 @@ body {
 
 .share-icon {
   display: inline-block;
-  background-image: url("@/assets/img/share.svg");
+  /* background-image: url("@/assets/img/share.svg"); // FIXME: this fails the build */
   background-position: center;
   background-repeat: no-repeat;
   width: 40px;
@@ -140,7 +140,7 @@ body {
 
 .search-icon {
   display: inline-block;
-  background-image: url("@/assets/img/podrobno.svg");
+  /* background-image: url("@/assets/img/podrobno.svg"); // FIXME: this fails the build */
   background-position: center;
   background-repeat: no-repeat;
   width: 40px;
@@ -158,7 +158,7 @@ body {
 }
 
 .divider {
-  background-image: url("@/assets/img/divider.svg");
+  /* background-image: url("@/assets/img/divider.svg"); // FIXME: this fails the build */
   background-position: center;
   background-repeat: no-repeat;
   width: 100%;
