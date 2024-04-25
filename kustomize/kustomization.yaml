@@ -9,4 +9,4 @@ resources:
 images:
   - name: izvoli
     newName: rg.fr-par.scw.cloud/djnd/izvoli
-    newTag: 'afeb0566a6bf05f7bc02fe54c8eab81112fcf6ca'
+    newTag: '8b7d75f1f41dbc42b583b06cd060d81e620bc8f5'
