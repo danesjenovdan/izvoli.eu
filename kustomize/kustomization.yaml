@@ -5,7 +5,13 @@ resources:
   - backend/deployment.yaml
   - backend/service.yaml
   - backend/ingress.yaml
+  - frontend/deployment.yaml
+  - frontend/service.yaml
+  - frontend/ingress.yaml
 images:
   - name: izvoli
     newName: rg.fr-par.scw.cloud/djnd/izvoli
     newTag: "8b7d75f1f41dbc42b583b06cd060d81e620bc8f5"
+  - name: izvoli-frontend
+    newName: rg.fr-par.scw.cloud/djnd/izvoli-frontend
+    newTag: "latest"

@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: izvoli-frontend
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-production"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - frontend.izvoli-eu.lb.djnd.si
+      secretName: izvoli-frontend-tls
+  rules:
+    - host: frontend.izvoli-eu.lb.djnd.si
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: izvoli-frontend
+                port:
+                  number: 80

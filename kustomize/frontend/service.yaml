@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: izvoli-frontend
+spec:
+  selector:
+    app: izvoli-frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

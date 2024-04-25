@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: izvoli-frontend
+  labels:
+    app: izvoli-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: izvoli-frontend
+  template:
+    metadata:
+      labels:
+        app: izvoli-frontend
+    spec:
+      containers:
+        - name: izvoli-frontend
+          image: izvoli-frontend
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: 100Mi
+              cpu: 100m
+            limits:
+              memory: 100Mi
+              cpu: 100m
