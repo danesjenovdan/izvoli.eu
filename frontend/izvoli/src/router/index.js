@@ -1,22 +1,44 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import IntroductionView from '../views/IntroductionView.vue'
+import QuestionView from '../views/QuestionView.vue'
+import ResultsView from '../views/ResultsView.vue'
+// import StatisticsView from '../views/StatisticsView.vue'
+import ResultsByPartyView from '../views/ResultsByPartyView.vue'
+// import NoCandidatesView from '../views/NoCandidatesView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView
+      name: 'introduction',
+      component: IntroductionView
+    },
+    // {
+    //   path: '/:slug/ni-podatkov',
+    //   name: 'noCandidates',
+    //   component: NoCandidatesView
+    // },
+    {
+      path: '/vprasanje/:id',
+      name: 'question',
+      component: QuestionView
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
-    }
+      path: '/rezultati',
+      name: 'results',
+      component: ResultsView
+    },
+    {
+      path: '/rezultati/:id',
+      name: 'resultsByParty',
+      component: ResultsByPartyView
+    },
+    // {
+    //   path: '/:slug/statistika',
+    //   name: 'statistics',
+    //   component: StatisticsView
+    // }
   ]
 })
 
