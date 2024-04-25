@@ -17,7 +17,7 @@ from .views import (
     party_save,
     party_summary,
     # open_party_summary,
-    # Volitvomat,
+    Volitvomat,
     # MunicipalitiesList,
     # MissingPartiesList,
     # QuestionsByMunicipalities,
@@ -49,11 +49,8 @@ urlpatterns = [
     #     "<int:election_id>/api/volitvomat/missing-parties/<slug:municipality_slug>",
     #     MissingPartiesList.as_view(),
     # ),
-    # path(
-    #     "<int:election_id>/api/volitvomat/<slug:municipality_id>", Volitvomat.as_view()
-    # ),
     # path("<int:election_id>/api/volitvomat/", Volitvomat.as_view()),
     # path("api/volitvomat/municipalities", MunicipalitiesList.as_view()),
-    # path("api/volitvomat/", Volitvomat.as_view()),
+    path("api/volitvomat/", Volitvomat.as_view()),
     # path("api/municipalities/", QuestionsByMunicipalities.as_view()),
 ]
