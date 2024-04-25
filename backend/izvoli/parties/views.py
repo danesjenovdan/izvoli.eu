@@ -327,6 +327,7 @@ class Volitvomat(APIView):
                     answer = StatementAnswer.objects.get(party=party, statement=s)
                     party_answer[party.id] = {
                         "name": party.name,
+                        "image": party.image.url,
                         "answer": answer.answer,
                         "comment": answer.comment
                     }

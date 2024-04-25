@@ -31,7 +31,7 @@ class Party(models.Model):
     finished_quiz = models.BooleanField(
         default=False, verbose_name="Je oddal_a vprašalnik? (se izpolni avtomatsko)"
     )
-    # image = models.ImageField(null=True, blank=True, verbose_name="Slika")
+    image = models.ImageField(null=True, blank=True, verbose_name="Slika")
     # url = models.URLField(blank=True)
     election = models.ForeignKey(
         Election, on_delete=models.CASCADE, verbose_name="Volitve"
