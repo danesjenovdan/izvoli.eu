@@ -39,6 +39,9 @@ const store = createStore({
     },
     getQuizFinished(state) {
       return state.quizFinished
+    },
+    getPartiesToCompare(state) {
+      return state.partiesToCompare
     }
   },
   mutations: {
@@ -150,6 +153,9 @@ const store = createStore({
       localStorage.setItem('parties', JSON.stringify(state.parties))
       console.log("Parties")
       console.log(state.parties)
+    },
+    setPartiesToCompare(state, payload) {
+      state.partiesToCompare = [...payload.parties]
     }
   },
   actions: {
