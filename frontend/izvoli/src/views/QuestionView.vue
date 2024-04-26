@@ -22,6 +22,33 @@ const questionId = computed(() => questionsList.value[idParam.value]);
 const question = computed(() => store.state.questions[questionId.value]);
 const answers = computed(() => store.getters.getAnswers);
 const parties = computed(() => store.getters.getParties);
+const partiesAgree = computed(() => {
+    const parties = {}
+    for (const [key, value] of Object.entries(question.value.parties)) {
+        if (value.answer == "YES") {
+            parties[key] = value
+        }
+    }
+    return parties
+})
+const partiesDisagree = computed(() => {
+    const parties = {}
+    for (const [key, value] of Object.entries(question.value.parties)) {
+        if (value.answer == "NO") {
+            parties[key] = value
+        }
+    }
+    return parties
+})
+const partiesNeutral = computed(() => {
+    const parties = {}
+    for (const [key, value] of Object.entries(question.value.parties)) {
+        if (value.answer == "NEUTRAL") {
+            parties[key] = value
+        }
+    }
+    return parties
+})
 
 
 const skipQuestion = (id, answer) => {
@@ -77,9 +104,9 @@ onMounted(() => {
 
 <template>
     <main class="container">
-        <div class="body">
+        <div class="body" v-if="question">
             <div class="progress-bar">
-                <div class="progress-number">{{ idParam }} / {{ questionsNo }}</div>
+                <div class="progress-number">{{ parseInt(idParam) + 1 }} / {{ questionsNo }}</div>
                 <div v-for="qNo in  questionsNo " class="progress-circle"></div>
             </div>
             <div class="content">
@@ -126,19 +153,19 @@ onMounted(() => {
                 <div class="parties" v-if="moreInfo">
                     <div>
                         <div class="head">Se strinja</div>
-                        <PartyElement v-for="(answer, party_id) in question.parties" :key="party_id"
+                        <PartyElement v-for="(answer, party_id) in partiesAgree" :key="party_id"
                             :party="parties[party_id]" :answer="answer">
                         </PartyElement>
                     </div>
                     <div>
                         <div class="head">Se ne strinja</div>
-                        <PartyElement v-for="(answer, party_id) in question.parties" :key="party_id"
+                        <PartyElement v-for="(answer, party_id) in partiesDisagree" :key="party_id"
                             :party="parties[party_id]" :answer="answer">
                         </PartyElement>
                     </div>
                     <div>
                         <div class="head">Neopredeljena / ni odgovora</div>
-                        <PartyElement v-for="(answer, party_id) in question.parties" :key="party_id"
+                        <PartyElement v-for="(answer, party_id) in partiesNeutral" :key="party_id"
                             :party="parties[party_id]" :answer="answer">
                         </PartyElement>
                     </div>

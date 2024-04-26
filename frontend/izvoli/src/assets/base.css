@@ -24,6 +24,10 @@ body {
   line-height: 24px;
 }
 
+button {
+  font-family: inherit
+}
+
 #app {
   /* height: 100%; */
   display: flex;
@@ -37,7 +41,7 @@ body {
 }
 
 .header-logo {
-  max-width: 300px;
+  width: 300px;
 }
 
 .body {

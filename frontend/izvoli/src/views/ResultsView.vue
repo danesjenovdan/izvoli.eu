@@ -12,11 +12,6 @@ const parties = computed(() => store.getters.getParties);
 const results = computed(() => store.getters.getResults);
 const chosenParties = ref([])
 
-const restartQuiz = () => {
-    store.dispatch("clearStore");
-    router.push("/");
-}
-
 const share = () => {
     navigator.clipboard.writeText("https://volitvomat.lb.djnd.si/").then(function () {
         alert('Povezava je skopirana v odložišče!')
