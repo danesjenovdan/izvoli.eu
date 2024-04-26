@@ -143,8 +143,8 @@ const store = createStore({
       for (const index in parties) {
         state.parties[parties[index].id] = {
           name: parties[index].name,
-          image_url: parties[index].image_url,
-          url: parties[index].url
+          image: parties[index].image,
+          // url: parties[index].url
         }
       }
       localStorage.setItem('parties', JSON.stringify(state.parties))

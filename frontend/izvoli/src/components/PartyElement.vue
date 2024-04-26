@@ -57,11 +57,11 @@ export default {
             font-weight: 800;
 
             img {
-                width: 32px;
-                height: 32px;
+                width: 34px;
+                height: 34px;
                 object-fit: cover;
                 border-radius: 16px;
-                border: 2px solid black;
+                border: 1px solid black;
                 margin-right: 4px;
                 flex-shrink: 0;
             }
