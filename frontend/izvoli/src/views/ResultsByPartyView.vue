@@ -72,7 +72,6 @@ onMounted(() => {
                 <div v-for="qNo in questionsNo " class="progress-circle"></div>
             </div>
             <div class="content">
-                <RouterLink to="/rezultati">Poglej rezultate</RouterLink>
                 <span>Kategorija vprašanja</span>
                 <h1>{{ question.title }}</h1>
                 <p>{{ question.description }}</p>

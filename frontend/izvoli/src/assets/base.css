@@ -24,6 +24,10 @@ body {
   line-height: 24px;
 }
 
+button {
+  font-family: inherit
+}
+
 #app {
   /* height: 100%; */
   display: flex;
