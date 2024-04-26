@@ -32,11 +32,11 @@ export default {
                 <img src="../assets/img/strinjam.svg" />
                 Neopredeljeno
             </div>
-            <button @click="show = true" v-if="!show">
+            <button @click="show = true" v-if="!show && party.comment">
                 Obrazložitev
                 <img src="../assets/img/puscica-trikotnik-modra.svg" />
             </button>
-            <button @click="show = false" v-if="show">
+            <button @click="show = false" v-if="show && party.comment">
                 Skrij
                 <img src="../assets/img/puscica-trikotnik-modra.svg" />
             </button>
@@ -48,10 +48,11 @@ export default {
 <style scoped lang="scss">
 .answer-wrapper {
     width: 100%;
+    line-height: 34px;
 
     .answer {
+        width: 100%;
         display: flex;
-
         align-items: center;
         justify-content: space-between;
 

@@ -10,9 +10,7 @@ const storeInitialized = computed(() => store.getters.getStoreInitialized);
 const quizFinished = computed(() => store.getters.getQuizFinished);
 const parties = computed(() => store.getters.getParties);
 const results = computed(() => store.getters.getResults);
-const partiesToCompare = computed(() => store.getters.getPartiesToCompare);
 const chosenParties = ref([])
-const progress = computed(() => Math.round(idParam.value / questionsNo.value * 100));
 
 const restartQuiz = () => {
     store.dispatch("clearStore");
@@ -65,11 +63,11 @@ onMounted(() => {
                 <h1>Najbolj se ujemaš s:</h1>
                 <div class="winners">
                     <div v-for="result in results" :key="result.party_id" class="">
-                        <RouterLink :to="`/rezultati/0`" class="party">
+                        <div class="party">
                             <img :src="parties[result.party_id].image" alt="" class="party-image" />
                             <p class="party-name">{{ parties[result.party_id].name }}</p>
                             <p>{{ result.percentage }} %</p>
-                        </RouterLink>
+                        </div>
                     </div>
                 </div>
                 <div>
