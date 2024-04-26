@@ -29,7 +29,7 @@ export default {
                 Se ne strinjam
             </div>
             <div v-if="party.answer == 'NEUTRAL'">
-                <img src="../assets/img/strinjam.svg" />
+                <img src="../assets/img/neopredeljen.svg" />
                 Neopredeljeno
             </div>
             <button @click="show = true" v-if="!show && party.comment">

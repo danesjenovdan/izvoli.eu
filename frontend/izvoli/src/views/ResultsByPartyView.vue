@@ -100,7 +100,7 @@ onMounted(() => {
                         Se ne strinjam
                     </div>
                     <div v-if="answers[idParam+1] == 'NEUTRAL'">
-                        <img src="../assets/img/strinjam.svg" />
+                        <img src="../assets/img/neopredeljen.svg" />
                         Neopredeljeno
                     </div>
                 </div>
