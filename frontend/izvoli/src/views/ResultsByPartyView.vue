@@ -24,24 +24,10 @@ const answers = computed(() => store.getters.getAnswers);
 const parties = computed(() => store.getters.getParties);
 const partiesToCompare = computed(() => store.getters.getPartiesToCompare);
 
-const saveAnswer = (id, answer) => {
-    // save answer
-    store.commit('addAnswer', { id, answer });
-    // navigate to next question
-    if (idParam.value < questionsNo.value - 1) {
-        router.push(`/vprasanje/${parseInt(idParam.value) + 1}`);
-    } else {
-        // last question -> calculate results and navigate to results
-        store.commit('calculateResults');
-        router.push('/rezultati');
-    }
-};
-
 watch(
     () => route.params.id,
     async (id) => {
         idParam.value = id;
-        // console.log(idParam.value, questionsNo.value, progress.value)
     }
 );
 
@@ -68,7 +54,7 @@ onMounted(() => {
     <main class="container">
         <div class="body">
             <div class="progress-bar">
-                <div class="progress-number">{{ idParam }} / {{ questionsNo }}</div>
+                <div class="progress-number">{{ parseInt(idParam) + 1 }} / {{ questionsNo }}</div>
                 <div v-for="qNo in questionsNo " class="progress-circle"></div>
             </div>
             <div class="content">

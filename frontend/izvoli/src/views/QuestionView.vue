@@ -104,7 +104,7 @@ onMounted(() => {
 
 <template>
     <main class="container">
-        <div class="body">
+        <div class="body" v-if="question">
             <div class="progress-bar">
                 <div class="progress-number">{{ parseInt(idParam) + 1 }} / {{ questionsNo }}</div>
                 <div v-for="qNo in  questionsNo " class="progress-circle"></div>
