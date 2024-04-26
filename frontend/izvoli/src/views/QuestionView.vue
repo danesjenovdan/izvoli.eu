@@ -21,6 +21,8 @@ const questionId = computed(() => questionsList.value[idParam.value]);
 // const progress = computed(() => Math.round(idParam.value / questionsNo.value * 100));
 const question = computed(() => store.state.questions[questionId.value]);
 const answers = computed(() => store.getters.getAnswers);
+const parties = computed(() => store.getters.getParties);
+
 
 const skipQuestion = (id, answer) => {
     // remove saved answer
@@ -124,17 +126,20 @@ onMounted(() => {
                 <div class="parties" v-if="moreInfo">
                     <div>
                         <div class="head">Se strinja</div>
-                        <PartyElement v-for="(party, party_id) in question.parties" :key="party_id" :party="party">
+                        <PartyElement v-for="(answer, party_id) in question.parties" :key="party_id"
+                            :party="parties[party_id]" :answer="answer">
                         </PartyElement>
                     </div>
                     <div>
                         <div class="head">Se ne strinja</div>
-                        <PartyElement v-for="(party, party_id) in question.parties" :key="party_id" :party="party">
+                        <PartyElement v-for="(answer, party_id) in question.parties" :key="party_id"
+                            :party="parties[party_id]" :answer="answer">
                         </PartyElement>
                     </div>
                     <div>
                         <div class="head">Neopredeljena / ni odgovora</div>
-                        <PartyElement v-for="(party, party_id) in question.parties" :key="party_id" :party="party">
+                        <PartyElement v-for="(answer, party_id) in question.parties" :key="party_id"
+                            :party="parties[party_id]" :answer="answer">
                         </PartyElement>
                     </div>
                 </div>

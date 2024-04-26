@@ -10,21 +10,7 @@ const storeInitialized = computed(() => store.getters.getStoreInitialized);
 const quizFinished = computed(() => store.getters.getQuizFinished);
 const parties = computed(() => store.getters.getParties);
 const results = computed(() => store.getters.getResults);
-// const firstPlace = computed(() => {
-//     let winnersNo = 1;
-//     const winnerPercentage = results.value[0].percentage;
-//     // let secondPercentage = results.value[1].percentage;
-//     // while (secondPercentage === winnerPercentage) {
-//     //     winnersNo++;
-//     //     // covered all results
-//     //     if (winnersNo === results.value.length) {
-//     //         break;
-//     //     } else {
-//     //         secondPercentage = results.value[winnersNo].percentage;
-//     //     }
-//     // }
-//     return winnersNo;
-// });
+const chosenParties = ref([])
 
 const restartQuiz = () => {
     store.dispatch("clearStore");
@@ -38,6 +24,22 @@ const share = () => {
         // ni se skopiralo ...
     });
 };
+
+const compareWithWinningParties = () => {
+    const parties = [...results.value.map(res => res.party_id)]
+    parties.splice(3)
+    store.commit('setPartiesToCompare', { "parties": parties })
+    router.push("/rezultati/0")
+}
+
+const compareWithChosenParties = () => {
+    store.commit('setPartiesToCompare', { "parties": chosenParties.value })
+    router.push("/rezultati/0")
+}
+
+const compareWithAllParties = () => {
+    chosenParties.value = [...results.value.map(res => res.party_id)]
+}
 
 onMounted(() => {
     if (!storeInitialized.value) {
@@ -61,27 +63,42 @@ onMounted(() => {
                 <h1>Najbolj se ujemaš s:</h1>
                 <div class="winners">
                     <div v-for="result in results" :key="result.party_id" class="">
-                        <RouterLink :to="`/rezultati/0`" class="party">
-                            <div class="party-image"></div>
+                        <div class="party">
+                            <img :src="parties[result.party_id].image" alt="" class="party-image" />
                             <p class="party-name">{{ parties[result.party_id].name }}</p>
                             <p>{{ result.percentage }} %</p>
-                            <!-- <div class="party-img">
-                        <img :src="`${parties[results[index - 1].party_id].image_url}`" />
-                    </div> -->
-                        </RouterLink>
+                        </div>
                     </div>
                 </div>
                 <div>
-                    <button class="yellow-button">
+                    <button class="yellow-button" @click="compareWithWinningParties">
                         Primerjaj svoje odgovore s temi strankami
                         <img src="../assets/img/puscica.svg" />
                     </button>
                 </div>
             </div>
             <div class="more-info">
-                <p><span>Izberi stranke za primerjavo</span><button>Izberi vse stranke</button></p>
-                <div>
-                    <button class="yellow-button">
+                <p><span>Izberi stranke za primerjavo</span><button @click="compareWithAllParties">Izberi vse
+                        stranke</button></p>
+
+                <div v-for="party in results" :key="party.party_id" class="party">
+                    <label :for="`chosen-party-${party.party_id}`">
+                        <input type="checkbox" :id="`chosen-party-${party.party_id}`" :value="party.party_id"
+                            v-model="chosenParties">
+                        <img :src="parties[party.party_id].image" class="party-image" />
+                        {{ parties[party.party_id].name }}
+                    </label>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" :aria-valuenow="party.percentage" aria-valuemin="0"
+                            :aria-valuemax="100" :style="{ width: `${party.percentage}%` }"
+                            :class="{'border-end': party.percentage < 100}">
+                        </div>
+                    </div>
+                    <span>{{ party.percentage }} %</span>
+                </div>
+
+                <div class="big-button-wrapper">
+                    <button class="yellow-button" @click="compareWithChosenParties">
                         Primerjaj svoje odgovore s temi strankami
                         <img src="../assets/img/puscica.svg" />
                     </button>
@@ -96,126 +113,6 @@ onMounted(() => {
             </div>
         </div>
     </main>
-
-    <!-- <div class="single-winner" v-if="firstPlace === 1">
-
-            <p>Najbolj se ujemaš s</p>
-
-            <div class="match">
-                <img src="../assets/img/oseba.svg" class="person" />
-                <img src="../assets/img/zvezda.svg" class="star" />
-                <RouterLink :to="`/rezultati/${results[0].party_id}`">
-                    <img :src="`${parties[results[0].party_id].image_url}`" class="person" />
-                </RouterLink>
-            </div>
-
-            <div style="text-align: center;">
-                <RouterLink :to="`/rezultati/${results[0].party_id}`" class="white-button-border">
-                    <div>
-                        <span class="party-name">{{ parties[results[0].party_id].name }}:</span>
-                        <span>{{ results[0].percentage }} %</span>
-                    </div>
-                </RouterLink>
-            </div>
-
-            <div class="divider"></div>
-
-            <div class="match-button-group">
-                <RouterLink :to="`/rezultati/${results[1].party_id}`" class="button">
-                    <span class="party-name">{{ parties[results[1].party_id].name }}:</span>
-                    <span>{{ results[1].percentage }} %</span>
-                    <div class="party-img">
-                        <img :src="`${parties[results[1].party_id].image_url}`" />
-                    </div>
-                </RouterLink>
-            </div>
-
-            <div class="match-button-group">
-                <RouterLink :to="`/rezultati/${results[2].party_id}`" class="button">
-                    <span class="party-name">{{ parties[results[2].party_id].name }}:</span>
-                    <span>{{ results[2].percentage }} %</span>
-                    <div class="party-img">
-                        <img :src="`${parties[results[2].party_id].image_url}`" />
-                    </div>
-                </RouterLink>
-            </div>
-
-        </div>
-
-        <p v-if="results[0].percentage === results[1].percentage">Najbolj se ujemaš s strankami</p>
-
-        <div class="two-winners" v-if="firstPlace === 2">
-            <div class="flex">
-                <div class="match">
-                    <img src="../assets/img/oseba.svg" class="person" />
-                    <img src="../assets/img/zvezda.svg" class="star" />
-                </div>
-                <div>
-                    <div class="match-button-group">
-                        <RouterLink :to="`/rezultati/${results[0].party_id}`" class="button">
-                            <span class="party-name">{{ parties[results[0].party_id].name }}:</span>
-                            <span>{{ results[0].percentage }} %</span>
-                            <div class="party-img">
-                                <img :src="`${parties[results[0].party_id].image_url}`" />
-                            </div>
-                        </RouterLink>
-                    </div>
-                    <div class="match-button-group">
-                        <RouterLink :to="`/rezultati/${results[1].party_id}`" class="button">
-                            <span class="party-name">{{ parties[results[1].party_id].name }}:</span>
-                            <span>{{ results[1].percentage }} %</span>
-                            <div class="party-img">
-                                <img :src="`${parties[results[1].party_id].image_url}`" />
-                            </div>
-                        </RouterLink>
-                    </div>
-                </div>
-            </div>
-            <div class="divider"></div>
-            <div class="match-button-group">
-                <RouterLink :to="`/rezultati/${results[2].party_id}`" class="button">
-                    <span class="party-name">{{ parties[results[2].party_id].name }}:</span>
-                    <span>{{ results[2].percentage }} %</span>
-                    <div class="party-img">
-                        <img :src="`${parties[results[2].party_id].image_url}`" />
-                    </div>
-                </RouterLink>
-            </div>
-        </div>
-
-        <div class="more-winners" v-if="firstPlace > 2">
-            <div class="match">
-                <img src="../assets/img/oseba.svg" class="person" />
-                <img src="../assets/img/zvezda.svg" class="star" />
-            </div>
-            <div>
-                <div v-for="index in firstPlace" :key="index" class="match-button-group">
-                    <RouterLink :to="`/rezultati/${results[index - 1].party_id}`" class="button">
-                        <span class="party-name">{{ parties[results[index - 1].party_id].name }}:</span>
-                        <span>{{ results[index - 1].percentage }} %</span>
-                        <div class="party-img">
-                            <img :src="`${parties[results[index - 1].party_id].image_url}`" />
-                        </div>
-                    </RouterLink>
-                </div>
-            </div>
-        </div> -->
-
-    <!-- <div class="button-group">
-                <RouterLink to="/statistika" class="yellow-button">
-                    poglej podrobne rezultate <span class="search-icon"></span>
-                </RouterLink>
-                <div class="yellow-button hover-pointer" @click="share">
-                    deli volitvomat <span class="share-icon"></span>
-                </div>
-                <p class="fine-print">Želiš deliti svoj rezultat? Deli posnetek zaslona.</p>
-                <div class="yellow-button hover-pointer" @click="restartQuiz">
-                    reši ponovno
-                </div>
-                <h5>Vse odgovore strank najdeš na <a href="https://glas-ljudstva.si/"
-                        target="_blank">glas-ljudstva.si/</a>.
-                </h5>
-            </div> -->
 </template>
 
 <style lang="scss" scoped>
@@ -243,11 +140,12 @@ h1 {
         display: flex;
         flex-direction: column;
         align-items: center;
+        margin: 0 10px;
 
         .party-image {
             width: 80px;
             height: 80px;
-            border: 2px solid black;
+            border: 1px solid black;
             border-radius: 40px;
             margin-bottom: 10px;
         }
@@ -265,7 +163,7 @@ h1 {
 }
 
 .yellow-button {
-    background-color: #FFFFFF;
+    background-color: #FFE368;
     border: 2px solid black;
     border-radius: 20px;
     margin-top: 30px;
@@ -275,15 +173,16 @@ h1 {
     font-size: 18px;
     font-weight: 800;
     line-height: 20px;
+    cursor: pointer;
 
     img {
         width: 28px;
         margin-left: 10px;
     }
 
-    &:hover {
-        background-color: #FFE368;
-    }
+    // &:hover {
+    //     background-color: #FFE368;
+    // }
 }
 
 .more-info {
@@ -292,6 +191,78 @@ h1 {
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
     padding: 50px 100px;
+
+    &>p {
+        font-size: 18px;
+        font-weight: 800;
+        margin-bottom: 20px;
+        
+        button {
+            background-color: inherit;
+            border: none;
+            padding: 0;
+            border-bottom: 1px solid #0E3D97;
+            color: #0E3D97;
+            font-size: 15px;
+            line-height: 16px;
+            cursor: pointer;
+            margin-left: 20px;
+        }
+    }
+
+    .party {
+        display: flex;
+        align-items: center;
+        margin: 15px 0;
+
+        label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            width: 25%;
+
+            .party-image {
+                width: 34px;
+                height: 34px;
+                border: 1px solid black;
+                border-radius: 18px;
+                margin: 0 10px;
+            }
+        }
+
+        .progress {
+            margin: 0;
+            width: 300px;
+            height: 20px;
+            background-color: #ffffff;
+            border: 1px solid black;
+            border-radius: 10px;
+            overflow: visible;
+
+            .progress-bar {
+                background-color: #65A3FF;
+                border-radius: 10px;
+                height: 100%;
+                position: relative;
+                overflow: visible;
+                transition: width 0.5s;
+        
+                &.border-end {
+                    border-right: 1px solid black;
+                }
+            }
+        }
+
+        span {
+            margin-left: 10px;
+            font-size: 15px;
+            font-weight: 500;
+        }
+    }
+
+    .big-button-wrapper {
+        text-align: center;
+    }
 }
 
 // @media (min-width: 1200px) {
@@ -302,165 +273,4 @@ h1 {
 //     }
 // }
 
-.match {
-    display: flex;
-    justify-content: center;
-    position: relative;
-    margin: 30px 0;
-}
-
-.person {
-    width: 140px;
-    margin: 10px;
-    border-radius: 50%;
-}
-
-.star {
-    width: 60px;
-    position: absolute;
-}
-
-.divider {
-    margin: 20px 0;
-}
-
-.white-button-border {
-    &>div {
-        display: flex;
-        align-items: center;
-    }
-
-    .party-name {
-        font-family: 'wf-manrope', sans-serif;
-        font-size: 20px;
-        font-weight: 400;
-    }
-
-    span:last-of-type {
-        // letter-spacing: 1.5px;
-        padding-left: 10px;
-        flex-shrink: 0;
-    }
-}
-
-.match-button-group {
-    text-align: center;
-
-    .button {
-        position: relative;
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        text-align: left;
-        width: 220px;
-        // background-color: #fffaf7;
-        padding: 10px 0 10px 30px;
-        margin: 10px 0;
-        border-radius: 30px;
-        font-size: 16px;
-        font-weight: 600;
-        color: #161615;
-        text-decoration: none;
-        // background-image: url("@/assets/img/bel-gumb.png"); // FIXME: this fails the build
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-    }
-
-    .party-name {
-        max-width: 40%;
-    }
-
-    span:last-of-type {
-        font-family: 'Grandstander', cursive;
-        font-size: 24px;
-        font-weight: 700;
-        // letter-spacing: 1.5px;
-        padding-left: 10px;
-        flex-shrink: 0;
-    }
-
-    .party-img {
-        position: absolute;
-        left: -20px;
-        top: 50%;
-        transform: translateY(-50%);
-
-        img {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-        }
-    }
-}
-
-.yellow-button span {
-    margin-left: 10px;
-}
-
-.yellow-button .search-icon {
-    width: 30px;
-    height: 30px;
-}
-
-p.fine-print {
-    font-weight: 400;
-    font-size: 14px;
-    text-align: center;
-    margin-top: 5px;
-}
-
-.white-button-border {
-    font-family: 'wf-manrope', sans-serif;
-    font-size: 16px;
-    padding: 0;
-
-    &>div {
-        padding: 40px;
-    }
-
-    span {
-        font-family: 'Grandstander', cursive;
-        font-size: 30px;
-        font-weight: 700;
-    }
-}
-
-.two-winners {
-    margin-top: 30px;
-    margin-bottom: 60px;
-
-    .flex {
-        display: flex;
-        align-items: center;
-    }
-
-    .match {
-        margin: 0;
-    }
-}
-
-.more-winners {
-    margin-top: 30px;
-    margin-bottom: 60px;
-    display: flex;
-}
-
-.two-winners,
-.more-winners {
-    .match {
-        justify-content: start;
-        align-items: start;
-    }
-
-    .match-button-group {
-        .button {
-            width: 180px;
-        }
-
-        .party-img {
-            left: -30px;
-        }
-    }
-}
 </style>

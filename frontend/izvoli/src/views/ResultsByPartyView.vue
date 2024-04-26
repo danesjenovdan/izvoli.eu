@@ -21,6 +21,8 @@ const questionsNo = computed(() => questionsList.value.length);
 const questionId = computed(() => questionsList.value[idParam.value]);
 const question = computed(() => store.state.questions[questionId.value]);
 const answers = computed(() => store.getters.getAnswers);
+const parties = computed(() => store.getters.getParties);
+const partiesToCompare = computed(() => store.getters.getPartiesToCompare);
 
 const saveAnswer = (id, answer) => {
     // save answer
@@ -67,9 +69,10 @@ onMounted(() => {
         <div class="body">
             <div class="progress-bar">
                 <div class="progress-number">{{ idParam }} / {{ questionsNo }}</div>
-                <div v-for="qNo in  questionsNo " class="progress-circle"></div>
+                <div v-for="qNo in questionsNo " class="progress-circle"></div>
             </div>
             <div class="content">
+                <RouterLink to="/rezultati">Poglej rezultate</RouterLink>
                 <span>Kategorija vprašanja</span>
                 <h1>{{ question.title }}</h1>
                 <p>{{ question.description }}</p>
@@ -102,12 +105,12 @@ onMounted(() => {
                     </div>
                 </div>
                 <div class="parties">
-                    <div v-for="(party, party_id) in question.parties" :key="party_id" class="party">
+                    <div v-for="party in partiesToCompare" :key="party" class="party">
                         <div class="head">
-                            slika
-                            <span>{{ party.name }}</span>
+                            <img :src="parties[party].image" class="party-image" />
+                            <span>{{ parties[party].name }}</span>
                         </div>
-                        <PartyAnswer :party="party"></PartyAnswer>
+                        <PartyAnswer :party="question.parties[party]"></PartyAnswer>
                     </div>
                 </div>
             </div>
@@ -260,22 +263,30 @@ main {
     }
 
     .parties {
-        display: flex;
-
         font-size: 15px;
         font-weight: 800;
 
         .party {
             display: flex;
+            align-items: start;
             padding: 20px 0;
             width: 100%;
             border-bottom: 1px solid black;
+
+            .party-image {
+                width: 34px;
+                height: 34px;
+                border: 1px solid black;
+                border-radius: 18px;
+                margin: 0 10px;
+            }
         }
 
         .head {
-            // font-size: 15px;
-            // font-weight: 800;
             min-width: 200px;
+            display: flex;
+            align-items: center;
+            line-height: 34px;
         }
 
         
