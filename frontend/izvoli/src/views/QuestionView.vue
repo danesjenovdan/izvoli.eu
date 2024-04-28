@@ -107,10 +107,11 @@ onMounted(() => {
         <div class="body" v-if="question">
             <div class="progress-bar">
                 <div class="progress-number">{{ parseInt(idParam) + 1 }} / {{ questionsNo }}</div>
-                <div v-for="qNo in  questionsNo " class="progress-circle"></div>
+                <div v-for="qNo in questionsNo " class="progress-circle"
+                    :class="{ 'active': qNo == parseInt(idParam) + 1, 'checked': qNo < parseInt(idParam) + 1 }"></div>
             </div>
             <div class="content">
-                <span>Kategorija vprašanja</span>
+                <span v-if="question.category">{{ question.category }}</span>
                 <h1>{{ question.title }}</h1>
                 <p>{{ question.description }}</p>
                 <div class="buttons">
@@ -214,32 +215,44 @@ main {
     font-size: 12px;
     line-height: 18px;
     font-weight: 600;
-    padding-right: 20px;
+    padding-right: 10px;
+    flex-shrink: 0;
 }
 
 .progress-circle {
     border: 2px solid black;
-    border-radius: 8px;
-    width: 14px;
-    height: 14px;
+    border-radius: 9px;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
     position: relative;
     
     &:not(:last-child) {
-        margin-right: 10px;
+        margin-right: 9px;
 
         &::after {
             content: "";
             height: 2px;
-            width: 10px;
+            width: 9px;
             background-color: black;
             position: absolute;
-            right: -12px;
-            top: 4px;
+            right: -11px;
+            top: 6px;
         }
     }
 
     &.checked {
         background-color: #FFE468;
+
+        &::before {
+            content: "";
+            width: 10px;
+            height: 10px;
+            display: block;
+            margin-left: 2px;
+            margin-top: 2px;
+            background-image: url("@/assets/img/check.svg");
+        }
     }
 
     &.active {
@@ -250,8 +263,11 @@ main {
             content: "";
             width: 8px;
             height: 8px;
+            display: block;
             border-radius: 4px;
             background-color: black;
+            margin-left: 3px;
+            margin-top: 3px;
         }
     }
 

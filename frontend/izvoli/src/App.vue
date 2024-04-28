@@ -5,14 +5,15 @@ import { useStore } from 'vuex';
 
 import Footer from '@/components/Footer.vue'
 
-const store = useStore();
-const router = useRouter();
+const store = useStore()
+const router = useRouter()
 
-const quizFinished = computed(() => store.getters.getQuizFinished);
+const quizFinished = computed(() => store.getters.getQuizFinished)
+const currentRouteName = computed(() => router.currentRoute.value.name)
 
 const restartQuiz = () => {
-  store.dispatch("clearStore");
-  router.push("/");
+  store.dispatch("clearStore")
+  router.push("/")
 }
 </script>
 
@@ -20,7 +21,7 @@ const restartQuiz = () => {
   <header class="header-wrapper">
     <img src="./assets/img/header-logo.svg" class="header-logo" />
     <div class="buttons" v-if="quizFinished">
-      <RouterLink to="/rezultati">
+      <RouterLink to="/rezultati" v-if="currentRouteName != 'results'">
         Poglej rezultate
         <img src="./assets/img/eyes-right.svg" alt="" />
       </RouterLink>
@@ -44,6 +45,7 @@ const restartQuiz = () => {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   position: relative;
   width: 900px;
 
