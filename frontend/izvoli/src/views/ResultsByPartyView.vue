@@ -65,16 +65,14 @@ onMounted(() => {
                 <span v-if="question.category">{{ question.category }}</span>
                 <h1>{{ question.title }}</h1>
                 <p>{{ question.description }}</p>
-                <div class="buttons">
-                    <RouterLink :to="`/rezultati/${parseInt(idParam) - 1}`" class="back"
-                        :class="{ 'hidden': idParam == 0 }">
-                        Nazaj
-                    </RouterLink>
-                    <RouterLink :to="`/rezultati/${parseInt(idParam) + 1}`" class="skip"
-                        :class="{ 'hidden': idParam >= questionsNo - 1 }">
-                        Naprej
-                    </RouterLink>
-                </div>
+                <RouterLink :to="`/rezultati/${parseInt(idParam) - 1}`" class="back"
+                    :class="{ 'hidden': idParam == 0 }">
+                    <img src="../assets/img/arrow.svg" />
+                </RouterLink>
+                <RouterLink :to="`/rezultati/${parseInt(idParam) + 1}`" class="skip"
+                    :class="{ 'hidden': idParam >= questionsNo - 1 }">
+                    <img src="../assets/img/arrow.svg" />
+                </RouterLink>
             </div>
 
             <div class="more-info">
@@ -202,6 +200,7 @@ main {
 
 .content {
     padding: 50px 100px;
+    position: relative;
 
     &>span {
         background-color: #FFFFFF;
@@ -222,6 +221,34 @@ main {
         font-size: 20px;
         line-height: 32px;
         margin-bottom: 30px;
+    }
+
+    .back, .skip {
+        width: 36px;
+        height: 36px;
+        border: solid 2px black;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 50px;
+
+        &:hover {
+            background-color: #FFE368;
+        }
+    }
+
+    .back {
+        left: 25px;
+    }
+
+    .skip {
+        right: 25px;
+
+        img {
+            transform: rotate(180deg);
+        }
     }
 }
 
