@@ -21,6 +21,35 @@ const questionId = computed(() => questionsList.value[idParam.value]);
 // const progress = computed(() => Math.round(idParam.value / questionsNo.value * 100));
 const question = computed(() => store.state.questions[questionId.value]);
 const answers = computed(() => store.getters.getAnswers);
+const parties = computed(() => store.getters.getParties);
+const partiesAgree = computed(() => {
+    const parties = {}
+    for (const [key, value] of Object.entries(question.value.parties)) {
+        if (value.answer == "YES") {
+            parties[key] = value
+        }
+    }
+    return parties
+})
+const partiesDisagree = computed(() => {
+    const parties = {}
+    for (const [key, value] of Object.entries(question.value.parties)) {
+        if (value.answer == "NO") {
+            parties[key] = value
+        }
+    }
+    return parties
+})
+const partiesNeutral = computed(() => {
+    const parties = {}
+    for (const [key, value] of Object.entries(question.value.parties)) {
+        if (value.answer == "NEUTRAL") {
+            parties[key] = value
+        }
+    }
+    return parties
+})
+
 
 const skipQuestion = (id, answer) => {
     // remove saved answer
@@ -75,13 +104,14 @@ onMounted(() => {
 
 <template>
     <main class="container">
-        <div class="body">
+        <div class="body" v-if="question">
             <div class="progress-bar">
-                <div class="progress-number">{{ idParam }} / {{ questionsNo }}</div>
-                <div v-for="qNo in  questionsNo " class="progress-circle"></div>
+                <div class="progress-number">{{ parseInt(idParam) + 1 }} / {{ questionsNo }}</div>
+                <div v-for="qNo in questionsNo " class="progress-circle"
+                    :class="{ 'active': qNo == parseInt(idParam) + 1, 'checked': qNo < parseInt(idParam) + 1 }"></div>
             </div>
             <div class="content">
-                <span>Kategorija vprašanja</span>
+                <span v-if="question.category">{{ question.category }}</span>
                 <h1>{{ question.title }}</h1>
                 <p>{{ question.description }}</p>
                 <div class="buttons">
@@ -124,17 +154,20 @@ onMounted(() => {
                 <div class="parties" v-if="moreInfo">
                     <div>
                         <div class="head">Se strinja</div>
-                        <PartyElement v-for="(party, party_id) in question.parties" :key="party_id" :party="party">
+                        <PartyElement v-for="(answer, party_id) in partiesAgree" :key="party_id"
+                            :party="parties[party_id]" :answer="answer">
                         </PartyElement>
                     </div>
                     <div>
                         <div class="head">Se ne strinja</div>
-                        <PartyElement v-for="(party, party_id) in question.parties" :key="party_id" :party="party">
+                        <PartyElement v-for="(answer, party_id) in partiesDisagree" :key="party_id"
+                            :party="parties[party_id]" :answer="answer">
                         </PartyElement>
                     </div>
                     <div>
                         <div class="head">Neopredeljena / ni odgovora</div>
-                        <PartyElement v-for="(party, party_id) in question.parties" :key="party_id" :party="party">
+                        <PartyElement v-for="(answer, party_id) in partiesNeutral" :key="party_id"
+                            :party="parties[party_id]" :answer="answer">
                         </PartyElement>
                     </div>
                 </div>
@@ -182,32 +215,44 @@ main {
     font-size: 12px;
     line-height: 18px;
     font-weight: 600;
-    padding-right: 20px;
+    padding-right: 10px;
+    flex-shrink: 0;
 }
 
 .progress-circle {
     border: 2px solid black;
-    border-radius: 8px;
-    width: 14px;
-    height: 14px;
+    border-radius: 9px;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
     position: relative;
     
     &:not(:last-child) {
-        margin-right: 10px;
+        margin-right: 9px;
 
         &::after {
             content: "";
             height: 2px;
-            width: 10px;
+            width: 9px;
             background-color: black;
             position: absolute;
-            right: -12px;
-            top: 4px;
+            right: -11px;
+            top: 6px;
         }
     }
 
     &.checked {
         background-color: #FFE468;
+
+        &::before {
+            content: "";
+            width: 10px;
+            height: 10px;
+            display: block;
+            margin-left: 2px;
+            margin-top: 2px;
+            background-image: url("@/assets/img/check.svg");
+        }
     }
 
     &.active {
@@ -218,15 +263,22 @@ main {
             content: "";
             width: 8px;
             height: 8px;
+            display: block;
             border-radius: 4px;
             background-color: black;
+            margin-left: 3px;
+            margin-top: 3px;
         }
     }
 
 }
 
 .content {
-    padding: 50px 100px;
+    padding: 20px;
+
+    @media (min-width: 992px) {
+        padding: 50px 100px;
+    }
 
     &>span {
         background-color: #FFFFFF;
@@ -238,9 +290,14 @@ main {
 
     h1 {
         margin-bottom: 20px;
-        font-size: 32px;
-        line-height: 40px;
+        font-size: 24px;
+        line-height: 30px;
         font-weight: 700;
+
+        @media (min-width: 992px) {
+            font-size: 32px;
+            line-height: 40px;
+        }
     }
 
     &>p {

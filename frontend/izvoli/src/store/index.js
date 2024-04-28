@@ -39,6 +39,9 @@ const store = createStore({
     },
     getQuizFinished(state) {
       return state.quizFinished
+    },
+    getPartiesToCompare(state) {
+      return state.partiesToCompare
     }
   },
   mutations: {
@@ -74,7 +77,6 @@ const store = createStore({
       // })
     },
     calculateResults(state) {
-      console.log("CALCULATING RESULTS")
       const answers_party_matches = {}
       const answersNo = Object.keys(state.answers).length
 
@@ -86,15 +88,11 @@ const store = createStore({
         }
       }
       if (answersNo > 0) {
-        console.log("Imamo odgovore")
         // count matching answers for each party
         for (const id in state.answers) {
           // go through answers
           for (const party_id in answers_party_matches) {
-            console.log("Party id:", party_id)
             // compare user answer to all parties
-            console.log('ODg', state.answers[id])
-            console.log('party odg', state.questions[id].parties[party_id].answer)
             if (state.answers[id] == state.questions[id].parties[party_id].answer) {
               answers_party_matches[party_id].count++
               answers_party_matches[party_id].percentage = Math.round(
@@ -104,8 +102,6 @@ const store = createStore({
           }
         }
       }
-      // console.log('party matches filled', answers_party_matches)
-
       // create an array with counting results
       const ordered_results = []
       for (const party_id in answers_party_matches) {
@@ -134,58 +130,56 @@ const store = createStore({
         state.questionsList = payload.questionsList
         // localStorage.setItem('questionsList', JSON.stringify(state.questionsList))
       }
-      console.log("Store questions")
-      console.log(state.questions)
-      console.log(state.questionsList)
     },
     setParties(state, parties) {
       state.parties = {}
       for (const index in parties) {
         state.parties[parties[index].id] = {
           name: parties[index].name,
-          image_url: parties[index].image_url,
-          url: parties[index].url
+          image: parties[index].image,
+          // url: parties[index].url
         }
       }
       localStorage.setItem('parties', JSON.stringify(state.parties))
-      console.log("Parties")
-      console.log(state.parties)
+    },
+    setPartiesToCompare(state, payload) {
+      state.partiesToCompare = [...payload.parties]
     }
   },
   actions: {
     async initializeStore({ commit, dispatch, state }) {
       // check if data exists in local storage
-      // const parties = localStorage.getItem('parties')
-      // const questions = localStorage.getItem('questions')
-      // const questionsList = localStorage.getItem('questionsList')
-      // const answers = localStorage.getItem('answers')
-      // const finished = localStorage.getItem('quizFinished')
+      const parties = localStorage.getItem('parties')
+      const questions = localStorage.getItem('questions')
+      const questionsList = localStorage.getItem('questionsList')
+      const answers = localStorage.getItem('answers')
+      const finished = localStorage.getItem('quizFinished')
       // console.log("Localstorage")
       // console.log(parties)
       // console.log(questions)
       // console.log(questionsList)
       // console.log(answers)
       // console.log(finished)
-      // if (parties && questions && questionsList) {
-      //   commit('setQuestions', {
-      //     questions: JSON.parse(questions),
-      //     questionsList: JSON.parse(questionsList)
-      //   })
-      //   state.parties = JSON.parse(parties) // TODO: change to commit when api is fixed
-      //   // commit('setParties', response.data['parties']);
-      //   if (answers) {
-      //     state.answers = JSON.parse(answers)
-      //   }
-      //   if (finished) {
-      //     state.quizFinished = finished === 'true'
-      //     if (state.quizFinished) {
-      //       store.commit('calculateResults')
-      //     }
-      //   }
-      // } else {
-      //   // no data
-      //   await dispatch('getData')
-      // }
+      if (parties && questions && questionsList) {
+        commit('setQuestions', {
+          questions: JSON.parse(questions),
+          questionsList: JSON.parse(questionsList)
+        })
+        state.parties = JSON.parse(parties) // TODO: change to commit when api is fixed
+        // commit('setParties', response.data['parties']);
+        if (answers) {
+          state.answers = JSON.parse(answers)
+        }
+        if (finished) {
+          state.quizFinished = finished === 'true'
+          if (state.quizFinished) {
+            store.commit('calculateResults')
+          }
+        }
+      } else {
+        // no data
+        await dispatch('getData')
+      }
       await dispatch('clearStore')
       commit('initializeStore')
       return state.quizFinished
@@ -199,7 +193,6 @@ const store = createStore({
     },
     clearStore({ commit, dispatch }) {
       // localStorage.clear();
-      console.log("CLEARING STORE")
       localStorage.removeItem('parties')
       localStorage.removeItem('questions')
       localStorage.removeItem('answers')

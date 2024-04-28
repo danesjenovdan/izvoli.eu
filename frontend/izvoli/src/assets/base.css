@@ -17,11 +17,15 @@ body {
   color: black;
   background: #7FB2FF;
   transition: color 0.5s, background-color 0.5s;
-  font-family: 'Manrope', sans-serif;
+  font-family: 'wf-manrope', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 16px;
   line-height: 24px;
+}
+
+button {
+  font-family: inherit
 }
 
 #app {
@@ -37,14 +41,21 @@ body {
 }
 
 .header-logo {
-  max-width: 300px;
+  width: 300px;
 }
 
 .body {
-  max-width: 900px;
+  max-width: 320px;
   background-color: #FFFBE9;
   border: 2px solid black;
   border-radius: 20px;
+  margin: 0 20px;
+}
+
+@media (min-width: 992px) {
+  .body {
+    max-width: 900px;
+  }
 }
 
 .button-group {

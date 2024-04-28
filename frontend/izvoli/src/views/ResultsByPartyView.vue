@@ -21,25 +21,13 @@ const questionsNo = computed(() => questionsList.value.length);
 const questionId = computed(() => questionsList.value[idParam.value]);
 const question = computed(() => store.state.questions[questionId.value]);
 const answers = computed(() => store.getters.getAnswers);
-
-const saveAnswer = (id, answer) => {
-    // save answer
-    store.commit('addAnswer', { id, answer });
-    // navigate to next question
-    if (idParam.value < questionsNo.value - 1) {
-        router.push(`/vprasanje/${parseInt(idParam.value) + 1}`);
-    } else {
-        // last question -> calculate results and navigate to results
-        store.commit('calculateResults');
-        router.push('/rezultati');
-    }
-};
+const parties = computed(() => store.getters.getParties);
+const partiesToCompare = computed(() => store.getters.getPartiesToCompare);
 
 watch(
     () => route.params.id,
     async (id) => {
         idParam.value = id;
-        // console.log(idParam.value, questionsNo.value, progress.value)
     }
 );
 
@@ -64,50 +52,52 @@ onMounted(() => {
 
 <template>
     <main class="container">
-        <div class="body">
+        <div class="body" v-if="question">
             <div class="progress-bar">
-                <div class="progress-number">{{ idParam }} / {{ questionsNo }}</div>
-                <div v-for="qNo in  questionsNo " class="progress-circle"></div>
+                <div class="progress-number">{{ parseInt(idParam) + 1 }} / {{ questionsNo }}</div>
+                <div v-for="qNo in questionsNo " class="progress-circle" :class="{
+                        'agree': answers[parseInt(qNo)] == 'YES',
+                        'disagree': answers[parseInt(qNo)] == 'NO',
+                        'neutral': !(`${parseInt(qNo)}` in answers) }">
+                </div>
             </div>
             <div class="content">
-                <span>Kategorija vprašanja</span>
+                <span v-if="question.category">{{ question.category }}</span>
                 <h1>{{ question.title }}</h1>
                 <p>{{ question.description }}</p>
-                <div class="buttons">
-                    <RouterLink :to="`/rezultati/${parseInt(idParam) - 1}`" class="back"
-                        :class="{ 'hidden': idParam == 0 }">
-                        Nazaj
-                    </RouterLink>
-                    <RouterLink :to="`/rezultati/${parseInt(idParam) + 1}`" class="skip"
-                        :class="{ 'hidden': idParam >= questionsNo - 1 }">
-                        Naprej
-                    </RouterLink>
-                </div>
+                <RouterLink :to="`/rezultati/${parseInt(idParam) - 1}`" class="back"
+                    :class="{ 'hidden': idParam == 0 }">
+                    <img src="../assets/img/arrow.svg" />
+                </RouterLink>
+                <RouterLink :to="`/rezultati/${parseInt(idParam) + 1}`" class="skip"
+                    :class="{ 'hidden': idParam >= questionsNo - 1 }">
+                    <img src="../assets/img/arrow.svg" />
+                </RouterLink>
             </div>
 
             <div class="more-info">
                 <div class="my-answer">
                     <span>Tvoj odgovor</span>
-                    <div v-if="answers[idParam+1] == 'YES'">
+                    <div v-if="answers[parseInt(idParam)+1] == 'YES'">
                         <img src="../assets/img/strinjam.svg" />
                         Se strinjam
                     </div>
-                    <div v-if="answers[idParam+1] == 'NO'">
+                    <div v-if="answers[parseInt(idParam)+1] == 'NO'">
                         <img src="../assets/img/ne-strinjam.svg" />
                         Se ne strinjam
                     </div>
-                    <div v-if="answers[idParam+1] == 'NEUTRAL'">
-                        <img src="../assets/img/strinjam.svg" />
+                    <div v-if="!(`${parseInt(idParam) + 1}` in answers) ">
+                        <img src="../assets/img/neopredeljen.svg" />
                         Neopredeljeno
                     </div>
                 </div>
                 <div class="parties">
-                    <div v-for="(party, party_id) in question.parties" :key="party_id" class="party">
+                    <div v-for="party in partiesToCompare" :key="party" class="party">
                         <div class="head">
-                            slika
-                            <span>{{ party.name }}</span>
+                            <img :src="parties[party].image" class="party-image" />
+                            <span>{{ parties[party].name }}</span>
                         </div>
-                        <PartyAnswer :party="party"></PartyAnswer>
+                        <PartyAnswer :party="question.parties[party]"></PartyAnswer>
                     </div>
                 </div>
             </div>
@@ -154,43 +144,55 @@ main {
     line-height: 18px;
     font-weight: 600;
     padding-right: 20px;
+    flex-shrink: 0;
 }
 
 .progress-circle {
-    border: 2px solid black;
-    border-radius: 8px;
-    width: 14px;
-    height: 14px;
+    border: 1px solid black;
+    border-radius: 9px;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
     position: relative;
 
+    &::before {
+        content: "";
+        width: 10px;
+        height: 10px;
+        display: block;
+        margin-left: 3px;
+        margin-top: 3px;
+    }
+
     &:not(:last-child) {
-        margin-right: 10px;
+        margin-right: 9px;
 
         &::after {
             content: "";
-            height: 2px;
+            height: 1px;
             width: 10px;
             background-color: black;
             position: absolute;
-            right: -12px;
-            top: 4px;
+            right: -10px;
+            top: 7px;
         }
     }
 
-    &.checked {
-        background-color: #FFE468;
+    &.agree {
+        &::before {
+            background-image: url("@/assets/img/strinjam.svg");
+        }
     }
 
-    &.active {
-        background-color: #7FB2FF;
-        position: relative;
-
+    &.disagree {
         &::before {
-            content: "";
-            width: 8px;
-            height: 8px;
-            border-radius: 4px;
-            background-color: black;
+            background-image: url("@/assets/img/ne-strinjam.svg");
+        }
+    }
+
+    &.neutral {
+        &::before {
+            background-image: url("@/assets/img/neopredeljen.svg");
         }
     }
 
@@ -198,6 +200,7 @@ main {
 
 .content {
     padding: 50px 100px;
+    position: relative;
 
     &>span {
         background-color: #FFFFFF;
@@ -218,6 +221,34 @@ main {
         font-size: 20px;
         line-height: 32px;
         margin-bottom: 30px;
+    }
+
+    .back, .skip {
+        width: 36px;
+        height: 36px;
+        border: solid 2px black;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 50px;
+
+        &:hover {
+            background-color: #FFE368;
+        }
+    }
+
+    .back {
+        left: 25px;
+    }
+
+    .skip {
+        right: 25px;
+
+        img {
+            transform: rotate(180deg);
+        }
     }
 }
 
@@ -260,22 +291,30 @@ main {
     }
 
     .parties {
-        display: flex;
-
         font-size: 15px;
         font-weight: 800;
 
         .party {
             display: flex;
+            align-items: start;
             padding: 20px 0;
             width: 100%;
             border-bottom: 1px solid black;
+
+            .party-image {
+                width: 34px;
+                height: 34px;
+                border: 1px solid black;
+                border-radius: 18px;
+                margin: 0 10px;
+            }
         }
 
         .head {
-            // font-size: 15px;
-            // font-weight: 800;
             min-width: 200px;
+            display: flex;
+            align-items: center;
+            line-height: 34px;
         }
 
         

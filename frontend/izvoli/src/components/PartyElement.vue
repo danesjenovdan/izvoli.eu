@@ -4,13 +4,16 @@ import { ref, toRef, onMounted, onBeforeUnmount, computed } from 'vue';
 export default {
     props: {
         party: Object,
+        answer: Object
     },
     setup(props, ctx) {
         const party = toRef(props, 'party');
+        const answer = toRef(props, 'answer');
         const show = ref(false);
 
         return {
             party,
+            answer,
             show,
         }
     }
@@ -24,16 +27,16 @@ export default {
                 <img :src="party.image" alt="" />
                 <p>{{ party.name }}</p>
             </div>
-            <button @click="show = true" v-if="!show">
+            <button @click="show = true" v-if="!show && answer.comment">
                 Prikaži
                 <img src="../assets/img/puscica-trikotnik-modra.svg" />
             </button>
-            <button @click="show = false" v-if="show">
+            <button @click="show = false" v-if="show && answer.comment">
                 Skrij
                 <img src="../assets/img/puscica-trikotnik-modra.svg" />
             </button>
         </div>
-        <p v-if="show">{{ party.comment }}</p>
+        <p v-if="show">{{ answer.comment }}</p>
     </div>
 </template>
 
@@ -49,10 +52,23 @@ export default {
         justify-content: space-between;
 
         .name {
+            display: flex;
+            align-items: center;
             font-weight: 800;
+
+            img {
+                width: 34px;
+                height: 34px;
+                object-fit: cover;
+                border-radius: 16px;
+                border: 1px solid black;
+                margin-right: 4px;
+                flex-shrink: 0;
+            }
         }
 
         button {
+            flex-shrink: 0;
             background-color: inherit;
             border: none;
             padding: 0;
