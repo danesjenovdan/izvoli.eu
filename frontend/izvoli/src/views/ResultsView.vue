@@ -11,6 +11,16 @@ const quizFinished = computed(() => store.getters.getQuizFinished);
 const parties = computed(() => store.getters.getParties);
 const results = computed(() => store.getters.getResults);
 const chosenParties = ref([])
+const partiesNoAnswer = computed(() => {
+    const p = {}
+    const partiesAnswered = [...results.value].map((el) => el.party_id)
+    for (const [key, value] of Object.entries(parties.value)) {
+        if (!(partiesAnswered.includes(key))) {
+            p[key] = value
+        }
+    }
+    return p
+})
 
 const share = () => {
     navigator.clipboard.writeText("https://volitvomat.lb.djnd.si/").then(function () {
@@ -90,6 +100,14 @@ onMounted(() => {
                         </div>
                     </div>
                     <span>{{ party.percentage }} %</span>
+                </div>
+                <div v-for="party in partiesNoAnswer" :key="party.id" class="party">
+                    <label :for="`chosen-party-${party.id}`">
+                        <input type="checkbox" :id="`chosen-party-${party.id}`" :value="party.id"
+                            v-model="chosenParties">
+                        <img :src="party.image" class="party-image" />
+                        {{ party.name }}
+                    </label>
                 </div>
 
                 <div class="big-button-wrapper">

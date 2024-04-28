@@ -27,11 +27,11 @@ export default {
                 <img :src="party.image" alt="" />
                 <p>{{ party.name }}</p>
             </div>
-            <button @click="show = true" v-if="!show">
+            <button @click="show = true" v-if="!show && answer.comment">
                 Prikaži
                 <img src="../assets/img/puscica-trikotnik-modra.svg" />
             </button>
-            <button @click="show = false" v-if="show">
+            <button @click="show = false" v-if="show && answer.comment">
                 Skrij
                 <img src="../assets/img/puscica-trikotnik-modra.svg" />
             </button>

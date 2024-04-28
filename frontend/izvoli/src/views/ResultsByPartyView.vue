@@ -52,39 +52,41 @@ onMounted(() => {
 
 <template>
     <main class="container">
-        <div class="body">
+        <div class="body" v-if="question">
             <div class="progress-bar">
                 <div class="progress-number">{{ parseInt(idParam) + 1 }} / {{ questionsNo }}</div>
-                <div v-for="qNo in questionsNo " class="progress-circle"></div>
+                <div v-for="qNo in questionsNo " class="progress-circle" :class="{
+                        'agree': answers[parseInt(qNo)] == 'YES',
+                        'disagree': answers[parseInt(qNo)] == 'NO',
+                        'neutral': !(`${parseInt(qNo)}` in answers) }">
+                </div>
             </div>
             <div class="content">
-                <span>Kategorija vprašanja</span>
+                <span v-if="question.category">{{ question.category }}</span>
                 <h1>{{ question.title }}</h1>
                 <p>{{ question.description }}</p>
-                <div class="buttons">
-                    <RouterLink :to="`/rezultati/${parseInt(idParam) - 1}`" class="back"
-                        :class="{ 'hidden': idParam == 0 }">
-                        Nazaj
-                    </RouterLink>
-                    <RouterLink :to="`/rezultati/${parseInt(idParam) + 1}`" class="skip"
-                        :class="{ 'hidden': idParam >= questionsNo - 1 }">
-                        Naprej
-                    </RouterLink>
-                </div>
+                <RouterLink :to="`/rezultati/${parseInt(idParam) - 1}`" class="back"
+                    :class="{ 'hidden': idParam == 0 }">
+                    <img src="../assets/img/arrow.svg" />
+                </RouterLink>
+                <RouterLink :to="`/rezultati/${parseInt(idParam) + 1}`" class="skip"
+                    :class="{ 'hidden': idParam >= questionsNo - 1 }">
+                    <img src="../assets/img/arrow.svg" />
+                </RouterLink>
             </div>
 
             <div class="more-info">
                 <div class="my-answer">
                     <span>Tvoj odgovor</span>
-                    <div v-if="answers[idParam+1] == 'YES'">
+                    <div v-if="answers[parseInt(idParam)+1] == 'YES'">
                         <img src="../assets/img/strinjam.svg" />
                         Se strinjam
                     </div>
-                    <div v-if="answers[idParam+1] == 'NO'">
+                    <div v-if="answers[parseInt(idParam)+1] == 'NO'">
                         <img src="../assets/img/ne-strinjam.svg" />
                         Se ne strinjam
                     </div>
-                    <div v-if="answers[idParam+1] == 'NEUTRAL'">
+                    <div v-if="!(`${parseInt(idParam) + 1}` in answers) ">
                         <img src="../assets/img/neopredeljen.svg" />
                         Neopredeljeno
                     </div>
@@ -142,43 +144,55 @@ main {
     line-height: 18px;
     font-weight: 600;
     padding-right: 20px;
+    flex-shrink: 0;
 }
 
 .progress-circle {
-    border: 2px solid black;
-    border-radius: 8px;
-    width: 14px;
-    height: 14px;
+    border: 1px solid black;
+    border-radius: 9px;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
     position: relative;
 
+    &::before {
+        content: "";
+        width: 10px;
+        height: 10px;
+        display: block;
+        margin-left: 3px;
+        margin-top: 3px;
+    }
+
     &:not(:last-child) {
-        margin-right: 10px;
+        margin-right: 9px;
 
         &::after {
             content: "";
-            height: 2px;
+            height: 1px;
             width: 10px;
             background-color: black;
             position: absolute;
-            right: -12px;
-            top: 4px;
+            right: -10px;
+            top: 7px;
         }
     }
 
-    &.checked {
-        background-color: #FFE468;
+    &.agree {
+        &::before {
+            background-image: url("@/assets/img/strinjam.svg");
+        }
     }
 
-    &.active {
-        background-color: #7FB2FF;
-        position: relative;
-
+    &.disagree {
         &::before {
-            content: "";
-            width: 8px;
-            height: 8px;
-            border-radius: 4px;
-            background-color: black;
+            background-image: url("@/assets/img/ne-strinjam.svg");
+        }
+    }
+
+    &.neutral {
+        &::before {
+            background-image: url("@/assets/img/neopredeljen.svg");
         }
     }
 
@@ -186,6 +200,7 @@ main {
 
 .content {
     padding: 50px 100px;
+    position: relative;
 
     &>span {
         background-color: #FFFFFF;
@@ -206,6 +221,34 @@ main {
         font-size: 20px;
         line-height: 32px;
         margin-bottom: 30px;
+    }
+
+    .back, .skip {
+        width: 36px;
+        height: 36px;
+        border: solid 2px black;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 50px;
+
+        &:hover {
+            background-color: #FFE368;
+        }
+    }
+
+    .back {
+        left: 25px;
+    }
+
+    .skip {
+        right: 25px;
+
+        img {
+            transform: rotate(180deg);
+        }
     }
 }
 

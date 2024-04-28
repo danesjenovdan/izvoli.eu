@@ -313,7 +313,7 @@ class Volitvomat(APIView):
         else:
             election = Election.objects.get(id=election_id)
 
-        parties = Party.objects.filter(election=election, finished_quiz=True)
+        parties = Party.objects.filter(election=election)
         statements = Statement.objects.filter(election=election)
 
         statements_dict = {}
@@ -327,6 +327,7 @@ class Volitvomat(APIView):
             statements_dict[statement.id] = {
                 "title": statement.title,
                 "description": statement.description,
+                "category": statement.statement_group.name if statement.statement_group else "",
                 "parties": {},
                 # "category": question.workgroup.id if question.workgroup else None,
             }
