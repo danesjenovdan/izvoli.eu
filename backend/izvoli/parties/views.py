@@ -327,6 +327,7 @@ class Volitvomat(APIView):
             statements_dict[statement.id] = {
                 "title": statement.title,
                 "description": statement.description,
+                "category": statement.statement_group.name if statement.statement_group else "",
                 "parties": {},
                 # "category": question.workgroup.id if question.workgroup else None,
             }
