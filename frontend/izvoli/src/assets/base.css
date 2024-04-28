@@ -45,10 +45,17 @@ button {
 }
 
 .body {
-  max-width: 900px;
+  max-width: 320px;
   background-color: #FFFBE9;
   border: 2px solid black;
   border-radius: 20px;
+  margin: 0 20px;
+}
+
+@media (min-width: 992px) {
+  .body {
+    max-width: 900px;
+  }
 }
 
 .button-group {

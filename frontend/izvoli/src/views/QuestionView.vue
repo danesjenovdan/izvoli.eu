@@ -274,7 +274,11 @@ main {
 }
 
 .content {
-    padding: 50px 100px;
+    padding: 20px;
+
+    @media (min-width: 992px) {
+        padding: 50px 100px;
+    }
 
     &>span {
         background-color: #FFFFFF;
@@ -286,9 +290,14 @@ main {
 
     h1 {
         margin-bottom: 20px;
-        font-size: 32px;
-        line-height: 40px;
+        font-size: 24px;
+        line-height: 30px;
         font-weight: 700;
+
+        @media (min-width: 992px) {
+            font-size: 32px;
+            line-height: 40px;
+        }
     }
 
     &>p {

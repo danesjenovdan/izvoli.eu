@@ -20,17 +20,21 @@ export default {
 <template>
     <div class="answer-wrapper">
         <div class="answer">
-            <div v-if="party.answer == 'YES'">
+            <div v-if="party?.answer == 'YES'">
                 <img src="../assets/img/strinjam.svg" />
                 Se strinjam
             </div>
-            <div v-if="party.answer == 'NO'">
+            <div v-if="party?.answer == 'NO'">
                 <img src="../assets/img/ne-strinjam.svg" />
                 Se ne strinjam
             </div>
-            <div v-if="party.answer == 'NEUTRAL'">
+            <div v-if="party?.answer == 'NEUTRAL'">
                 <img src="../assets/img/neopredeljen.svg" />
                 Neopredeljeno
+            </div>
+            <div v-if="!party">
+                <img src="../assets/img/neopredeljen.svg" />
+                Ni odgovora
             </div>
             <button @click="show = true" v-if="!show && party.comment">
                 Obrazložitev

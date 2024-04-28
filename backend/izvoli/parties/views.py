@@ -313,7 +313,7 @@ class Volitvomat(APIView):
         else:
             election = Election.objects.get(id=election_id)
 
-        parties = Party.objects.filter(election=election, finished_quiz=True)
+        parties = Party.objects.filter(election=election)
         statements = Statement.objects.filter(election=election)
 
         statements_dict = {}
