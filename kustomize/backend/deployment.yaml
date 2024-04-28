@@ -42,11 +42,11 @@ spec:
                 name: izvoli-credentials
           resources:
             requests:
-              memory: 1Gi
-              cpu: 500m
+              memory: 200Mi
+              cpu: 100m
             limits:
-              memory: 1Gi
-              cpu: 500m
+              memory: 200Mi
+              cpu: 100m
         - name: migrate
           image: izvoli
           volumeMounts:
@@ -69,11 +69,11 @@ spec:
                 name: izvoli-credentials
           resources:
             requests:
-              memory: 1Gi
-              cpu: 500m
+              memory: 200Mi
+              cpu: 100m
             limits:
-              memory: 1Gi
-              cpu: 500m
+              memory: 200Mi
+              cpu: 100m
       containers:
         - name: izvoli
           image: izvoli
