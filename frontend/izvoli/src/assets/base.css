@@ -35,15 +35,6 @@ button {
   align-items: center;
 }
 
-.header-wrapper {
-  text-align: center;
-  padding: 20px 0;
-}
-
-.header-logo {
-  width: 300px;
-}
-
 .body {
   max-width: 320px;
   background-color: #FFFBE9;

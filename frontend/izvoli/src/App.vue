@@ -1,9 +1,9 @@
 <script setup>
-import { computed } from 'vue';
+import { computed } from 'vue'
 import { RouterLink, RouterView, useRouter } from 'vue-router'
-import { useStore } from 'vuex';
+import { useStore } from 'vuex'
 
-import Footer from '@/components/Footer.vue'
+import PageFooter from '@/components/PageFooter.vue'
 
 const store = useStore()
 const router = useRouter()
@@ -12,14 +12,18 @@ const quizFinished = computed(() => store.getters.getQuizFinished)
 const currentRouteName = computed(() => router.currentRoute.value.name)
 
 const restartQuiz = () => {
-  store.dispatch("clearStore")
-  router.push("/")
+  store.dispatch('clearStore')
+  router.push('/')
 }
 </script>
 
 <template>
   <header class="header-wrapper">
-    <img src="./assets/img/header-logo.svg" class="header-logo" />
+    <img
+      src="./assets/img/header-logo.svg"
+      class="header-logo"
+      alt="Izvoli EU, prva pomoč za evropske volitve"
+    />
     <div class="buttons" v-if="quizFinished">
       <RouterLink to="/rezultati" v-if="currentRouteName != 'results'">
         Poglej rezultate
@@ -32,7 +36,7 @@ const restartQuiz = () => {
     </div>
   </header>
   <RouterView />
-  <Footer></Footer>
+  <PageFooter></PageFooter>
 </template>
 
 <style lang="scss">
@@ -40,14 +44,19 @@ const restartQuiz = () => {
 @import '@/assets/base.css';
 
 .header-wrapper {
-  padding-top: 20px;
-  padding-bottom: 40px;
+  padding-top: 40px;
+  padding-bottom: 42px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  text-align: center;
   position: relative;
   width: 900px;
+
+  .header-logo {
+    width: 292px;
+  }
 
   .buttons {
     position: absolute;
@@ -56,7 +65,8 @@ const restartQuiz = () => {
     flex-direction: column;
     align-items: end;
 
-    a, button {
+    a,
+    button {
       display: inline-flex;
       align-items: center;
       font-size: 15px;
@@ -68,7 +78,7 @@ const restartQuiz = () => {
       border: 2px solid black;
       border-radius: 10px;
       margin-bottom: 10px;
-      background-color: #65A3FF;
+      background-color: #65a3ff;
       cursor: pointer;
 
       img {
