@@ -12,8 +12,8 @@ const store = useStore()
 const idParam = ref(parseInt(route.params.id, 10))
 const moreInfo = ref(false)
 
-const screenWidth = ref(window.innerWidth)
-const desktop = computed(() => screenWidth.value > 992)
+// const screenWidth = ref(window.innerWidth)
+// const desktop = computed(() => screenWidth.value > 992)
 
 const storeInitialized = computed(() => store.getters.getStoreInitialized)
 const questionsList = computed(() => store.getters.getQuestionsList)
@@ -21,7 +21,7 @@ const questionsNo = computed(() => questionsList.value.length)
 const questionId = computed(() => questionsList.value[idParam.value])
 // const progress = computed(() => Math.round(idParam.value / questionsNo.value * 100));
 const question = computed(() => store.state.questions[questionId.value])
-const answers = computed(() => store.getters.getAnswers)
+// const answers = computed(() => store.getters.getAnswers)
 const parties = computed(() => store.getters.getParties)
 const partiesAgree = computed(() => {
   const parties = {}
@@ -144,11 +144,11 @@ onMounted(() => {
           <img src="../assets/img/eyes-right.svg" v-if="!moreInfo" />
           <img src="../assets/img/eyes-down.svg" v-if="moreInfo" />
           <span>Kaj mislijo stranke?</span>
-          <button @click="moreInfo = true" v-if="!moreInfo">
+          <button @click="moreInfo = true" v-if="!moreInfo" class="show">
             Prikaži
             <img src="../assets/img/puscica-trikotnik-modra.svg" />
           </button>
-          <button @click="moreInfo = false" v-if="moreInfo">
+          <button @click="moreInfo = false" v-if="moreInfo" class="hide">
             Skrij
             <img src="../assets/img/puscica-trikotnik-modra.svg" />
           </button>
@@ -303,64 +303,64 @@ main {
 }
 
 .more-info {
-  border-top: 2px solid black;
+  padding: 40px 100px;
   background-color: #f2f7ff;
-  border-bottom-left-radius: 20px;
-  border-bottom-right-radius: 20px;
-  padding: 50px 100px;
+  border-top: 2px solid black;
 
   .show-hide {
+    & > img {
+      width: 21px;
+      margin-right: 5px;
+    }
+
     span {
       font-size: 18px;
       line-height: 20px;
       font-weight: 800;
-      margin: 0 5px;
-    }
-
-    & > img {
-      width: 20px;
     }
 
     button {
-      background-color: inherit;
-      border: none;
+      display: inline-flex;
+      gap: 1px;
+      align-items: flex-end;
+      margin-left: 7px;
       padding: 0;
+      background: transparent;
+      border: none;
       border-bottom: 1px solid #0e3d97;
       color: #0e3d97;
       font-size: 15px;
-      line-height: 16px;
+      line-height: 1;
       cursor: pointer;
 
       img {
-        width: 10px;
+        width: 12px;
+        margin-bottom: 1px;
+      }
+
+      &.hide {
+        img {
+          transform: rotate(180deg);
+        }
       }
     }
   }
 
   .parties {
     display: flex;
-    margin-top: 20px;
+    gap: 26px;
+    margin-top: 22px;
 
     & > div {
       flex: 1;
-      padding-left: 10px;
-      padding-right: 10px;
 
-      &:first-child {
-        padding-left: 0;
+      .head {
+        padding: 6px 8px;
+        background-color: #e2edff;
+        font-size: 13px;
+        line-height: 18px;
+        font-weight: 600;
       }
-
-      &:last-child {
-        padding-right: 0;
-      }
-    }
-
-    .head {
-      font-size: 13px;
-      font-weight: 600;
-      line-height: 18px;
-      background-color: #e2edff;
-      padding: 5px 8px;
     }
   }
 }
