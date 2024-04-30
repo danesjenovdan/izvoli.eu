@@ -76,32 +76,7 @@ onMounted(() => {
 
   .button-wrapper {
     margin-top: 56px;
-
-    .button-go {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 322px;
-      margin-inline: auto;
-      padding: 15px 25px 15px 31px;
-      background-color: #ffd100;
-      color: black;
-      border: 2px solid black;
-      border-radius: 20px;
-      font-size: 24px;
-      line-height: 20px;
-      font-weight: 800;
-      text-decoration: none;
-      transition: transform 0.15s ease-in-out;
-
-      img {
-        width: 34px;
-      }
-
-      &:hover {
-        transform: scale(0.9);
-      }
-    }
+    text-align: center;
   }
 }
 </style>

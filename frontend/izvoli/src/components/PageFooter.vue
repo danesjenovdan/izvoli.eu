@@ -307,21 +307,20 @@ footer {
         cursor: pointer;
         position: relative;
 
-        &::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          border-radius: inherit;
+        &:checked {
           background-color: #ffd100;
-          background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" fill="%23010101"><path d="M3.73164 9.02395L0 5.2925L1.77979 3.51264L3.73162 5.46455L8.22029 0.976074L10.0001 2.75586L3.73164 9.02395Z"/></svg>');
-          background-size: 75%;
-          background-position: center;
-          background-repeat: no-repeat;
-          opacity: 0;
-        }
 
-        &:checked::before {
-          opacity: 1;
+          &::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 9px;
+            height: 5px;
+            border: solid black;
+            border-width: 0 0 2px 2px;
+            transform: scale(1) rotate(-45deg) translateX(-12%) translateY(90%);
+          }
         }
       }
     }

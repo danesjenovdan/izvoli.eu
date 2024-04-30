@@ -93,7 +93,7 @@ const store = createStore({
           // go through answers
           for (const party_id in answers_party_matches) {
             // compare user answer to all parties
-            if (state.answers[id] == state.questions[id].parties[party_id].answer) {
+            if (state.answers[id] == state.questions[id].parties[party_id]?.answer) { // TODO: tu sem dal "?." ker je drugače lahko undefined, preveri da to kalkulacijo procentov ne uniči
               answers_party_matches[party_id].count++
               answers_party_matches[party_id].percentage = Math.round(
                 (answers_party_matches[party_id].count / answersNo) * 100

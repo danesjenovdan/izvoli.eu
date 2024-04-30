@@ -1,289 +1,369 @@
 <script setup>
-import { ref, watch, computed, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { useStore } from 'vuex';
+import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
-const store = useStore();
-const router = useRouter();
+const store = useStore()
+const router = useRouter()
 
-const storeInitialized = computed(() => store.getters.getStoreInitialized);
-const quizFinished = computed(() => store.getters.getQuizFinished);
-const parties = computed(() => store.getters.getParties);
-const results = computed(() => store.getters.getResults);
+const storeInitialized = computed(() => store.getters.getStoreInitialized)
+const quizFinished = computed(() => store.getters.getQuizFinished)
+const parties = computed(() => store.getters.getParties)
+const results = computed(() => store.getters.getResults)
 const chosenParties = ref([])
 const partiesNoAnswer = computed(() => {
-    const p = {}
-    const partiesAnswered = [...results.value].map((el) => el.party_id)
-    for (const [key, value] of Object.entries(parties.value)) {
-        if (!(partiesAnswered.includes(key))) {
-            p[key] = value
-        }
+  const p = {}
+  const partiesAnswered = [...results.value].map((el) => el.party_id)
+  for (const [key, value] of Object.entries(parties.value)) {
+    if (!partiesAnswered.includes(key)) {
+      p[key] = value
     }
-    return p
+  }
+  return p
 })
 
-const share = () => {
-    navigator.clipboard.writeText("https://volitvomat.lb.djnd.si/").then(function () {
-        alert('Povezava je skopirana v odložišče!')
-    }, function () {
-        // ni se skopiralo ...
-    });
-};
-
 const compareWithWinningParties = () => {
-    const parties = [...results.value.map(res => res.party_id)]
-    parties.splice(3)
-    store.commit('setPartiesToCompare', { "parties": parties })
-    router.push("/rezultati/0")
+  const parties = [...results.value.map((res) => res.party_id)]
+  parties.splice(3)
+  store.commit('setPartiesToCompare', { parties: parties })
+  router.push('/rezultati/0')
 }
 
 const compareWithChosenParties = () => {
-    store.commit('setPartiesToCompare', { "parties": chosenParties.value })
-    router.push("/rezultati/0")
+  store.commit('setPartiesToCompare', { parties: chosenParties.value })
+  router.push('/rezultati/0')
 }
 
 const compareWithAllParties = () => {
-    chosenParties.value = [...results.value.map(res => res.party_id)]
+  chosenParties.value = [...results.value.map((res) => res.party_id)]
 }
 
 onMounted(() => {
-    if (!storeInitialized.value) {
-        store.dispatch("initializeStore").then((quiz_finished) => {
-            if (!quiz_finished) {
-                router.push("/");
-            }
-        })
-    }
-    if (!quizFinished.value) {
-        router.push("/");
-    }
+  if (!storeInitialized.value) {
+    store.dispatch('initializeStore').then((quiz_finished) => {
+      if (!quiz_finished) {
+        router.push('/')
+      }
+    })
+  }
+  if (!quizFinished.value) {
+    router.push('/')
+  }
 })
 
+function dashOffsetFromPercentage(percentage) {
+  const circumference = 2 * Math.PI * 39
+  const amount = ((percentage - 25) / 100) * circumference
+  return circumference - amount
+}
+
+function dashArrayFromPercentage(percentage) {
+  const circumference = 2 * Math.PI * 39
+  const amount = (percentage / 100) * circumference
+  const remainder = circumference - amount
+  return `${amount} ${remainder}`
+}
+
+function dashArrayFromRemainderPercentage(percentage) {
+  const circumference = 2 * Math.PI * 39
+  const amount = (percentage / 100) * circumference
+  const remainder = circumference - amount
+  return `${remainder} ${amount}`
+}
+
+function partyImageUrl(url) {
+  if (!url) return ''
+  const newUrl = new URL(url, store.getters.getApiUrl)
+  return newUrl.toString()
+}
 </script>
 
 <template>
-    <main class="container">
-        <div class="body" v-if="results.length > 0">
-            <div class="content">
-                <h1>Najbolj se ujemaš s:</h1>
-                <div class="winners">
-                    <div v-for="result in results" :key="result.party_id" class="">
-                        <div class="party">
-                            <img :src="parties[result.party_id].image" alt="" class="party-image" />
-                            <p class="party-name">{{ parties[result.party_id].name }}</p>
-                            <p>{{ result.percentage }} %</p>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <button class="yellow-button" @click="compareWithWinningParties">
-                        Primerjaj svoje odgovore s temi strankami
-                        <img src="../assets/img/puscica.svg" />
-                    </button>
-                </div>
-            </div>
-            <div class="more-info">
-                <p><span>Izberi stranke za primerjavo</span><button @click="compareWithAllParties">Izberi vse
-                        stranke</button></p>
-
-                <div v-for="party in results" :key="party.party_id" class="party">
-                    <label :for="`chosen-party-${party.party_id}`">
-                        <input type="checkbox" :id="`chosen-party-${party.party_id}`" :value="party.party_id"
-                            v-model="chosenParties">
-                        <img :src="parties[party.party_id].image" class="party-image" />
-                        {{ parties[party.party_id].name }}
-                    </label>
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" :aria-valuenow="party.percentage" aria-valuemin="0"
-                            :aria-valuemax="100" :style="{ width: `${party.percentage}%` }"
-                            :class="{'border-end': party.percentage < 100}">
-                        </div>
-                    </div>
-                    <span>{{ party.percentage }} %</span>
-                </div>
-                <div v-for="party in partiesNoAnswer" :key="party.id" class="party">
-                    <label :for="`chosen-party-${party.id}`">
-                        <input type="checkbox" :id="`chosen-party-${party.id}`" :value="party.id"
-                            v-model="chosenParties">
-                        <img :src="party.image" class="party-image" />
-                        {{ party.name }}
-                    </label>
-                </div>
-
-                <div class="big-button-wrapper">
-                    <button class="yellow-button" @click="compareWithChosenParties">
-                        Primerjaj svoje odgovore s temi strankami
-                        <img src="../assets/img/puscica.svg" />
-                    </button>
-                </div>
-            </div>
+  <main class="container">
+    <div class="body" v-if="results.length > 0">
+      <div class="content">
+        <h1>Najbolj se ujemaš s:</h1>
+        <div class="winners">
+          <div v-for="result in results" :key="result.party_id" class="party">
+            <svg width="86" height="86" class="party-donut">
+              <defs>
+                <pattern
+                  :id="`donut-image-${result.party_id}`"
+                  x="0"
+                  y="0"
+                  height="100%"
+                  width="100%"
+                  viewBox="0 0 100 100"
+                >
+                  <rect x="0" y="0" width="100" height="100" fill="#fff"></rect>
+                  <image
+                    x="0"
+                    y="0"
+                    width="100"
+                    height="100"
+                    :href="partyImageUrl(parties[result.party_id].image)"
+                  ></image>
+                </pattern>
+              </defs>
+              <circle cx="43" cy="43" r="43" fill="#000" />
+              <circle
+                cx="43"
+                cy="43"
+                r="39"
+                fill="none"
+                stroke="#7FB2FF"
+                stroke-width="6"
+                :stroke-dashoffset="dashOffsetFromPercentage(0)"
+                :stroke-dasharray="dashArrayFromPercentage(25)"
+              />
+              <circle
+                cx="43"
+                cy="43"
+                r="39"
+                fill="none"
+                stroke="#FFF"
+                stroke-width="6"
+                :stroke-dashoffset="dashOffsetFromPercentage(25 + 0.5)"
+                :stroke-dasharray="dashArrayFromRemainderPercentage(25 + 1)"
+              />
+              <circle cx="43" cy="43" r="35" :fill="`url(#donut-image-${result.party_id})`" />
+            </svg>
+            <p class="party-name">{{ parties[result.party_id].name }}</p>
+            <p class="party-percentage">{{ result.percentage }} %</p>
+          </div>
         </div>
-
-        <div class="body">
-            <div class="content">
-                <h2>Primerjaj svoja stališča z drugimi evropskimi strankami</h2>
-                <p>Neki kratek tagline, kaj se tu zgodi. Kao evropski spirit pa to bla bla bla. </p>
-            </div>
+        <div class="button-wrapper">
+          <button class="button-go" @click="compareWithWinningParties">
+            Primerjaj svoje odgovore s temi strankami
+            <img src="../assets/img/puscica.svg" alt="" />
+          </button>
         </div>
-    </main>
+      </div>
+      <div class="more-info">
+        <p>
+          <span>Izberi stranke za primerjavo</span>
+          <button @click="compareWithAllParties">Izberi vse stranke</button>
+        </p>
+        <div v-for="party in results" :key="party.party_id" class="party">
+          <label :for="`chosen-party-${party.party_id}`">
+            <input
+              type="checkbox"
+              :id="`chosen-party-${party.party_id}`"
+              :value="party.party_id"
+              v-model="chosenParties"
+            />
+            <img :src="parties[party.party_id].image" class="party-image" />
+            {{ parties[party.party_id].name }}
+          </label>
+          <div class="progress">
+            <div
+              class="progress-bar"
+              role="progressbar"
+              :aria-valuenow="party.percentage"
+              aria-valuemin="0"
+              :aria-valuemax="100"
+              :style="{ width: `${party.percentage}%` }"
+              :class="{ 'border-end': party.percentage < 100 }"
+            ></div>
+          </div>
+          <span>{{ party.percentage }} %</span>
+        </div>
+        <div v-for="party in partiesNoAnswer" :key="party.id" class="party">
+          <label :for="`chosen-party-${party.id}`">
+            <input
+              type="checkbox"
+              :id="`chosen-party-${party.id}`"
+              :value="party.id"
+              v-model="chosenParties"
+            />
+            <img :src="party.image" class="party-image" />
+            {{ party.name }}
+          </label>
+        </div>
+        <div class="button-wrapper">
+          <button class="button-go" @click="compareWithChosenParties">
+            Primerjaj svoje odgovore s temi strankami
+            <img src="../assets/img/puscica.svg" alt="" />
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="body">
+      <div class="content">
+        <h2>Primerjaj svoja stališča z drugimi evropskimi strankami</h2>
+        <p>Neki kratek tagline, kaj se tu zgodi. Kao evropski spirit pa to bla bla bla.</p>
+      </div>
+    </div> -->
+  </main>
 </template>
 
 <style lang="scss" scoped>
-
 .body {
-    margin-bottom: 50px;
-}
-
-.content {
-    padding: 50px;
+  .button-wrapper {
+    margin-top: 42px;
     text-align: center;
-}
 
-h1 {
-    margin-bottom: 20px;
-}
+    .button-go {
+      font-size: 18px;
+      line-height: 20px;
+      padding-inline: 17px 17px;
+    }
+  }
 
-.winners {
-    display: flex;
-    justify-content: center;
+  .content {
+    padding-inline: 100px;
+    padding-top: 60px;
+    padding-bottom: 56px;
 
-    .party {
-        color: black;
-        text-decoration: none;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin: 0 10px;
+    h1 {
+      margin-bottom: 20px;
+      font-size: 32px;
+      line-height: 40px;
+      font-weight: 700;
+      text-align: center;
+    }
 
-        .party-image {
-            width: 80px;
-            height: 80px;
-            border: 1px solid black;
-            border-radius: 40px;
-            margin-bottom: 10px;
-        }
+    .winners {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
 
-        p {
-            font-size: 15px;
-            font-weight: 500;
+      .party {
+        flex: 0 0 145px;
+        text-align: center;
+
+        .party-donut {
+          display: block;
+          margin-inline: auto;
+          margin-bottom: 12px;
         }
 
         .party-name {
-            font-size: 20px;
-            font-weight: 800;
+          margin-bottom: 6px;
+          font-size: 18px;
+          line-height: 1;
+          font-weight: 800;
         }
+
+        .party-percentage {
+          font-size: 18px;
+          line-height: 1;
+          font-weight: 500;
+        }
+      }
     }
-}
+  }
 
-.yellow-button {
-    background-color: #FFE368;
-    border: 2px solid black;
-    border-radius: 20px;
-    margin-top: 30px;
-    display: inline-flex;
-    align-items: center;
-    padding: 16px;
-    font-size: 18px;
-    font-weight: 800;
-    line-height: 20px;
-    cursor: pointer;
-
-    img {
-        width: 28px;
-        margin-left: 10px;
-    }
-
-    // &:hover {
-    //     background-color: #FFE368;
-    // }
-}
-
-.more-info {
+  .more-info {
     border-top: 2px solid black;
-    background-color: #F2F7FF;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-    padding: 50px 100px;
+    background-color: #f2f7ff;
+    padding-inline: 100px;
+    padding-top: 60px;
+    padding-bottom: 56px;
 
-    &>p {
+    & > p {
+      span {
         font-size: 18px;
+        line-height: 20px;
         font-weight: 800;
-        margin-bottom: 20px;
-        
-        button {
-            background-color: inherit;
-            border: none;
-            padding: 0;
-            border-bottom: 1px solid #0E3D97;
-            color: #0E3D97;
-            font-size: 15px;
-            line-height: 16px;
-            cursor: pointer;
-            margin-left: 20px;
-        }
+      }
+
+      button {
+        display: inline-flex;
+        gap: 1px;
+        align-items: flex-end;
+        margin-left: 7px;
+        padding: 0;
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid #0e3d97;
+        color: #0e3d97;
+        font-size: 15px;
+        line-height: 1;
+        cursor: pointer;
+      }
     }
 
     .party {
-        display: flex;
-        align-items: center;
-        margin: 15px 0;
+      //     display: flex;
+      //     align-items: center;
+      //     margin: 15px 0;
 
-        label {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            width: 25%;
+      label {
+        //       display: flex;
+        //       align-items: center;
+        //       cursor: pointer;
+        //       width: 25%;
 
-            .party-image {
-                width: 34px;
-                height: 34px;
-                border: 1px solid black;
-                border-radius: 18px;
-                margin: 0 10px;
+        input[type='checkbox'] {
+          flex-shrink: 0;
+          appearance: none;
+          background-color: transparent;
+          margin: 2px 0 0 0;
+          width: 16px;
+          height: 16px;
+          border: 1px solid black;
+          border-radius: 4px;
+          transform: translateY(-0.075em);
+          cursor: pointer;
+          position: relative;
+
+          &:checked {
+            background-color: #ffd100;
+
+            &::before {
+              content: '';
+              position: absolute;
+              left: 0;
+              top: 0;
+              width: 9px;
+              height: 5px;
+              border: solid black;
+              border-width: 0 0 2px 2px;
+              transform: scale(1) rotate(-45deg) translateX(-12%) translateY(90%);
             }
+          }
         }
 
-        .progress {
-            margin: 0;
-            width: 300px;
-            height: 20px;
-            background-color: #ffffff;
-            border: 1px solid black;
-            border-radius: 10px;
-            overflow: visible;
+        //       .party-image {
+        //         width: 34px;
+        //         height: 34px;
+        //         border: 1px solid black;
+        //         border-radius: 18px;
+        //         margin: 0 10px;
+        //       }
+      }
 
-            .progress-bar {
-                background-color: #65A3FF;
-                border-radius: 10px;
-                height: 100%;
-                position: relative;
-                overflow: visible;
-                transition: width 0.5s;
-        
-                &.border-end {
-                    border-right: 1px solid black;
-                }
-            }
-        }
+      //     .progress {
+      //       margin: 0;
+      //       width: 300px;
+      //       height: 20px;
+      //       background-color: #ffffff;
+      //       border: 1px solid black;
+      //       border-radius: 10px;
+      //       overflow: visible;
 
-        span {
-            margin-left: 10px;
-            font-size: 15px;
-            font-weight: 500;
-        }
+      //       .progress-bar {
+      //         background-color: #65a3ff;
+      //         border-radius: 10px;
+      //         height: 100%;
+      //         position: relative;
+      //         overflow: visible;
+      //         transition: width 0.5s;
+
+      //         &.border-end {
+      //           border-right: 1px solid black;
+      //         }
+      //       }
+      //     }
+
+      //     span {
+      //       margin-left: 10px;
+      //       font-size: 15px;
+      //       font-weight: 500;
+      //     }
     }
-
-    .big-button-wrapper {
-        text-align: center;
-    }
+  }
 }
-
-// @media (min-width: 1200px) {
-//     .container {
-//         display: flex;
-//         flex-direction: column;
-//         justify-content: center;
-//     }
-// }
-
 </style>

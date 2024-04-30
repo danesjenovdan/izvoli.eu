@@ -64,8 +64,12 @@ button {
   align-items: center;
 }
 
-.body {
+.container {
+  width: 100%;
   max-width: 900px;
+}
+
+.body {
   background-color: #fffbe9;
   border: 2px solid black;
   border-radius: 20px;
@@ -116,6 +120,34 @@ button {
         margin-left: 4px;
       }
     }
+  }
+}
+
+.button-go {
+  display: inline-flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 322px;
+  margin-inline: auto;
+  padding: 15px 25px 15px 31px;
+  background-color: #ffd100;
+  color: black;
+  border: 2px solid black;
+  border-radius: 20px;
+  font-size: 24px;
+  line-height: 20px;
+  font-weight: 800;
+  text-decoration: none;
+  transition: transform 0.15s ease-in-out;
+  cursor: pointer;
+
+  img {
+    width: 34px;
+  }
+
+  &:hover {
+    transform: scale(0.9);
   }
 }
 </style>
