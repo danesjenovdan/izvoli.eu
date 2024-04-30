@@ -3,6 +3,7 @@ import { ref, watch, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import PartyElement from '@/components/PartyElement.vue'
+import QuestionsProgress from '@/components/QuestionsProgress.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -103,14 +104,7 @@ onMounted(() => {
 <template>
   <main class="container">
     <div class="body" v-if="question">
-      <div class="progress-bar">
-        <div class="progress-number">{{ parseInt(idParam) + 1 }} / {{ questionsNo }}</div>
-        <div
-          v-for="qNo in questionsNo"
-          class="progress-circle"
-          :class="{ active: qNo == parseInt(idParam) + 1, checked: qNo < parseInt(idParam) + 1 }"
-        ></div>
-      </div>
+      <QuestionsProgress :current="idParam" :count="questionsNo" />
       <div class="content">
         <span v-if="question.category">{{ question.category }}</span>
         <h1>{{ question.title }}</h1>
@@ -197,94 +191,11 @@ onMounted(() => {
   visibility: hidden;
 }
 
-// .container {
-//     padding: 0;
-
-//     @media (min-width: 992px) {
-//         max-width: 960px;
-//     }
-
-//     @media (min-width: 1200px) {
-//         max-width: 1140px;
-//     }
-// }
-
 main {
   display: flex;
   flex-direction: column;
   justify-content: center;
   height: 100%;
-}
-
-.progress-bar {
-  border-bottom: 2px solid black;
-  background-color: #f2f7ff;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
-  padding: 10px 24px;
-  display: flex;
-  align-items: center;
-}
-
-.progress-number {
-  font-size: 12px;
-  line-height: 18px;
-  font-weight: 600;
-  padding-right: 10px;
-  flex-shrink: 0;
-}
-
-.progress-circle {
-  border: 2px solid black;
-  border-radius: 9px;
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-  position: relative;
-
-  &:not(:last-child) {
-    margin-right: 9px;
-
-    &::after {
-      content: '';
-      height: 2px;
-      width: 9px;
-      background-color: black;
-      position: absolute;
-      right: -11px;
-      top: 6px;
-    }
-  }
-
-  &.checked {
-    background-color: #ffe468;
-
-    &::before {
-      content: '';
-      width: 10px;
-      height: 10px;
-      display: block;
-      margin-left: 2px;
-      margin-top: 2px;
-      background-image: url('@/assets/img/check.svg');
-    }
-  }
-
-  &.active {
-    background-color: #7fb2ff;
-    position: relative;
-
-    &::before {
-      content: '';
-      width: 8px;
-      height: 8px;
-      display: block;
-      border-radius: 4px;
-      background-color: black;
-      margin-left: 3px;
-      margin-top: 3px;
-    }
-  }
 }
 
 .content {
