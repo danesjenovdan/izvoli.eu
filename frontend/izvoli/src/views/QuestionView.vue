@@ -9,7 +9,7 @@ const route = useRoute()
 const router = useRouter()
 const store = useStore()
 
-const idParam = ref(parseInt(route.params.id))
+const idParam = ref(parseInt(route.params.id, 10))
 const moreInfo = ref(false)
 
 const screenWidth = ref(window.innerWidth)
@@ -55,7 +55,7 @@ const skipQuestion = (id, answer) => {
   // remove saved answer
   store.commit('removeAnswer', { id, answer })
   if (idParam.value < questionsNo.value - 1) {
-    router.push(`/vprasanje/${parseInt(idParam.value) + 1}`)
+    router.push(`/vprasanje/${idParam.value + 1}`)
   } else {
     store.commit('calculateResults')
     router.push('/rezultati')
@@ -67,7 +67,7 @@ const saveAnswer = (id, answer) => {
   store.commit('addAnswer', { id, answer })
   // navigate to next question
   if (idParam.value < questionsNo.value - 1) {
-    router.push(`/vprasanje/${parseInt(idParam.value) + 1}`)
+    router.push(`/vprasanje/${idParam.value + 1}`)
   } else {
     // last question -> calculate results and navigate to results
     store.commit('calculateResults')
@@ -78,7 +78,7 @@ const saveAnswer = (id, answer) => {
 watch(
   () => route.params.id,
   async (id) => {
-    idParam.value = id
+    idParam.value = parseInt(id, 10)
     // console.log(idParam.value, questionsNo.value, progress.value)
   }
 )
@@ -106,17 +106,19 @@ onMounted(() => {
     <div class="body" v-if="question">
       <QuestionsProgress :current="idParam" :count="questionsNo" />
       <div class="content">
-        <span v-if="question.category">{{ question.category }}</span>
-        <h1>{{ question.title }}</h1>
-        <p>{{ question.description }}</p>
+        <div v-if="question.category" class="category">{{ question.category }}</div>
+        <h1 v-if="question.title" class="title">{{ question.title }}</h1>
+        <p v-if="question.description" class="description">{{ question.description }}</p>
         <div class="buttons">
           <RouterLink
-            :to="`/vprasanje/${parseInt(idParam) - 1}`"
+            :to="`/vprasanje/${idParam - 1}`"
             class="back"
-            :class="{ hidden: idParam == 0 }"
+            :class="{ hidden: idParam === 0 }"
           >
-            <img src="../assets/img/puscica-trikotnik.svg" />
-            <img src="../assets/img/puscica-trikotnik.svg" />
+            <div>
+              <img src="../assets/img/puscica-trikotnik.svg" alt="" />
+              <img src="../assets/img/puscica-trikotnik.svg" alt="" />
+            </div>
             Nazaj
           </RouterLink>
           <button @click="saveAnswer(questionId, 'NO')" class="disagree">
@@ -129,8 +131,10 @@ onMounted(() => {
           </button>
           <button @click="skipQuestion(questionId, true)" class="skip">
             Preskoči
-            <img src="../assets/img/puscica-trikotnik.svg" />
-            <img src="../assets/img/puscica-trikotnik.svg" />
+            <div>
+              <img src="../assets/img/puscica-trikotnik.svg" alt="" />
+              <img src="../assets/img/puscica-trikotnik.svg" alt="" />
+            </div>
           </button>
         </div>
       </div>
@@ -199,113 +203,104 @@ main {
 }
 
 .content {
-  padding: 20px;
+  padding: 50px 100px 60px 100px;
 
-  @media (min-width: 992px) {
-    padding: 50px 100px;
-  }
-
-  & > span {
-    background-color: #ffffff;
-    border-radius: 10px;
+  .category {
+    display: inline-block;
+    margin-bottom: 16px;
+    padding: 4px 8px;
+    background-color: rgb(127, 127, 127, 0.15);
+    border-radius: 9999px;
     font-size: 12px;
-    font-weight: 400;
-    padding: 2px 4px;
+    line-height: 1;
   }
 
-  h1 {
-    margin-bottom: 20px;
-    font-size: 24px;
-    line-height: 30px;
+  .title {
+    margin-bottom: 22px;
+    font-size: 32px;
+    line-height: 40px;
     font-weight: 700;
-
-    @media (min-width: 992px) {
-      font-size: 32px;
-      line-height: 40px;
-    }
   }
 
-  & > p {
-    font-size: 20px;
-    line-height: 32px;
-    margin-bottom: 30px;
+  .description {
+    margin-bottom: 22px;
+    font-size: 21px;
+    line-height: 31px;
   }
 
   .buttons {
     display: flex;
-    align-items: end;
-  }
+    gap: 20px;
+    justify-content: center;
+    align-items: flex-end;
+    margin-top: 42px;
 
-  .agree,
-  .disagree,
-  .back,
-  .skip {
-    border: 2px solid black;
-    border-radius: 20px;
-    margin: 0 10px;
-    display: inline-flex;
-    align-items: center;
-    cursor: pointer;
-  }
-
-  .agree,
-  .disagree {
-    background-color: #ffffff;
-    padding: 16px;
-    font-size: 18px;
-    font-weight: 800;
-    line-height: 20px;
-
-    img {
-      width: 28px;
-      margin-right: 10px;
+    .agree,
+    .disagree,
+    .back,
+    .skip {
+      background: transparent;
+      border: 2px solid black;
+      border-radius: 20px;
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      justify-content: flex-start;
+      cursor: pointer;
     }
 
-    &:hover {
-      background-color: #ffe368;
-    }
-  }
+    .back,
+    .skip {
+      padding: 14px 10px;
+      width: 100px;
+      font-size: 10px;
+      line-height: 1;
+      font-weight: 500;
+      color: inherit;
+      text-decoration: none;
 
-  .back,
-  .skip {
-    background-color: #fffbe9;
-    padding: 16px;
-    font-size: 10px;
-    font-weight: 500;
-    line-height: 10px;
+      img {
+        height: 16px;
+        transform: rotate(90deg);
 
-    img {
-      width: 14px;
-      transform: rotate(90deg);
+        &:first-of-type {
+          margin-right: -6px;
+        }
+      }
 
-      &:first-of-type {
-        margin-left: 5px;
-        margin-right: -5px;
+      &:hover {
+        background-color: #fff;
       }
     }
 
-    &:hover {
-      background-color: #ffffff;
+    .skip {
+      justify-content: flex-end;
+
+      img {
+        transform: rotate(-90deg);
+      }
     }
-  }
 
-  .back {
-    color: black;
-    text-decoration: none;
-  }
+    .agree,
+    .disagree {
+      gap: 10px;
+      background-color: #fff;
+      padding: 20px 9px 20px 18px;
+      width: 200px;
+      font-size: 18px;
+      line-height: 20px;
+      font-weight: 800;
 
-  .skip {
-    img {
-      transform: rotate(-90deg);
+      img {
+        width: 28px;
+      }
+
+      &:hover {
+        background-color: #ffe368;
+      }
     }
   }
 }
-
-// @media (min-width: 768px) {
-//   main {
-//     width: 720px;
-//   }
-// }
 
 .more-info {
   border-top: 2px solid black;
