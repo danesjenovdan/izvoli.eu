@@ -25,7 +25,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="container">
+  <main class="container">
     <div class="body">
       <p class="introduction">
         Politične stranke, med katerimi bomo izbirali na volitvah 24. 4. 2022, imajo različne
@@ -54,12 +54,12 @@ onMounted(() => {
         </RouterLink>
       </div>
     </div>
-  </div>
+  </main>
 </template>
 
 <style lang="scss" scoped>
 .body {
-  padding-inline: 95px;
+  padding-inline: 100px;
   padding-top: 72px;
   padding-bottom: 56px;
 

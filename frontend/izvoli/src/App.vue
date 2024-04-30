@@ -41,18 +41,44 @@ const restartQuiz = () => {
 
 <style lang="scss">
 @import '@/assets/fonts/selfhosted.css';
-@import '@/assets/base.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  background: #7fb2ff;
+  font-family: 'wf-manrope', sans-serif;
+}
+
+button {
+  font: inherit;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.body {
+  max-width: 900px;
+  background-color: #fffbe9;
+  border: 2px solid black;
+  border-radius: 20px;
+  overflow: hidden;
+}
 
 .header-wrapper {
   padding-top: 40px;
   padding-bottom: 42px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  width: 100%;
+  max-width: 900px;
   text-align: center;
   position: relative;
-  width: 900px;
 
   .header-logo {
     width: 292px;
@@ -60,29 +86,32 @@ const restartQuiz = () => {
 
   .buttons {
     position: absolute;
+    top: 0;
+    bottom: 0;
     right: 0;
     display: flex;
+    gap: 10px;
     flex-direction: column;
     align-items: end;
+    justify-content: center;
 
     a,
     button {
       display: inline-flex;
       align-items: center;
+      padding: 6px 11px 6px 14px;
+      background: transparent;
+      border: 2px solid black;
+      border-radius: 10px;
       font-size: 15px;
+      line-height: 20px;
       font-weight: 800;
       color: black;
       text-decoration: none;
-      line-height: 20px;
-      padding: 4px 8px;
-      border: 2px solid black;
-      border-radius: 10px;
-      margin-bottom: 10px;
-      background-color: #65a3ff;
       cursor: pointer;
 
       img {
-        width: 20px;
+        width: 21px;
         height: auto;
         margin-left: 4px;
       }
