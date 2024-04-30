@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, computed, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import PartyElement from '@/components/PartyElement.vue'
@@ -9,17 +9,15 @@ const route = useRoute()
 const router = useRouter()
 const store = useStore()
 
-const idParam = ref(parseInt(route.params.id, 10))
 const moreInfo = ref(false)
 
-// const screenWidth = ref(window.innerWidth)
-// const desktop = computed(() => screenWidth.value > 992)
+const questionIndex = computed(() => parseInt(route.params.id, 10) - 1)
+const questionNumber = computed(() => questionIndex.value + 1)
 
 const storeInitialized = computed(() => store.getters.getStoreInitialized)
 const questionsList = computed(() => store.getters.getQuestionsList)
 const questionsNo = computed(() => questionsList.value.length)
-const questionId = computed(() => questionsList.value[idParam.value])
-// const progress = computed(() => Math.round(idParam.value / questionsNo.value * 100));
+const questionId = computed(() => questionsList.value[questionIndex.value])
 const question = computed(() => store.state.questions[questionId.value])
 // const answers = computed(() => store.getters.getAnswers)
 const parties = computed(() => store.getters.getParties)
@@ -54,8 +52,8 @@ const partiesNeutral = computed(() => {
 const skipQuestion = (id, answer) => {
   // remove saved answer
   store.commit('removeAnswer', { id, answer })
-  if (idParam.value < questionsNo.value - 1) {
-    router.push(`/vprasanje/${idParam.value + 1}`)
+  if (questionIndex.value < questionsNo.value - 1) {
+    router.push(`/vprasanje/${questionNumber.value + 1}`)
   } else {
     store.commit('calculateResults')
     router.push('/rezultati')
@@ -66,22 +64,14 @@ const saveAnswer = (id, answer) => {
   // save answer
   store.commit('addAnswer', { id, answer })
   // navigate to next question
-  if (idParam.value < questionsNo.value - 1) {
-    router.push(`/vprasanje/${idParam.value + 1}`)
+  if (questionIndex.value < questionsNo.value - 1) {
+    router.push(`/vprasanje/${questionNumber.value + 1}`)
   } else {
     // last question -> calculate results and navigate to results
     store.commit('calculateResults')
     router.push('/rezultati')
   }
 }
-
-watch(
-  () => route.params.id,
-  async (id) => {
-    idParam.value = parseInt(id, 10)
-    // console.log(idParam.value, questionsNo.value, progress.value)
-  }
-)
 
 onMounted(() => {
   if (!storeInitialized.value) {
@@ -104,16 +94,16 @@ onMounted(() => {
 <template>
   <main class="container">
     <div class="body" v-if="question">
-      <QuestionsProgress :current="idParam" :count="questionsNo" />
+      <QuestionsProgress :current="questionNumber" :count="questionsNo" />
       <div class="content">
         <div v-if="question.category" class="category">{{ question.category }}</div>
         <h1 v-if="question.title" class="title">{{ question.title }}</h1>
         <p v-if="question.description" class="description">{{ question.description }}</p>
         <div class="buttons">
           <RouterLink
-            :to="`/vprasanje/${idParam - 1}`"
+            :to="`/vprasanje/${questionNumber - 1}`"
             class="back"
-            :class="{ hidden: idParam === 0 }"
+            :class="{ hidden: questionIndex <= 0 }"
           >
             <div>
               <img src="../assets/img/puscica-trikotnik.svg" alt="" />

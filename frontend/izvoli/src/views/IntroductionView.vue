@@ -49,7 +49,7 @@ onMounted(() => {
         jim lahko tako olajšaš odločitev.
       </p>
       <div class="button-wrapper">
-        <RouterLink to="/vprasanje/0" class="button-go">
+        <RouterLink to="/vprasanje/1" class="button-go">
           Vstopi <img src="../assets/img/puscica.svg" alt="" />
         </RouterLink>
       </div>
