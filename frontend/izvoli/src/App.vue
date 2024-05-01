@@ -1,9 +1,9 @@
 <script setup>
-import { computed } from 'vue';
+import { computed } from 'vue'
 import { RouterLink, RouterView, useRouter } from 'vue-router'
-import { useStore } from 'vuex';
+import { useStore } from 'vuex'
 
-import Footer from '@/components/Footer.vue'
+import PageFooter from '@/components/PageFooter.vue'
 
 const store = useStore()
 const router = useRouter()
@@ -12,14 +12,18 @@ const quizFinished = computed(() => store.getters.getQuizFinished)
 const currentRouteName = computed(() => router.currentRoute.value.name)
 
 const restartQuiz = () => {
-  store.dispatch("clearStore")
-  router.push("/")
+  store.dispatch('clearStore')
+  router.push('/')
 }
 </script>
 
 <template>
   <header class="header-wrapper">
-    <img src="./assets/img/header-logo.svg" class="header-logo" />
+    <img
+      src="./assets/img/header-logo.svg"
+      class="header-logo"
+      alt="Izvoli EU, prva pomoč za evropske volitve"
+    />
     <div class="buttons" v-if="quizFinished">
       <RouterLink to="/rezultati" v-if="currentRouteName != 'results'">
         Poglej rezultate
@@ -32,51 +36,118 @@ const restartQuiz = () => {
     </div>
   </header>
   <RouterView />
-  <Footer></Footer>
+  <PageFooter></PageFooter>
 </template>
 
 <style lang="scss">
 @import '@/assets/fonts/selfhosted.css';
-@import '@/assets/base.css';
 
-.header-wrapper {
-  padding-top: 20px;
-  padding-bottom: 40px;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  background: #7fb2ff;
+  font-family: 'wf-manrope', sans-serif;
+}
+
+button {
+  font: inherit;
+}
+
+#app {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+}
+
+.container {
+  width: 100%;
+  max-width: 900px;
+}
+
+.body {
+  background-color: #fffbe9;
+  border: 2px solid black;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.header-wrapper {
+  padding-top: 40px;
+  padding-bottom: 42px;
+  width: 100%;
+  max-width: 900px;
+  text-align: center;
   position: relative;
-  width: 900px;
+
+  .header-logo {
+    width: 292px;
+  }
 
   .buttons {
     position: absolute;
+    top: 0;
+    bottom: 0;
     right: 0;
     display: flex;
+    gap: 10px;
     flex-direction: column;
     align-items: end;
+    justify-content: center;
 
-    a, button {
+    a,
+    button {
       display: inline-flex;
       align-items: center;
+      padding: 6px 11px 6px 14px;
+      background: transparent;
+      border: 2px solid black;
+      border-radius: 10px;
       font-size: 15px;
+      line-height: 20px;
       font-weight: 800;
       color: black;
       text-decoration: none;
-      line-height: 20px;
-      padding: 4px 8px;
-      border: 2px solid black;
-      border-radius: 10px;
-      margin-bottom: 10px;
-      background-color: #65A3FF;
       cursor: pointer;
 
       img {
-        width: 20px;
+        width: 21px;
         height: auto;
         margin-left: 4px;
       }
     }
+  }
+}
+
+.button-go {
+  display: inline-flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 322px;
+  margin-inline: auto;
+  padding: 15px 25px 15px 31px;
+  background-color: #ffd100;
+  color: black;
+  border: 2px solid black;
+  border-radius: 20px;
+  font-size: 24px;
+  line-height: 20px;
+  font-weight: 800;
+  text-decoration: none;
+  transition: transform 0.15s ease-in-out;
+  cursor: pointer;
+
+  img {
+    width: 34px;
+  }
+
+  &:hover {
+    transform: scale(0.9);
   }
 }
 </style>

@@ -1,97 +1,87 @@
 <script setup>
-import { ref, watch, computed, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { useStore } from 'vuex';
-import PartyElement from "@/components/PartyElement.vue";
+import { ref, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+import PartyElement from '@/components/PartyElement.vue'
+import QuestionsProgress from '@/components/QuestionsProgress.vue'
 
-const route = useRoute();
-const router = useRouter();
-const store = useStore();
+const route = useRoute()
+const router = useRouter()
+const store = useStore()
 
-const idParam = ref(parseInt(route.params.id));
-const moreInfo = ref(false);
+const moreInfo = ref(false)
 
-const screenWidth = ref(window.innerWidth);
-const desktop = computed(() => screenWidth.value > 992);
+const questionIndex = computed(() => parseInt(route.params.id, 10) - 1)
+const questionNumber = computed(() => questionIndex.value + 1)
 
-const storeInitialized = computed(() => store.getters.getStoreInitialized);
-const questionsList = computed(() => store.getters.getQuestionsList);
-const questionsNo = computed(() => questionsList.value.length);
-const questionId = computed(() => questionsList.value[idParam.value]);
-// const progress = computed(() => Math.round(idParam.value / questionsNo.value * 100));
-const question = computed(() => store.state.questions[questionId.value]);
-const answers = computed(() => store.getters.getAnswers);
-const parties = computed(() => store.getters.getParties);
+const storeInitialized = computed(() => store.getters.getStoreInitialized)
+const questionsList = computed(() => store.getters.getQuestionsList)
+const questionsNo = computed(() => questionsList.value.length)
+const questionId = computed(() => questionsList.value[questionIndex.value])
+const question = computed(() => store.state.questions[questionId.value])
+// const answers = computed(() => store.getters.getAnswers)
+const parties = computed(() => store.getters.getParties)
 const partiesAgree = computed(() => {
-    const parties = {}
-    for (const [key, value] of Object.entries(question.value.parties)) {
-        if (value.answer == "YES") {
-            parties[key] = value
-        }
+  const parties = {}
+  for (const [key, value] of Object.entries(question.value.parties)) {
+    if (value.answer == 'YES') {
+      parties[key] = value
     }
-    return parties
+  }
+  return parties
 })
 const partiesDisagree = computed(() => {
-    const parties = {}
-    for (const [key, value] of Object.entries(question.value.parties)) {
-        if (value.answer == "NO") {
-            parties[key] = value
-        }
+  const parties = {}
+  for (const [key, value] of Object.entries(question.value.parties)) {
+    if (value.answer == 'NO') {
+      parties[key] = value
     }
-    return parties
+  }
+  return parties
 })
 const partiesNeutral = computed(() => {
-    const parties = {}
-    for (const [key, value] of Object.entries(question.value.parties)) {
-        if (value.answer == "NEUTRAL") {
-            parties[key] = value
-        }
+  const parties = {}
+  for (const [key, value] of Object.entries(question.value.parties)) {
+    if (value.answer == 'NEUTRAL') {
+      parties[key] = value
     }
-    return parties
+  }
+  return parties
 })
 
-
 const skipQuestion = (id, answer) => {
-    // remove saved answer
-    store.commit('removeAnswer', { id, answer });
-    if (idParam.value < questionsNo.value - 1) {
-        router.push(`/vprasanje/${parseInt(idParam.value) + 1}`);
-    } else {
-        store.commit('calculateResults');
-        router.push('/rezultati');
-    }
-};
+  // remove saved answer
+  store.commit('removeAnswer', { id, answer })
+  if (questionIndex.value < questionsNo.value - 1) {
+    router.push(`/vprasanje/${questionNumber.value + 1}`)
+  } else {
+    store.commit('calculateResults')
+    router.push('/rezultati')
+  }
+}
 
 const saveAnswer = (id, answer) => {
-    // save answer
-    store.commit('addAnswer', { id, answer });
-    // navigate to next question
-    if (idParam.value < questionsNo.value - 1) {
-        router.push(`/vprasanje/${parseInt(idParam.value) + 1}`);
-    } else {
-        // last question -> calculate results and navigate to results
-        store.commit('calculateResults');
-        router.push('/rezultati');
-    }
-};
-
-watch(
-    () => route.params.id,
-    async (id) => {
-        idParam.value = id;
-        // console.log(idParam.value, questionsNo.value, progress.value)
-    }
-);
+  // save answer
+  store.commit('addAnswer', { id, answer })
+  // navigate to next question
+  if (questionIndex.value < questionsNo.value - 1) {
+    router.push(`/vprasanje/${questionNumber.value + 1}`)
+  } else {
+    // last question -> calculate results and navigate to results
+    store.commit('calculateResults')
+    router.push('/rezultati')
+  }
+}
 
 onMounted(() => {
-    if (!storeInitialized.value) {
-        store.dispatch("initializeStore").then((quiz_finished) => {
-            if (quiz_finished) {
-                router.push("/rezultati");
-            }
-        })
-    }
-});
+  if (!storeInitialized.value) {
+    store.dispatch('initializeStore').then((quiz_finished) => {
+      if (quiz_finished) {
+        router.push('/rezultati')
+      }
+    })
+  }
+})
 
 // router.beforeEach((to, from) => {
 //     if (moreInfo.value) {
@@ -99,348 +89,273 @@ onMounted(() => {
 //         return false;
 //     }
 // });
-
 </script>
 
 <template>
-    <main class="container">
-        <div class="body" v-if="question">
-            <div class="progress-bar">
-                <div class="progress-number">{{ parseInt(idParam) + 1 }} / {{ questionsNo }}</div>
-                <div v-for="qNo in questionsNo " class="progress-circle"
-                    :class="{ 'active': qNo == parseInt(idParam) + 1, 'checked': qNo < parseInt(idParam) + 1 }"></div>
+  <main class="container">
+    <div class="body" v-if="question">
+      <QuestionsProgress :current="questionNumber" :count="questionsNo" />
+      <div class="content">
+        <div v-if="question.category" class="category">{{ question.category }}</div>
+        <h1 v-if="question.title" class="title">{{ question.title }}</h1>
+        <p v-if="question.description" class="description">{{ question.description }}</p>
+        <div class="buttons">
+          <RouterLink
+            :to="`/vprasanje/${questionNumber - 1}`"
+            class="back"
+            :class="{ hidden: questionIndex <= 0 }"
+          >
+            <div>
+              <img src="../assets/img/puscica-trikotnik.svg" alt="" />
+              <img src="../assets/img/puscica-trikotnik.svg" alt="" />
             </div>
-            <div class="content">
-                <span v-if="question.category">{{ question.category }}</span>
-                <h1>{{ question.title }}</h1>
-                <p>{{ question.description }}</p>
-                <div class="buttons">
-                    <RouterLink :to="`/vprasanje/${parseInt(idParam) - 1}`" class="back"
-                        :class="{'hidden': idParam == 0}">
-                        <img src="../assets/img/puscica-trikotnik.svg" />
-                        <img src="../assets/img/puscica-trikotnik.svg" />
-                        Nazaj
-                    </RouterLink>
-                    <button @click="saveAnswer(questionId, 'NO')" class="disagree">
-                        <img src="../assets/img/ne-strinjam.svg" />
-                        Se ne strinjam
-                    </button>
-                    <button @click="saveAnswer(questionId, 'YES')" class="agree">
-                        <img src="../assets/img/strinjam.svg" />
-                        Se strinjam
-                    </button>
-                    <button @click="skipQuestion(questionId, true)" class="skip">
-                        Preskoči
-                        <img src="../assets/img/puscica-trikotnik.svg" />
-                        <img src="../assets/img/puscica-trikotnik.svg" />
-                    </button>
-                </div>
+            Nazaj
+          </RouterLink>
+          <button @click="saveAnswer(questionId, 'NO')" class="disagree">
+            <img src="../assets/img/ne-strinjam.svg" />
+            Se ne strinjam
+          </button>
+          <button @click="saveAnswer(questionId, 'YES')" class="agree">
+            <img src="../assets/img/strinjam.svg" />
+            Se strinjam
+          </button>
+          <button @click="skipQuestion(questionId, true)" class="skip">
+            Preskoči
+            <div>
+              <img src="../assets/img/puscica-trikotnik.svg" alt="" />
+              <img src="../assets/img/puscica-trikotnik.svg" alt="" />
             </div>
-
-            <div class="more-info">
-                <div class="show-hide">
-                    <img src="../assets/img/eyes-right.svg" v-if="!moreInfo" />
-                    <img src="../assets/img/eyes-down.svg" v-if="moreInfo" />
-                    <span>Kaj mislijo stranke?</span>
-                    <button @click="moreInfo = true" v-if="!moreInfo">
-                        Prikaži
-                        <img src="../assets/img/puscica-trikotnik-modra.svg" />
-                    </button>
-                    <button @click="moreInfo = false" v-if="moreInfo">
-                        Skrij
-                        <img src="../assets/img/puscica-trikotnik-modra.svg" />
-                    </button>
-                </div>
-                <div class="parties" v-if="moreInfo">
-                    <div>
-                        <div class="head">Se strinja</div>
-                        <PartyElement v-for="(answer, party_id) in partiesAgree" :key="party_id"
-                            :party="parties[party_id]" :answer="answer">
-                        </PartyElement>
-                    </div>
-                    <div>
-                        <div class="head">Se ne strinja</div>
-                        <PartyElement v-for="(answer, party_id) in partiesDisagree" :key="party_id"
-                            :party="parties[party_id]" :answer="answer">
-                        </PartyElement>
-                    </div>
-                    <div>
-                        <div class="head">Neopredeljena / ni odgovora</div>
-                        <PartyElement v-for="(answer, party_id) in partiesNeutral" :key="party_id"
-                            :party="parties[party_id]" :answer="answer">
-                        </PartyElement>
-                    </div>
-                </div>
-            </div>
+          </button>
         </div>
-    </main>
+      </div>
+
+      <div class="more-info">
+        <div class="show-hide">
+          <img src="../assets/img/eyes-right.svg" v-if="!moreInfo" />
+          <img src="../assets/img/eyes-down.svg" v-if="moreInfo" />
+          <span>Kaj mislijo stranke?</span>
+          <button @click="moreInfo = true" v-if="!moreInfo" class="show">
+            Prikaži
+            <img src="../assets/img/puscica-trikotnik-modra.svg" />
+          </button>
+          <button @click="moreInfo = false" v-if="moreInfo" class="hide">
+            Skrij
+            <img src="../assets/img/puscica-trikotnik-modra.svg" />
+          </button>
+        </div>
+        <div class="parties" v-if="moreInfo">
+          <div>
+            <div class="head">Se strinja</div>
+            <PartyElement
+              v-for="(answer, party_id) in partiesAgree"
+              :key="party_id"
+              :party="parties[party_id]"
+              :answer="answer"
+            >
+            </PartyElement>
+          </div>
+          <div>
+            <div class="head">Se ne strinja</div>
+            <PartyElement
+              v-for="(answer, party_id) in partiesDisagree"
+              :key="party_id"
+              :party="parties[party_id]"
+              :answer="answer"
+            >
+            </PartyElement>
+          </div>
+          <div>
+            <div class="head">Neopredeljena / ni odgovora</div>
+            <PartyElement
+              v-for="(answer, party_id) in partiesNeutral"
+              :key="party_id"
+              :party="parties[party_id]"
+              :answer="answer"
+            >
+            </PartyElement>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
 </template>
 
 <style scoped lang="scss">
-
 .hidden {
-    visibility: hidden;
+  visibility: hidden;
 }
-
-// .container {
-//     padding: 0;
-
-//     @media (min-width: 992px) {
-//         max-width: 960px;
-//     }
-
-//     @media (min-width: 1200px) {
-//         max-width: 1140px;
-//     }
-// }
 
 main {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
 }
 
-.progress-bar {
-    border-bottom: 2px solid black;
-    background-color: #F2F7FF;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-    padding: 10px 24px;
-    display: flex;
-    align-items: center;
-}
+.body {
+  .content {
+    padding-inline: 100px;
+    padding-top: 50px;
+    padding-bottom: 56px;
 
-.progress-number {
-    font-size: 12px;
-    line-height: 18px;
-    font-weight: 600;
-    padding-right: 10px;
-    flex-shrink: 0;
-}
-
-.progress-circle {
-    border: 2px solid black;
-    border-radius: 9px;
-    width: 18px;
-    height: 18px;
-    flex-shrink: 0;
-    position: relative;
-    
-    &:not(:last-child) {
-        margin-right: 9px;
-
-        &::after {
-            content: "";
-            height: 2px;
-            width: 9px;
-            background-color: black;
-            position: absolute;
-            right: -11px;
-            top: 6px;
-        }
+    .category {
+      display: inline-block;
+      margin-bottom: 16px;
+      padding: 4px 8px;
+      background-color: rgb(127, 127, 127, 0.15);
+      border-radius: 9999px;
+      font-size: 12px;
+      line-height: 1;
     }
 
-    &.checked {
-        background-color: #FFE468;
-
-        &::before {
-            content: "";
-            width: 10px;
-            height: 10px;
-            display: block;
-            margin-left: 2px;
-            margin-top: 2px;
-            background-image: url("@/assets/img/check.svg");
-        }
+    .title {
+      margin-bottom: 22px;
+      font-size: 32px;
+      line-height: 40px;
+      font-weight: 700;
     }
 
-    &.active {
-        background-color: #7FB2FF;
-        position: relative;
-
-        &::before {
-            content: "";
-            width: 8px;
-            height: 8px;
-            display: block;
-            border-radius: 4px;
-            background-color: black;
-            margin-left: 3px;
-            margin-top: 3px;
-        }
-    }
-
-}
-
-.content {
-    padding: 20px;
-
-    @media (min-width: 992px) {
-        padding: 50px 100px;
-    }
-
-    &>span {
-        background-color: #FFFFFF;
-        border-radius: 10px;
-        font-size: 12px;
-        font-weight: 400;
-        padding: 2px 4px;
-    }
-
-    h1 {
-        margin-bottom: 20px;
-        font-size: 24px;
-        line-height: 30px;
-        font-weight: 700;
-
-        @media (min-width: 992px) {
-            font-size: 32px;
-            line-height: 40px;
-        }
-    }
-
-    &>p {
-        font-size: 20px;
-        line-height: 32px;
-        margin-bottom: 30px;
+    .description {
+      margin-bottom: 22px;
+      font-size: 21px;
+      line-height: 31px;
     }
 
     .buttons {
-        display: flex;
-        align-items: end;
-    }
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      align-items: flex-end;
+      margin-top: 42px;
 
-    .agree,
-    .disagree,
-    .back,
-    .skip {
+      .agree,
+      .disagree,
+      .back,
+      .skip {
+        background: transparent;
         border: 2px solid black;
         border-radius: 20px;
-        margin: 0 10px;
-        display: inline-flex;
+        display: flex;
+        gap: 6px;
         align-items: center;
-        cursor: pointer;   
-    }
+        justify-content: flex-start;
+        cursor: pointer;
+      }
 
-    .agree, .disagree {
-        background-color: #FFFFFF;
-        padding: 16px;
-        font-size: 18px;
-        font-weight: 800;
-        line-height: 20px;
-
-        img {
-            width: 28px;
-            margin-right: 10px;
-        }
-
-        &:hover {
-            background-color: #FFE368;
-        }
-    }
-
-    .back,
-    .skip {
-        background-color: #FFFBE9;
-        padding: 16px;
+      .back,
+      .skip {
+        padding: 14px 10px;
+        width: 100px;
         font-size: 10px;
+        line-height: 1;
         font-weight: 500;
-        line-height: 10px;
+        color: inherit;
+        text-decoration: none;
 
         img {
-            width: 14px;
-            transform: rotate(90deg);
+          height: 16px;
+          transform: rotate(90deg);
 
-            &:first-of-type {
-                margin-left: 5px;
-                margin-right: -5px;
-            }
+          &:first-of-type {
+            margin-right: -6px;
+          }
         }
 
         &:hover {
-            background-color: #FFFFFF;
+          background-color: #fff;
         }
-    }
+      }
 
-    .back {
-        color: black;
-        text-decoration: none;
-    }
+      .skip {
+        justify-content: flex-end;
 
-    .skip {
         img {
-            transform: rotate(-90deg);
+          transform: rotate(-90deg);
         }
+      }
+
+      .agree,
+      .disagree {
+        gap: 10px;
+        background-color: #fff;
+        padding: 20px 9px 20px 18px;
+        width: 200px;
+        font-size: 18px;
+        line-height: 20px;
+        font-weight: 800;
+
+        img {
+          width: 28px;
+        }
+
+        &:hover {
+          background-color: #ffe368;
+        }
+      }
     }
-}
+  }
 
-// @media (min-width: 768px) {
-//   main {
-//     width: 720px;
-//   }
-// }
-
-.more-info {
+  .more-info {
+    padding: 40px 100px;
+    background-color: #f2f7ff;
     border-top: 2px solid black;
-    background-color: #F2F7FF;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-    padding: 50px 100px;
 
     .show-hide {
-        span {
-            font-size: 18px;
-            line-height: 20px;
-            font-weight: 800;
-            margin: 0 5px;
+      & > img {
+        width: 21px;
+        margin-right: 5px;
+      }
+
+      span {
+        font-size: 18px;
+        line-height: 20px;
+        font-weight: 800;
+      }
+
+      button {
+        display: inline-flex;
+        gap: 1px;
+        align-items: flex-end;
+        margin-left: 7px;
+        padding: 0;
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid #0e3d97;
+        color: #0e3d97;
+        font-size: 15px;
+        line-height: 1;
+        cursor: pointer;
+
+        img {
+          width: 12px;
+          margin-bottom: 1px;
         }
 
-        &>img {
-            width: 20px;
+        &.hide {
+          img {
+            transform: rotate(180deg);
+          }
         }
-
-        button {
-            background-color: inherit;
-            border: none;
-            padding: 0;
-            border-bottom: 1px solid #0E3D97;
-            color: #0E3D97;
-            font-size: 15px;
-            line-height: 16px;
-            cursor: pointer;
-
-            img {
-                width: 10px;
-            }
-        }
+      }
     }
 
     .parties {
-        display: flex;
-        margin-top: 20px;
+      display: flex;
+      gap: 26px;
+      margin-top: 22px;
 
-        &>div {
-            flex: 1;
-            padding-left: 10px;
-            padding-right: 10px;
-
-            &:first-child {
-                padding-left: 0;
-            }
-
-            &:last-child {
-                padding-right: 0;
-            }
-        }
+      & > div {
+        flex: 1;
 
         .head {
-            font-size: 13px;
-            font-weight: 600;
-            line-height: 18px;
-            background-color: #E2EDFF;
-            padding: 5px 8px;
+          padding: 6px 8px;
+          background-color: #e2edff;
+          font-size: 13px;
+          line-height: 18px;
+          font-weight: 600;
         }
+      }
     }
+  }
 }
 </style>
