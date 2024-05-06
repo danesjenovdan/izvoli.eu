@@ -90,10 +90,10 @@ class Statement(models.Model):
         on_delete=models.SET_NULL,
         verbose_name="Skupina izjav",
     )
-    # priority_demand = models.BooleanField(
-    #     default=False,
-    #     verbose_name="Gre za prioritetno zahtevo? (samo za parlamentarne volitve)",
-    # )
+    hide_in_app = models.BooleanField(
+        default=False,
+        verbose_name="Vprašanja ne prikazuj na aplikaciji izvoli.eu",
+    )
     election = models.ForeignKey(
         Election, on_delete=models.CASCADE, verbose_name="Volitve"
     )

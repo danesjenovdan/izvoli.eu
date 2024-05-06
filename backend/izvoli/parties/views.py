@@ -314,7 +314,7 @@ class Volitvomat(APIView):
             election = Election.objects.get(id=election_id)
 
         parties = Party.objects.filter(election=election)
-        statements = Statement.objects.filter(election=election)
+        statements = Statement.objects.filter(election=election, hide_in_app=False)
 
         statements_dict = {}
 
