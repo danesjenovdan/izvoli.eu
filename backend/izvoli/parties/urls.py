@@ -1,4 +1,5 @@
 from django.urls import include, path
+from django.views.generic import RedirectView
 from .views import (
     # amandma,
     # landing,
@@ -30,6 +31,7 @@ from .views import (
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
+    path("", RedirectView.as_view(url="/sl/")),
     # path("", include("django.contrib.auth.urls")),
     # path("registracija/", Registracija.as_view()),
     # path("potrdi-naslov/<str:token>/", verify_email),

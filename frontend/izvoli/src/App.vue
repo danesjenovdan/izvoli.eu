@@ -36,7 +36,7 @@ const restartQuiz = () => {
     </div>
   </header>
   <RouterView />
-  <PageFooter></PageFooter>
+  <PageFooter v-if="currentRouteName != 'landing'"></PageFooter>
 </template>
 
 <style lang="scss">
