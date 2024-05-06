@@ -23,6 +23,12 @@ const partiesNoAnswer = computed(() => {
   return p
 })
 
+const winners = computed(() => {
+  const winners = [...results.value]
+  winners.splice(3)
+  return winners
+})
+
 const compareWithWinningParties = () => {
   const parties = [...results.value.map((res) => res.party_id)]
   parties.splice(3)
@@ -37,6 +43,10 @@ const compareWithChosenParties = () => {
 
 const compareWithAllParties = () => {
   chosenParties.value = [...results.value.map((res) => res.party_id)]
+}
+
+const unselectAllParties = () => {
+  chosenParties.value = []
 }
 
 onMounted(() => {
@@ -66,7 +76,7 @@ function partyImageUrl(url) {
         <h1>Najbolj se ujemaš s:</h1>
         <div class="winners">
           <PartyDonutChart
-            v-for="result in results"
+            v-for="result in winners"
             :key="result.party_id"
             :result="result"
             :parties="parties"
@@ -82,17 +92,16 @@ function partyImageUrl(url) {
       <div class="more-info">
         <p>
           <span>Izberi stranke za primerjavo</span>
-          <button @click="compareWithAllParties">Izberi vse stranke</button>
+          <button @click="compareWithAllParties" v-if="chosenParties.length == 0">Izberi vse
+            stranke</button>
+          <button @click="unselectAllParties" v-if="chosenParties.length > 0">Odstrani vse
+            stranke</button>
         </p>
         <div class="parties">
           <div v-for="party in results" :key="party.party_id" class="party">
             <label :for="`chosen-party-${party.party_id}`">
-              <input
-                type="checkbox"
-                :id="`chosen-party-${party.party_id}`"
-                :value="party.party_id"
-                v-model="chosenParties"
-              />
+              <input type="checkbox" :id="`chosen-party-${party.party_id}`" :value="party.party_id"
+                v-model="chosenParties" />
               <img :src="partyImageUrl(parties[party.party_id].image)" class="party-image" />
               {{ parties[party.party_id].name }}
             </label>
@@ -111,12 +120,7 @@ function partyImageUrl(url) {
           </div>
           <div v-for="party in partiesNoAnswer" :key="party.id" class="party">
             <label :for="`chosen-party-${party.id}`">
-              <input
-                type="checkbox"
-                :id="`chosen-party-${party.id}`"
-                :value="party.id"
-                v-model="chosenParties"
-              />
+              <input type="checkbox" :id="`chosen-party-${party.id}`" :value="party.id" v-model="chosenParties" />
               <img :src="partyImageUrl(party.image)" class="party-image" />
               {{ party.name }}
             </label>

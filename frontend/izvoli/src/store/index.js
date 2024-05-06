@@ -180,7 +180,6 @@ const store = createStore({
         // no data
         await dispatch('getData')
       }
-      await dispatch('clearStore')
       commit('initializeStore')
       return state.quizFinished
     },
