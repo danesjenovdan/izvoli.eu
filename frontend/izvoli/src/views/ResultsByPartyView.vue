@@ -316,7 +316,7 @@ main {
             min-width: 200px;
             display: flex;
             align-items: center;
-            line-height: 34px;
+            // line-height: 34px;
         }
 
         
