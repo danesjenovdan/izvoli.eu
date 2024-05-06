@@ -33,7 +33,7 @@ export default {
             </button>
             <button @click="show = false" v-if="show && answer.comment">
                 Skrij
-                <img src="../assets/img/puscica-trikotnik-modra.svg" />
+                <img src="../assets/img/krizec-moder.svg" class="hide" />
             </button>
         </div>
         <p v-if="show">{{ answer.comment }}</p>
@@ -80,6 +80,10 @@ export default {
 
             img {
                 width: 10px;
+
+                &.hide {
+                    width: 8px;
+                }
             }
         }
     }
