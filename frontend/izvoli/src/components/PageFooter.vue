@@ -41,7 +41,7 @@ function onNewsletterSubmit(event) {
         <div>
           <img src="../assets/img/vodic.svg" alt="" class="i-vodic" />
           <p>
-            <a href="https://vodici.djnd.si/volitve/evropske/"
+            <a href="https://vodici.djnd.si/volitve/evropske/" target="_blank"
               >Obišči tudi volilni vodič za alternativno oddajo glasu!</a
             >
           </p>
