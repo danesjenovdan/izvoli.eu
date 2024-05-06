@@ -55,11 +55,12 @@ onMounted(() => {
         <div class="body" v-if="question">
             <div class="progress-bar">
                 <div class="progress-number">{{ parseInt(idParam) + 1 }} / {{ questionsNo }}</div>
-                <div v-for="qNo in questionsNo " class="progress-circle" :class="{
+                <RouterLink :to="`/rezultati/${parseInt(qNo - 1)}`" v-for="qNo in questionsNo " class="progress-circle"
+                    :class="{
                         'agree': answers[parseInt(qNo)] == 'YES',
                         'disagree': answers[parseInt(qNo)] == 'NO',
                         'neutral': !(`${parseInt(qNo)}` in answers) }">
-                </div>
+                </RouterLink>
             </div>
             <div class="content">
                 <span v-if="question.category">{{ question.category }}</span>
