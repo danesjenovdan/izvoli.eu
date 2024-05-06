@@ -9,7 +9,10 @@ const config = {
   endDate: '2023-06-09',
   timeZone: 'Europe/Ljubljana',
   uid: '29173902-a18f-4e82-bc15-6e7a15234805',
-  options: ['Apple', 'Google', 'iCal', 'Microsoft365', 'MicrosoftTeams', 'Outlook.com', 'Yahoo']
+  options: ['Apple', 'Google', 'iCal', 'Microsoft365', 'MicrosoftTeams', 'Outlook.com', 'Yahoo'],
+  customLabels: {
+    close: 'Zapri'
+  }
 }
 
 function onCalClick(event) {
