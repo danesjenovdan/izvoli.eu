@@ -2,6 +2,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import PartyDonutChart from '../components/PartyDonutChart.vue'
 
 const store = useStore()
 const router = useRouter()
@@ -51,26 +52,6 @@ onMounted(() => {
   }
 })
 
-function dashOffsetFromPercentage(percentage) {
-  const circumference = 2 * Math.PI * 39
-  const amount = ((percentage - 25) / 100) * circumference
-  return circumference - amount
-}
-
-function dashArrayFromPercentage(percentage) {
-  const circumference = 2 * Math.PI * 39
-  const amount = (percentage / 100) * circumference
-  const remainder = circumference - amount
-  return `${amount} ${remainder}`
-}
-
-function dashArrayFromRemainderPercentage(percentage) {
-  const circumference = 2 * Math.PI * 39
-  const amount = (percentage / 100) * circumference
-  const remainder = circumference - amount
-  return `${remainder} ${amount}`
-}
-
 function partyImageUrl(url) {
   if (!url) return ''
   const newUrl = new URL(url, store.getters.getApiUrl)
@@ -84,53 +65,12 @@ function partyImageUrl(url) {
       <div class="content">
         <h1>Najbolj se ujemaš s:</h1>
         <div class="winners">
-          <div v-for="result in results" :key="result.party_id" class="party">
-            <svg width="86" height="86" class="party-donut">
-              <defs>
-                <pattern
-                  :id="`donut-image-${result.party_id}`"
-                  x="0"
-                  y="0"
-                  height="100%"
-                  width="100%"
-                  viewBox="0 0 100 100"
-                >
-                  <rect x="0" y="0" width="100" height="100" fill="#fff"></rect>
-                  <image
-                    x="0"
-                    y="0"
-                    width="100"
-                    height="100"
-                    :href="partyImageUrl(parties[result.party_id].image)"
-                  ></image>
-                </pattern>
-              </defs>
-              <circle cx="43" cy="43" r="43" fill="#000" />
-              <circle
-                cx="43"
-                cy="43"
-                r="39"
-                fill="none"
-                stroke="#7FB2FF"
-                stroke-width="6"
-                :stroke-dashoffset="dashOffsetFromPercentage(0)"
-                :stroke-dasharray="dashArrayFromPercentage(result.percentage)"
-              />
-              <circle
-                cx="43"
-                cy="43"
-                r="39"
-                fill="none"
-                stroke="#FFF"
-                stroke-width="6"
-                :stroke-dashoffset="dashOffsetFromPercentage(result.percentage + 0.5)"
-                :stroke-dasharray="dashArrayFromRemainderPercentage(result.percentage + 1)"
-              />
-              <circle cx="43" cy="43" r="35" :fill="`url(#donut-image-${result.party_id})`" />
-            </svg>
-            <p class="party-name">{{ parties[result.party_id].name }}</p>
-            <p class="party-percentage">{{ result.percentage }} %</p>
-          </div>
+          <PartyDonutChart
+            v-for="result in results"
+            :key="result.party_id"
+            :result="result"
+            :parties="parties"
+          />
         </div>
         <div class="button-wrapper">
           <button class="button-go" @click="compareWithWinningParties">
@@ -230,30 +170,6 @@ function partyImageUrl(url) {
       gap: 16px;
       justify-content: center;
       flex-wrap: wrap;
-
-      .party {
-        flex: 0 0 145px;
-        text-align: center;
-
-        .party-donut {
-          display: block;
-          margin-inline: auto;
-          margin-bottom: 12px;
-        }
-
-        .party-name {
-          margin-bottom: 6px;
-          font-size: 18px;
-          line-height: 1;
-          font-weight: 800;
-        }
-
-        .party-percentage {
-          font-size: 18px;
-          line-height: 1;
-          font-weight: 500;
-        }
-      }
     }
   }
 
@@ -360,6 +276,13 @@ function partyImageUrl(url) {
             background-color: #65a3ff;
             height: 100%;
             border-radius: inherit;
+            animation: progressBar 1.5s ease-in-out forwards;
+
+            @keyframes progressBar {
+              from {
+                width: 0;
+              }
+            }
 
             &.border-end {
               border-right: 1px solid black;
