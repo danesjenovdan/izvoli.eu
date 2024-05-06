@@ -9,7 +9,10 @@ const config = {
   endDate: '2023-06-09',
   timeZone: 'Europe/Ljubljana',
   uid: '29173902-a18f-4e82-bc15-6e7a15234805',
-  options: ['Apple', 'Google', 'iCal', 'Microsoft365', 'MicrosoftTeams', 'Outlook.com', 'Yahoo']
+  options: ['Apple', 'Google', 'iCal', 'Microsoft365', 'MicrosoftTeams', 'Outlook.com', 'Yahoo'],
+  customLabels: {
+    close: 'Zapri'
+  }
 }
 
 function onCalClick(event) {
@@ -38,7 +41,7 @@ function onNewsletterSubmit(event) {
         <div>
           <img src="../assets/img/vodic.svg" alt="" class="i-vodic" />
           <p>
-            <a href="https://vodici.djnd.si/volitve/evropske/"
+            <a href="https://vodici.djnd.si/volitve/evropske/" target="_blank"
               >Obišči tudi volilni vodič za alternativno oddajo glasu!</a
             >
           </p>

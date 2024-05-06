@@ -13,7 +13,7 @@ const currentRouteName = computed(() => router.currentRoute.value.name)
 
 const restartQuiz = () => {
   store.dispatch('clearStore')
-  router.push('/')
+  router.push({ name: 'introduction' })
 }
 </script>
 
@@ -25,14 +25,14 @@ const restartQuiz = () => {
       alt="Izvoli EU, prva pomoč za evropske volitve"
     />
     <div class="buttons" v-if="quizFinished">
-      <RouterLink to="/rezultati" v-if="currentRouteName != 'results'">
+      <RouterLink
+        v-if="currentRouteName != 'results'"
+        class="show-results"
+        :to="{ name: 'results' }"
+      >
         Poglej rezultate
-        <img src="./assets/img/eyes-right.svg" alt="" />
       </RouterLink>
-      <button class="" @click="restartQuiz">
-        Ponovno reši
-        <img src="./assets/img/reset.svg" alt="" />
-      </button>
+      <button class="restart-quiz" @click="restartQuiz">Ponovno reši</button>
     </div>
   </header>
   <RouterView />
@@ -105,6 +105,9 @@ button {
       align-items: center;
       padding: 6px 11px 6px 14px;
       background: transparent;
+      background-repeat: no-repeat;
+      background-position: center right 11px;
+      background-size: 21px;
       border: 2px solid black;
       border-radius: 10px;
       font-size: 15px;
@@ -114,10 +117,35 @@ button {
       text-decoration: none;
       cursor: pointer;
 
-      img {
+      &::after {
+        content: '';
+        display: inline-block;
         width: 21px;
-        height: auto;
+        height: 21px;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
         margin-left: 4px;
+      }
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.33);
+      }
+
+      &.show-results {
+        &::after {
+          background-image: url('./assets/img/eyes-right.svg');
+        }
+
+        &:hover::after {
+          background-image: url('./assets/img/eyes-down.svg');
+        }
+      }
+
+      &.restart-quiz {
+        &::after {
+          background-image: url('./assets/img/reset.svg');
+        }
       }
     }
   }
