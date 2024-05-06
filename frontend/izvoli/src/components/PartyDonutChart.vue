@@ -58,7 +58,7 @@ const easeInOut = (t) => {
 
 let startTimestamp = null
 const stepFunction = (timestamp) => {
-  if (targetPercentage.value <= 0) return;
+  if (targetPercentage.value <= 0) return
   if (!startTimestamp) startTimestamp = timestamp
   const progress = timestamp - startTimestamp
   const newPercentage = easeInOut(Math.min(progress / animationDuration, 1))
@@ -149,9 +149,3 @@ onBeforeUnmount(() => {
   }
 }
 </style>
-<!--
-
-
-
-
- -->
