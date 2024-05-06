@@ -22,6 +22,12 @@ const partiesNoAnswer = computed(() => {
   return p
 })
 
+const winners = computed(() => {
+  const winners = [...results.value]
+  winners.splice(3)
+  return winners
+})
+
 const compareWithWinningParties = () => {
   const parties = [...results.value.map((res) => res.party_id)]
   parties.splice(3)
@@ -84,48 +90,23 @@ function partyImageUrl(url) {
       <div class="content">
         <h1>Najbolj se ujemaš s:</h1>
         <div class="winners">
-          <div v-for="result in results" :key="result.party_id" class="party">
+          <div v-for="result in winners" :key="result.party_id" class="party">
             <svg width="86" height="86" class="party-donut">
               <defs>
-                <pattern
-                  :id="`donut-image-${result.party_id}`"
-                  x="0"
-                  y="0"
-                  height="100%"
-                  width="100%"
-                  viewBox="0 0 100 100"
-                >
+                <pattern :id="`donut-image-${result.party_id}`" x="0" y="0" height="100%" width="100%"
+                  viewBox="0 0 100 100">
                   <rect x="0" y="0" width="100" height="100" fill="#fff"></rect>
-                  <image
-                    x="0"
-                    y="0"
-                    width="100"
-                    height="100"
-                    :href="partyImageUrl(parties[result.party_id].image)"
-                  ></image>
+                  <image x="0" y="0" width="100" height="100" :href="partyImageUrl(parties[result.party_id].image)">
+                  </image>
                 </pattern>
               </defs>
               <circle cx="43" cy="43" r="43" fill="#000" />
-              <circle
-                cx="43"
-                cy="43"
-                r="39"
-                fill="none"
-                stroke="#7FB2FF"
-                stroke-width="6"
+              <circle cx="43" cy="43" r="39" fill="none" stroke="#7FB2FF" stroke-width="6"
                 :stroke-dashoffset="dashOffsetFromPercentage(0)"
-                :stroke-dasharray="dashArrayFromPercentage(result.percentage)"
-              />
-              <circle
-                cx="43"
-                cy="43"
-                r="39"
-                fill="none"
-                stroke="#FFF"
-                stroke-width="6"
+                :stroke-dasharray="dashArrayFromPercentage(result.percentage)" />
+              <circle cx="43" cy="43" r="39" fill="none" stroke="#FFF" stroke-width="6"
                 :stroke-dashoffset="dashOffsetFromPercentage(result.percentage + 0.5)"
-                :stroke-dasharray="dashArrayFromRemainderPercentage(result.percentage + 1)"
-              />
+                :stroke-dasharray="dashArrayFromRemainderPercentage(result.percentage + 1)" />
               <circle cx="43" cy="43" r="35" :fill="`url(#donut-image-${result.party_id})`" />
             </svg>
             <p class="party-name">{{ parties[result.party_id].name }}</p>
@@ -147,36 +128,21 @@ function partyImageUrl(url) {
         <div class="parties">
           <div v-for="party in results" :key="party.party_id" class="party">
             <label :for="`chosen-party-${party.party_id}`">
-              <input
-                type="checkbox"
-                :id="`chosen-party-${party.party_id}`"
-                :value="party.party_id"
-                v-model="chosenParties"
-              />
+              <input type="checkbox" :id="`chosen-party-${party.party_id}`" :value="party.party_id"
+                v-model="chosenParties" />
               <img :src="partyImageUrl(parties[party.party_id].image)" class="party-image" />
               {{ parties[party.party_id].name }}
             </label>
             <div class="progress">
-              <div
-                class="progress-bar"
-                role="progressbar"
-                :aria-valuenow="party.percentage"
-                aria-valuemin="0"
-                :aria-valuemax="100"
-                :style="{ width: `${party.percentage}%` }"
-                :class="{ 'border-end': party.percentage < 100 }"
-              ></div>
+              <div class="progress-bar" role="progressbar" :aria-valuenow="party.percentage" aria-valuemin="0"
+                :aria-valuemax="100" :style="{ width: `${party.percentage}%` }"
+                :class="{ 'border-end': party.percentage < 100 }"></div>
             </div>
             <span class="party-percentage">{{ party.percentage }} %</span>
           </div>
           <div v-for="party in partiesNoAnswer" :key="party.id" class="party">
             <label :for="`chosen-party-${party.id}`">
-              <input
-                type="checkbox"
-                :id="`chosen-party-${party.id}`"
-                :value="party.id"
-                v-model="chosenParties"
-              />
+              <input type="checkbox" :id="`chosen-party-${party.id}`" :value="party.id" v-model="chosenParties" />
               <img :src="partyImageUrl(party.image)" class="party-image" />
               {{ party.name }}
             </label>
