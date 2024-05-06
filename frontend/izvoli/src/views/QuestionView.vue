@@ -10,6 +10,7 @@ const router = useRouter()
 const store = useStore()
 
 const moreInfo = ref(false)
+const moreInfoHover = ref(false)
 
 const questionIndex = computed(() => parseInt(route.params.id, 10) - 1)
 const questionNumber = computed(() => questionIndex.value + 1)
@@ -134,10 +135,16 @@ onMounted(() => {
 
       <div class="more-info">
         <div class="show-hide">
-          <img src="../assets/img/eyes-right.svg" v-if="!moreInfo" />
-          <img src="../assets/img/eyes-down.svg" v-if="moreInfo" />
+          <img src="../assets/img/eyes-down.svg" v-if="moreInfo || moreInfoHover" />
+          <img src="../assets/img/eyes-right.svg" v-else />
           <span>Kaj mislijo stranke?</span>
-          <button @click="moreInfo = true" v-if="!moreInfo" class="show">
+          <button
+            @click="moreInfo = true"
+            @mouseenter="moreInfoHover = true"
+            @mouseleave="moreInfoHover = false"
+            v-if="!moreInfo"
+            class="show"
+          >
             Prikaži
             <img src="../assets/img/puscica-trikotnik-modra.svg" />
           </button>
