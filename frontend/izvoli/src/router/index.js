@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import LandingView from '../views/LandingView.vue'
 import IntroductionView from '../views/IntroductionView.vue'
 import QuestionView from '../views/QuestionView.vue'
 import ResultsView from '../views/ResultsView.vue'
@@ -11,6 +12,11 @@ const router = createRouter({
   routes: [
     {
       path: '/',
+      name: 'landing',
+      component: LandingView
+    },
+    {
+      path: '/intro',
       name: 'introduction',
       component: IntroductionView
     },
@@ -33,7 +39,7 @@ const router = createRouter({
       path: '/rezultati/:id',
       name: 'resultsByParty',
       component: ResultsByPartyView
-    },
+    }
     // {
     //   path: '/:slug/statistika',
     //   name: 'statistics',
