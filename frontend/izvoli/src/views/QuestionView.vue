@@ -101,9 +101,12 @@ onMounted(() => {
         <p v-if="question.description" class="description">{{ question.description }}</p>
         <div class="buttons">
           <RouterLink
-            :to="`/vprasanje/${questionNumber - 1}`"
+            :to="
+              questionIndex <= 0
+                ? { name: 'introduction' }
+                : { name: 'question', params: { id: questionNumber - 1 } }
+            "
             class="back"
-            :class="{ hidden: questionIndex <= 0 }"
           >
             <div>
               <img src="../assets/img/puscica-trikotnik.svg" alt="" />
@@ -181,10 +184,6 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
-.hidden {
-  visibility: hidden;
-}
-
 main {
   display: flex;
   flex-direction: column;
