@@ -59,7 +59,7 @@ export default {
             img {
                 width: 34px;
                 height: 34px;
-                object-fit: cover;
+                object-fit: contain;
                 border-radius: 16px;
                 border: 1px solid black;
                 margin-right: 4px;

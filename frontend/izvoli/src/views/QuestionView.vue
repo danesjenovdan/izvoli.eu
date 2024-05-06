@@ -83,12 +83,12 @@ onMounted(() => {
   }
 })
 
-// router.beforeEach((to, from) => {
-//     if (moreInfo.value) {
-//         moreInfo.value = false;
-//         return false;
-//     }
-// });
+router.beforeEach((to, from) => {
+  if (moreInfo.value) {
+    moreInfo.value = false;
+    return false;
+  }
+});
 </script>
 
 <template>
