@@ -13,20 +13,9 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - izvoli-eu.lb.djnd.si
         - izvoli.eu
       secretName: izvoli-tls
   rules:
-    - host: izvoli-eu.lb.djnd.si
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: izvoli
-                port:
-                  number: 8000
     - host: izvoli.eu
       http:
         paths:
@@ -53,20 +42,9 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - files.izvoli-eu.lb.djnd.si
         - files.izvoli.eu
       secretName: izvoli-nginx-tls
   rules:
-    - host: files.izvoli-eu.lb.djnd.si
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: izvoli-nginx
-                port:
-                  number: 80
     - host: files.izvoli.eu
       http:
         paths:
