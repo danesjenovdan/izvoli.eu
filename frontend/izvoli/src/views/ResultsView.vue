@@ -164,7 +164,7 @@ function partyImageUrl(url) {
                 aria-valuemin="0"
                 :aria-valuemax="100"
                 :style="{ width: `${party.percentage}%` }"
-                :class="{ 'border-end': party.percentage < 100 }"
+                :class="{ 'border-end': party.percentage > 0 && party.percentage < 100 }"
               ></div>
             </div>
             <span class="party-percentage">{{ party.percentage }} %</span>
