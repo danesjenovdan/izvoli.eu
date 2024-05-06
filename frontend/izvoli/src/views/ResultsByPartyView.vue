@@ -307,6 +307,7 @@ main {
                 border: 1px solid black;
                 border-radius: 18px;
                 margin: 0 10px;
+                object-fit: contain;
             }
         }
 

@@ -44,6 +44,10 @@ const compareWithAllParties = () => {
   chosenParties.value = [...results.value.map((res) => res.party_id)]
 }
 
+const unselectAllParties = () => {
+  chosenParties.value = []
+}
+
 onMounted(() => {
   if (!storeInitialized.value) {
     store.dispatch('initializeStore').then((quiz_finished) => {
@@ -123,7 +127,10 @@ function partyImageUrl(url) {
       <div class="more-info">
         <p>
           <span>Izberi stranke za primerjavo</span>
-          <button @click="compareWithAllParties">Izberi vse stranke</button>
+          <button @click="compareWithAllParties" v-if="chosenParties.length == 0">Izberi vse
+            stranke</button>
+          <button @click="unselectAllParties" v-if="chosenParties.length > 0">Odstrani vse
+            stranke</button>
         </p>
         <div class="parties">
           <div v-for="party in results" :key="party.party_id" class="party">
