@@ -11,7 +11,7 @@ resources:
 images:
   - name: izvoli
     newName: rg.fr-par.scw.cloud/djnd/izvoli
-    newTag: 'bdf6520439590bfe54b4158e70ac4d9e0aa5b6b3'
+    newTag: 'd1e6c270593da07fed2b357d1089a20cba18b313'
   - name: izvoli-frontend
     newName: rg.fr-par.scw.cloud/djnd/izvoli-frontend
-    newTag: 'bdf6520439590bfe54b4158e70ac4d9e0aa5b6b3'
+    newTag: 'd1e6c270593da07fed2b357d1089a20cba18b313'
