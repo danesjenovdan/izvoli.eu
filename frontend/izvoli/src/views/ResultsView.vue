@@ -160,10 +160,19 @@ function partyImageUrl(url) {
     margin-top: 42px;
     text-align: center;
 
+    @media (max-width: 575.98px) {
+      margin-top: 32px;
+    }
+
     .button-go {
       font-size: 18px;
       line-height: 20px;
       padding-inline: 17px 17px;
+
+      @media (max-width: 575.98px) {
+        font-size: 15px;
+        line-height: 16px;
+      }
     }
   }
 
@@ -172,12 +181,24 @@ function partyImageUrl(url) {
     padding-top: 60px;
     padding-bottom: 56px;
 
+    @media (max-width: 575.98px) {
+      padding-inline: 21px;
+      padding-top: 21px;
+      padding-bottom: 32px;
+    }
+
     h1 {
       margin-bottom: 20px;
       font-size: 32px;
       line-height: 40px;
       font-weight: 700;
       text-align: center;
+
+      @media (max-width: 575.98px) {
+        margin-bottom: 24px;
+        font-size: 24px;
+        line-height: 30px;
+      }
     }
 
     .winners {
@@ -185,6 +206,10 @@ function partyImageUrl(url) {
       gap: 16px;
       justify-content: center;
       flex-wrap: wrap;
+
+      @media (max-width: 575.98px) {
+        gap: 8px;
+      }
     }
   }
 
@@ -195,14 +220,33 @@ function partyImageUrl(url) {
     padding-top: 60px;
     padding-bottom: 56px;
 
+    @media (max-width: 575.98px) {
+      padding-inline: 21px;
+      padding-top: 32px;
+      padding-bottom: 32px;
+    }
+
     & > p {
+
+      @media (max-width: 575.98px) {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
       span {
         font-size: 18px;
         line-height: 20px;
         font-weight: 800;
+
+        @media (max-width: 575.98px) {
+          font-size: 15px;
+          line-height: 16px;
+        }
       }
 
       button {
+        flex-shrink: 0;
         display: inline-flex;
         gap: 1px;
         align-items: flex-end;
@@ -215,6 +259,10 @@ function partyImageUrl(url) {
         font-size: 15px;
         line-height: 1;
         cursor: pointer;
+
+        @media (max-width: 575.98px) {
+          font-size: 12px;
+        }
       }
     }
 
@@ -226,6 +274,12 @@ function partyImageUrl(url) {
         align-items: center;
         margin-bottom: 16px;
 
+        @media (max-width: 575.98px) {
+          display: grid;
+          grid-template-columns: 4fr 1fr;
+          margin-bottom: 18px;
+        }
+
         label {
           flex: 1.25;
           display: flex;
@@ -234,6 +288,11 @@ function partyImageUrl(url) {
           font-size: 15px;
           line-height: 18px;
           font-weight: 800;
+
+          @media (max-width: 575.98px) {
+            grid-row: 1;
+            grid-column: 1;
+          }
 
           input[type='checkbox'] {
             flex-shrink: 0;
@@ -287,6 +346,13 @@ function partyImageUrl(url) {
           border-radius: 10px;
           overflow: hidden;
 
+          @media (max-width: 575.98px) {
+            grid-row: 2;
+            grid-column: 1 / -1;
+            margin-left: 32px;
+            margin-top: 8px;
+          }
+
           .progress-bar {
             background-color: #65a3ff;
             height: 100%;
@@ -311,6 +377,11 @@ function partyImageUrl(url) {
           font-size: 15px;
           line-height: 18px;
           font-weight: 500;
+
+          @media (max-width: 575.98px) {
+            grid-row: 1;
+            grid-column: 2;
+          }
         }
       }
     }

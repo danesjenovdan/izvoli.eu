@@ -41,17 +41,28 @@ const show = ref(false)
     </div>
     <p v-if="show" class="comment">{{ party?.comment }}</p>
   </div>
+  <p v-if="show" class="comment on-mobile">{{ party?.comment }}</p>
 </template>
 
 <style scoped lang="scss">
 .answer-wrapper {
   width: 100%;
 
+  @media (max-width: 575.98px) {
+    width: fit-content;
+    margin-top: 4px;
+  }
+
   .answer {
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    @media (max-width: 575.98px) {
+      flex-direction: column;
+      align-items: flex-end;
+    }
 
     & > div {
       display: flex;
@@ -61,6 +72,10 @@ const show = ref(false)
         width: 28px;
         margin-right: 10px;
         margin-bottom: 5px;
+
+        @media (max-width: 575.98px) {
+          width: 24px;
+        }
       }
     }
 
@@ -79,6 +94,10 @@ const show = ref(false)
       font-weight: 400;
       cursor: pointer;
 
+      @media (max-width: 575.98px) {
+        margin-top: 8px;
+      }
+
       img {
         width: 10px;
 
@@ -89,11 +108,28 @@ const show = ref(false)
     }
   }
 
-  .comment {
-    padding-top: 10px;
-    font-size: 13px;
-    line-height: 18px;
-    font-weight: 400;
+}
+
+.comment {
+  padding-top: 18px;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 400;
+  display: block;
+
+  @media (max-width: 575.98px) {
+    display: none;
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  &.on-mobile {
+    display: none;
+
+    @media (max-width: 575.98px) {
+      display: block;
+      width: 100%;
+    }
   }
 }
 </style>

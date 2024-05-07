@@ -35,7 +35,12 @@ onMounted(() => {
 <template>
   <main class="container">
     <div class="body" v-if="question">
-      <ResultsProgress :current="questionNumber" :count="questionsNo" :list="questionsList" :answers="answers" />
+      <ResultsProgress
+        :current="questionNumber"
+        :count="questionsNo"
+        :list="questionsList"
+        :answers="answers"
+      />
       <div class="content">
         <span v-if="question.category">{{ question.category }}</span>
         <h1>{{ question.title }}</h1>
@@ -102,12 +107,29 @@ main {
   padding: 50px 100px;
   position: relative;
 
+  @media (max-width: 575.98px) {
+    padding-inline: 21px;
+    padding-top: 81px;
+    padding-bottom: 32px;
+  }
+
   & > span {
-    background-color: #ffffff;
-    border-radius: 10px;
+    display: inline-block;
+    margin-bottom: 16px;
+    padding: 4px 8px;
+    background-color: rgb(127, 127, 127, 0.15);
+    border-radius: 9999px;
     font-size: 12px;
-    font-weight: 400;
-    padding: 2px 4px;
+    line-height: 1;
+
+    @media (max-width: 575.98px) {
+      position: absolute;
+      top: 35px;
+      left: 0;
+      right: 0;
+      margin-inline: auto;
+      width: fit-content;
+    }
   }
 
   h1 {
@@ -115,12 +137,23 @@ main {
     font-size: 32px;
     line-height: 40px;
     font-weight: 700;
+
+    @media (max-width: 575.98px) {
+      font-size: 24px;
+      line-height: 30px;
+    }
   }
 
   & > p {
     font-size: 20px;
     line-height: 32px;
     margin-bottom: 30px;
+
+    @media (max-width: 575.98px) {
+      font-size: 15px;
+      line-height: 22px;
+      margin-bottom: 0;
+    }
   }
 
   .back,
@@ -134,6 +167,10 @@ main {
     justify-content: center;
     position: absolute;
     top: 50px;
+
+    @media (max-width: 575.98px) {
+      top: 28px;
+    }
 
     &:hover {
       background-color: #ffe368;
@@ -160,34 +197,65 @@ main {
   border-bottom-right-radius: 20px;
   padding: 50px 100px;
 
+  @media (max-width: 575.98px) {
+    padding-inline: 21px;
+    padding-block: 32px;
+  }
+
   .my-answer {
     background-color: #ffffff;
-    border-bottom: 1px solid black;
     padding: 20px;
     font-size: 18px;
     font-weight: 800;
     display: flex;
     align-items: center;
 
+    @media (max-width: 575.98px) {
+      font-size: 15px;
+      line-height: 20px;
+      justify-content: space-between;
+      padding: 18px 7px;
+      margin-inline: -7px;
+    }
+
     & > span {
       min-width: 180px;
+
+      @media (max-width: 575.98px) {
+        min-width: initial;
+      }
     }
 
     & > div {
       display: flex;
       align-items: center;
+
+      @media (max-width: 575.98px) {
+        font-size: 13px;
+        line-height: 20px;
+      }
     }
 
     img {
       width: 28px;
       margin-right: 10px;
       margin-bottom: 5px;
+
+      @media (max-width: 575.98px) {
+        width: 24px;
+      }
     }
   }
 
   .parties {
     font-size: 15px;
+    line-height: 20px;
     font-weight: 800;
+
+    @media (max-width: 575.98px) {
+      font-size: 13px;
+      line-height: 18px;
+    }
 
     .party {
       display: flex;
@@ -196,12 +264,19 @@ main {
       width: 100%;
       border-bottom: 1px solid black;
 
+      @media (max-width: 575.98px) {
+        padding-block: 14px;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+
       .party-image {
+        flex-shrink: 0;
         width: 34px;
         height: 34px;
         border: 1px solid black;
         border-radius: 18px;
-        margin: 0 10px;
+        margin-right: 9px;
         object-fit: contain;
       }
     }
@@ -210,6 +285,11 @@ main {
       min-width: 200px;
       display: flex;
       align-items: center;
+
+      @media (max-width: 575.98px) {
+        min-width: initial;
+        max-width: 58%;
+      }
     }
   }
 }

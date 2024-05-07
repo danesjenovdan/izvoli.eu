@@ -64,6 +64,13 @@ function getAnswer(i) {
     left: 0;
     z-index: 2;
     padding: 14px 11px 7px 22px;
+
+    @media (max-width: 575.98px) {
+      position: static;
+      text-align: center;
+      padding: 6px 0 4px;
+      border-bottom: 2px solid black;
+    }
   }
 
   .progress-circles {
@@ -73,6 +80,11 @@ function getAnswer(i) {
     overflow-x: auto;
     scrollbar-width: thin;
     scrollbar-color: #555 transparent;
+
+    @media (max-width: 575.98px) {
+      gap: 21px;
+      padding: 8px 27px;
+    }
 
     .progress-circle {
       flex-shrink: 0;
@@ -89,6 +101,12 @@ function getAnswer(i) {
       background-size: 10px 10px;
       cursor: pointer;
 
+      @media (max-width: 575.98px) {
+        width: 26px;
+        height: 26px;
+        background-size: 14px 14px;
+      }
+
       &:not(:last-child) {
         &::after {
           content: '';
@@ -98,6 +116,12 @@ function getAnswer(i) {
           height: 2px;
           width: 9px;
           background-color: black;
+
+          @media (max-width: 575.98px) {
+            width: 21px;
+            top: 11px;
+            right: -22px;
+          }
         }
       }
 
