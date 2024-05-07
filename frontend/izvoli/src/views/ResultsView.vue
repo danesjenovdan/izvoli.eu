@@ -47,12 +47,12 @@ const compareWithWinningParties = () => {
   const parties = [...results.value.map((res) => res.party_id)]
   parties.splice(3)
   store.commit('setPartiesToCompare', { parties: parties })
-  router.push('/rezultati/0')
+  router.push({ name: 'resultsByParty', params: { id: 1 } })
 }
 
 const compareWithChosenParties = () => {
   store.commit('setPartiesToCompare', { parties: chosenParties.value })
-  router.push('/rezultati/0')
+  router.push({ name: 'resultsByParty', params: { id: 1 } })
 }
 
 const compareWithAllParties = () => {
@@ -125,8 +125,12 @@ function answerToValue(answer) {
         <div class="parties">
           <div v-for="party in results" :key="party.party_id" class="party">
             <label :for="`chosen-party-${party.party_id}`">
-              <input type="checkbox" :id="`chosen-party-${party.party_id}`" :value="party.party_id"
-                v-model="chosenParties" />
+              <input
+                type="checkbox"
+                :id="`chosen-party-${party.party_id}`"
+                :value="party.party_id"
+                v-model="chosenParties"
+              />
               <img :src="partyImageUrl(parties[party.party_id].image)" class="party-image" />
               {{ parties[party.party_id].name }}
             </label>
@@ -139,7 +143,12 @@ function answerToValue(answer) {
           </div>
           <div v-for="party in partiesNoAnswer" :key="party.id" class="party">
             <label :for="`chosen-party-${party.id}`">
-              <input type="checkbox" :id="`chosen-party-${party.id}`" :value="party.id" v-model="chosenParties" />
+              <input
+                type="checkbox"
+                :id="`chosen-party-${party.id}`"
+                :value="party.id"
+                v-model="chosenParties"
+              />
               <img :src="partyImageUrl(party.image)" class="party-image" />
               {{ party.name }}
             </label>
@@ -180,10 +189,19 @@ function answerToValue(answer) {
     margin-top: 42px;
     text-align: center;
 
+    @media (max-width: 575.98px) {
+      margin-top: 32px;
+    }
+
     .button-go {
       font-size: 18px;
       line-height: 20px;
       padding-inline: 17px 17px;
+
+      @media (max-width: 575.98px) {
+        font-size: 15px;
+        line-height: 16px;
+      }
     }
   }
 
@@ -192,12 +210,24 @@ function answerToValue(answer) {
     padding-top: 60px;
     padding-bottom: 56px;
 
+    @media (max-width: 575.98px) {
+      padding-inline: 21px;
+      padding-top: 21px;
+      padding-bottom: 32px;
+    }
+
     h1 {
       margin-bottom: 20px;
       font-size: 32px;
       line-height: 40px;
       font-weight: 700;
       text-align: center;
+
+      @media (max-width: 575.98px) {
+        margin-bottom: 24px;
+        font-size: 24px;
+        line-height: 30px;
+      }
     }
 
     .winners {
@@ -205,6 +235,10 @@ function answerToValue(answer) {
       gap: 16px;
       justify-content: center;
       flex-wrap: wrap;
+
+      @media (max-width: 575.98px) {
+        gap: 8px;
+      }
     }
   }
 
@@ -215,14 +249,33 @@ function answerToValue(answer) {
     padding-top: 60px;
     padding-bottom: 56px;
 
+    @media (max-width: 575.98px) {
+      padding-inline: 21px;
+      padding-top: 32px;
+      padding-bottom: 32px;
+    }
+
     & > p {
+
+      @media (max-width: 575.98px) {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
       span {
         font-size: 18px;
         line-height: 20px;
         font-weight: 800;
+
+        @media (max-width: 575.98px) {
+          font-size: 15px;
+          line-height: 16px;
+        }
       }
 
       button {
+        flex-shrink: 0;
         display: inline-flex;
         gap: 1px;
         align-items: flex-end;
@@ -235,6 +288,10 @@ function answerToValue(answer) {
         font-size: 15px;
         line-height: 1;
         cursor: pointer;
+
+        @media (max-width: 575.98px) {
+          font-size: 12px;
+        }
       }
     }
 
@@ -246,6 +303,12 @@ function answerToValue(answer) {
         align-items: center;
         margin-bottom: 16px;
 
+        @media (max-width: 575.98px) {
+          display: grid;
+          grid-template-columns: 4fr 1fr;
+          margin-bottom: 18px;
+        }
+
         label {
           flex: 1.25;
           display: flex;
@@ -254,6 +317,11 @@ function answerToValue(answer) {
           font-size: 15px;
           line-height: 18px;
           font-weight: 800;
+
+          @media (max-width: 575.98px) {
+            grid-row: 1;
+            grid-column: 1;
+          }
 
           input[type='checkbox'] {
             flex-shrink: 0;
@@ -307,6 +375,13 @@ function answerToValue(answer) {
           border-radius: 10px;
           overflow: hidden;
 
+          @media (max-width: 575.98px) {
+            grid-row: 2;
+            grid-column: 1 / -1;
+            margin-left: 32px;
+            margin-top: 8px;
+          }
+
           .progress-bar {
             background-color: #65a3ff;
             height: 100%;
@@ -331,6 +406,11 @@ function answerToValue(answer) {
           font-size: 15px;
           line-height: 18px;
           font-weight: 500;
+
+          @media (max-width: 575.98px) {
+            grid-row: 1;
+            grid-column: 2;
+          }
         }
       }
     }

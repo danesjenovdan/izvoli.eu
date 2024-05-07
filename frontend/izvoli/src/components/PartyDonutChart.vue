@@ -82,7 +82,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="party-donut-chart">
-    <svg width="86" height="86" class="party-donut">
+    <svg class="party-donut" viewBox="0 0 86 86">
       <defs>
         <pattern
           :id="`donut-image-${result.party_id}`"
@@ -129,6 +129,20 @@ onBeforeUnmount(() => {
   flex: 0 0 145px;
   text-align: center;
 
+  @media (max-width: 575.98px) {
+    flex-basis: 85px;
+  }
+
+  svg {
+    width: 86px;
+    height: 86px;
+
+    @media (max-width: 575.98px) {
+      width: 60px;
+      height: 60px;
+    }
+  }
+
   .party-donut {
     display: block;
     margin-inline: auto;
@@ -143,7 +157,7 @@ onBeforeUnmount(() => {
   }
 
   .party-percentage {
-    font-size: 18px;
+    font-size: 15px;
     line-height: 1;
     font-weight: 500;
   }
