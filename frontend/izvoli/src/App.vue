@@ -67,6 +67,10 @@ button {
 .container {
   width: 100%;
   max-width: 900px;
+
+  @media (max-width: 575.98px) {
+    padding-inline: 21px;
+  }
 }
 
 .body {
@@ -84,8 +88,17 @@ button {
   text-align: center;
   position: relative;
 
+  @media (max-width: 575.98px) {
+    padding-top: 26px;
+    padding-bottom: 24px;
+  }
+
   .header-logo {
     width: 292px;
+
+    @media (max-width: 575.98px) {
+      width: 194px;
+    }
   }
 
   .buttons {
@@ -96,8 +109,14 @@ button {
     display: flex;
     gap: 10px;
     flex-direction: column;
-    align-items: end;
+    align-items: flex-end;
     justify-content: center;
+
+    @media (max-width: 575.98px) {
+      position: static;
+      margin-top: 21px;
+      align-items: center;
+    }
 
     a,
     button {
@@ -117,6 +136,11 @@ button {
       text-decoration: none;
       cursor: pointer;
 
+      @media (max-width: 575.98px) {
+        font-size: 12px;
+        line-height: 16px;
+      }
+
       &::after {
         content: '';
         display: inline-block;
@@ -126,6 +150,11 @@ button {
         background-position: center;
         background-size: contain;
         margin-left: 4px;
+
+        @media (max-width: 575.98px) {
+          width: 16px;
+          height: 16px;
+      }
       }
 
       &:hover {
@@ -170,8 +199,17 @@ button {
   transition: transform 0.15s ease-in-out;
   cursor: pointer;
 
+  @media (max-width: 575.98px) {
+    min-width: 189px;
+    padding: 10px 15px 10px 18px;
+  }
+
   img {
     width: 34px;
+
+    @media (max-width: 575.98px) {
+      width: 28px;
+    }
   }
 
   &:hover {

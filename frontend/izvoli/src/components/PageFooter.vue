@@ -1,6 +1,11 @@
 <script setup>
+import axios from 'axios'
+import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import { atcb_action } from 'add-to-calendar-button'
+
+const newsletterEmail = ref('')
+const newsletterLoading = ref(false)
 
 const config = {
   name: 'Volitve v Evropski parlament',
@@ -19,8 +24,25 @@ function onCalClick(event) {
   atcb_action(config, event.currentTarget)
 }
 
-function onNewsletterSubmit(event) {
-  console.log('onNewsletterSubmit', event)
+async function onNewsletterSubmit() {
+  newsletterLoading.value = true
+  try {
+    const response = await axios.post('https://podpri.lb.djnd.si/api/subscribe/', {
+      email: newsletterEmail.value,
+      segment_id: 21
+    })
+    if (response.data.msg === 'mail sent') {
+      newsletterEmail.value = ''
+      newsletterLoading.value = false
+      alert('Hvala! Poslali smo ti sporočilo s povezavo, na kateri lahko potrdiš prijavo!')
+    } else {
+      newsletterLoading.value = false
+      alert('Prišlo je do napake :(')
+    }
+  } catch (error) {
+    newsletterLoading.value = false
+    alert('Prišlo je do napake :(')
+  }
 }
 </script>
 
@@ -55,12 +77,19 @@ function onNewsletterSubmit(event) {
         <p><strong>Prijavi se na naš Občasnik!</strong></p>
         <form @submit.prevent="onNewsletterSubmit">
           <label for="newsletter-email">Vpiši svoj e-naslov:</label>
-          <input type="email" id="newsletter-email" name="newsletter-email" placeholder="ime@email.si" />
+          <input
+            type="email"
+            id="newsletter-email"
+            name="newsletter-email"
+            placeholder="ime@email.si"
+            required
+            v-model="newsletterEmail"
+          />
           <label for="newsletter-agree" class="newsletter-agree">
-            <input type="checkbox" id="newsletter-agree" />
+            <input type="checkbox" id="newsletter-agree" required />
             Strinjam se, da mi Danes je nov dan občasno pošlje elektronsko sporočilo.
           </label>
-          <button type="submit">Prijavi me!</button>
+          <button type="submit" :disabled="newsletterLoading">Prijavi me!</button>
         </form>
       </div>
       <div>
@@ -91,6 +120,11 @@ function onNewsletterSubmit(event) {
 footer {
   max-width: 900px;
   margin-top: 70px;
+
+  @media (max-width: 575.98px) {
+    padding-inline: 21px;
+    margin-top: 47px;
+  }
 }
 
 .support {
@@ -102,10 +136,20 @@ footer {
   align-items: center;
   justify-content: space-between;
 
+  @media (max-width: 575.98px) {
+    flex-direction: column;
+    padding: 27px 24px;
+    gap: 21px;
+  }
+
   p {
     font-size: 15px;
     line-height: 20px;
     margin-right: 20px;
+
+    @media (max-width: 575.98px) {
+      font-size: 12px;
+    }
 
     a {
       font-weight: 700;
@@ -182,6 +226,10 @@ footer {
 .columns {
   display: flex;
 
+  @media (max-width: 575.98px) {
+    flex-direction: column;
+  }
+
   & > div {
     flex-grow: 1;
     flex-basis: 0;
@@ -192,10 +240,19 @@ footer {
 
     &:not(:first-child) {
       border-left: 1px solid black;
+
+      @media (max-width: 575.98px) {
+        border-left: none;
+      }
     }
 
     &:not(:last-child) {
       border-right: 1px solid black;
+
+      @media (max-width: 575.98px) {
+        border-right: none;
+        border-bottom: none;
+      }
 
       &::after,
       &::before {
@@ -207,6 +264,10 @@ footer {
         width: 12px;
         z-index: 1;
         right: -7px;
+
+        @media (max-width: 575.98px) {
+          display: none;
+        }
       }
 
       &::before {
@@ -222,6 +283,11 @@ footer {
       font-size: 15px;
       line-height: 20px;
 
+      @media (max-width: 575.98px) {
+        font-size: 12px;
+        line-height: 15px;
+      }
+
       a {
         font-weight: 700;
         color: black;
@@ -236,10 +302,18 @@ footer {
     &:first-child {
       padding-left: 12px;
 
+      @media (max-width: 575.98px) {
+        padding-left: 21px;
+      }
+
       & > div {
         display: flex;
         align-items: center;
         margin-bottom: 24px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
       }
 
       .i-vodic {
@@ -256,8 +330,16 @@ footer {
     &:last-child {
       padding-right: 12px;
 
+      @media (max-width: 575.98px) {
+        padding-right: 21px;
+      }
+
       & > div {
         margin-bottom: 24px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
       }
     }
   }
@@ -334,8 +416,13 @@ footer {
       text-align: left;
       cursor: pointer;
 
-      &:hover {
+      &:not(:disabled):hover {
         background-color: rgba(255, 255, 255, 0.33);
+      }
+
+      &:disabled {
+        background-color: rgba(255, 255, 255, 0.22);
+        cursor: progress;
       }
     }
   }
@@ -347,6 +434,13 @@ footer {
   gap: 38px;
   padding: 16px 52px;
 
+  @media (max-width: 575.98px) {
+    flex-direction: column;
+    padding: 18px 21px;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
   img {
     height: 42px;
   }
@@ -354,6 +448,11 @@ footer {
   p {
     font-size: 12px;
     line-height: 16px;
+
+    @media (max-width: 575.98px) {
+      font-size: 10px;
+      line-height: 14px;
+    }
   }
 }
 </style>

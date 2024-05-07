@@ -1,5 +1,9 @@
 <script setup>
-defineProps({
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const props = defineProps({
   current: {
     type: Number,
     required: true
@@ -7,26 +11,45 @@ defineProps({
   count: {
     type: Number,
     required: true
+  },
+  list: {
+    type: Array,
+    required: true
+  },
+  answers: {
+    type: Object,
+    required: true
   }
 })
+
+function getAnswer(i) {
+  const index = i - 1
+  return props.answers[props.list[index]]
+}
 </script>
 
 <template>
-  <div class="questions-progress">
+  <div class="results-progress">
     <div class="progress-number">{{ current }}/{{ count }}</div>
     <div class="progress-circles">
       <div
         v-for="i in count"
         :key="i"
         class="progress-circle"
-        :class="{ active: i === current, checked: i < current }"
+        :class="{
+          active: i === current,
+          agree: getAnswer(i) === 'YES',
+          disagree: getAnswer(i) === 'NO',
+          neutral: !getAnswer(i) || getAnswer(i) === 'NEUTRAL'
+        }"
+        @click="router.push({ name: 'resultsByParty', params: { id: i } })"
       ></div>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.questions-progress {
+.results-progress {
   background-color: #f2f7ff;
   border-bottom: 2px solid black;
   position: relative;
@@ -45,7 +68,8 @@ defineProps({
     @media (max-width: 575.98px) {
       position: static;
       text-align: center;
-      padding: 10px 0 7px;
+      padding: 6px 0 4px;
+      border-bottom: 2px solid black;
     }
   }
 
@@ -58,7 +82,8 @@ defineProps({
     scrollbar-color: #555 transparent;
 
     @media (max-width: 575.98px) {
-      display: none;
+      gap: 21px;
+      padding: 8px 27px;
     }
 
     .progress-circle {
@@ -68,48 +93,52 @@ defineProps({
       align-items: center;
       width: 18px;
       height: 18px;
-      border: 2px solid black;
+      border: 1px solid black;
       border-radius: 9999px;
       position: relative;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 10px 10px;
+      cursor: pointer;
+
+      @media (max-width: 575.98px) {
+        width: 26px;
+        height: 26px;
+        background-size: 14px 14px;
+      }
 
       &:not(:last-child) {
         &::after {
           content: '';
           position: absolute;
-          top: 6px;
-          right: -11px;
+          top: 7px;
+          right: -10px;
           height: 2px;
           width: 9px;
           background-color: black;
-        }
-      }
 
-      &.checked {
-        background-color: #ffe468;
-
-        &::before {
-          content: '';
-          position: absolute;
-          left: 0;
-          top: 0;
-          width: 9px;
-          height: 5px;
-          border: solid black;
-          border-width: 0 0 2px 2px;
-          transform: scale(1) rotate(-45deg) translateX(-12%) translateY(90%);
+          @media (max-width: 575.98px) {
+            width: 21px;
+            top: 11px;
+            right: -22px;
+          }
         }
       }
 
       &.active {
-        background-color: #7fb2ff;
+        background-color: #ffe468;
+      }
 
-        &::before {
-          content: '';
-          width: 8px;
-          height: 8px;
-          background-color: black;
-          border-radius: 9999px;
-        }
+      &.agree {
+        background-image: url('@/assets/img/strinjam.svg');
+      }
+
+      &.disagree {
+        background-image: url('@/assets/img/ne-strinjam.svg');
+      }
+
+      &.neutral {
+        background-image: url('@/assets/img/neopredeljen.svg');
       }
     }
   }
