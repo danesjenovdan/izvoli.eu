@@ -63,6 +63,12 @@ onMounted(() => {
   padding-top: 72px;
   padding-bottom: 56px;
 
+  @media (max-width: 575.98px) {
+    padding-inline: 21px;
+    padding-top: 24px;
+    padding-bottom: 33px;
+  }
+
   p {
     margin-bottom: 24px;
     font-size: 15px;
@@ -71,12 +77,21 @@ onMounted(() => {
     &.introduction {
       font-size: 24px;
       line-height: 34px;
+
+      @media (max-width: 575.98px) {
+        font-size: 21px;
+        line-height: 27px;
+      }
     }
   }
 
   .button-wrapper {
     margin-top: 56px;
     text-align: center;
+
+    @media (max-width: 575.98px) {
+      margin-top: 33px;
+    }
   }
 }
 </style>

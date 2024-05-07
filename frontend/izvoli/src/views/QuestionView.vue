@@ -101,27 +101,30 @@ router.beforeEach(() => {
         <h1 v-if="question.title" class="title">{{ question.title }}</h1>
         <p v-if="question.description" class="description">{{ question.description }}</p>
         <div class="buttons">
-          <RouterLink :to="
+          <RouterLink
+            :to="
               questionIndex <= 0
                 ? { name: 'introduction' }
                 : { name: 'question', params: { id: questionNumber - 1 } }
-            " class="back">
+            "
+            class="back"
+          >
             <div>
               <img src="../assets/img/puscica-trikotnik.svg" alt="" />
               <img src="../assets/img/puscica-trikotnik.svg" alt="" />
             </div>
-            Popravi prejšnjo izbiro
+            <span>Popravi prejšnjo izbiro</span>
           </RouterLink>
           <button @click="saveAnswer(questionId, 'NO')" class="disagree">
             <img src="../assets/img/ne-strinjam.svg" />
-            Se ne strinjam
+            <span>Se ne strinjam</span>
           </button>
           <button @click="saveAnswer(questionId, 'YES')" class="agree">
             <img src="../assets/img/strinjam.svg" />
-            Se strinjam
+            <span>Se strinjam</span>
           </button>
           <button @click="saveAnswer(questionId, 'NEUTRAL')" class="skip">
-            Brez stališča
+            <span>Brez stališča</span>
             <div>
               <img src="../assets/img/puscica-trikotnik.svg" alt="" />
               <img src="../assets/img/puscica-trikotnik.svg" alt="" />
@@ -135,8 +138,13 @@ router.beforeEach(() => {
           <img src="../assets/img/eyes-down.svg" v-if="moreInfo || moreInfoHover" />
           <img src="../assets/img/eyes-right.svg" v-else />
           <span>Kaj mislijo stranke?</span>
-          <button @click="moreInfo = true" @mouseenter="moreInfoHover = true" @mouseleave="moreInfoHover = false"
-            v-if="!moreInfo" class="show">
+          <button
+            @click="moreInfo = true"
+            @mouseenter="moreInfoHover = true"
+            @mouseleave="moreInfoHover = false"
+            v-if="!moreInfo"
+            class="show"
+          >
             Prikaži
             <img src="../assets/img/puscica-trikotnik-modra.svg" />
           </button>
@@ -148,20 +156,32 @@ router.beforeEach(() => {
         <div class="parties" v-if="moreInfo">
           <div>
             <div class="head">Se strinja</div>
-            <PartyElement v-for="(answer, party_id) in partiesAgree" :key="party_id" :party="parties[party_id]"
-              :answer="answer">
+            <PartyElement
+              v-for="(answer, party_id) in partiesAgree"
+              :key="party_id"
+              :party="parties[party_id]"
+              :answer="answer"
+            >
             </PartyElement>
           </div>
           <div>
             <div class="head">Se ne strinja</div>
-            <PartyElement v-for="(answer, party_id) in partiesDisagree" :key="party_id" :party="parties[party_id]"
-              :answer="answer">
+            <PartyElement
+              v-for="(answer, party_id) in partiesDisagree"
+              :key="party_id"
+              :party="parties[party_id]"
+              :answer="answer"
+            >
             </PartyElement>
           </div>
           <div>
             <div class="head">Neopredeljena / ni odgovora</div>
-            <PartyElement v-for="(answer, party_id) in partiesNeutral" :key="party_id" :party="parties[party_id]"
-              :answer="answer">
+            <PartyElement
+              v-for="(answer, party_id) in partiesNeutral"
+              :key="party_id"
+              :party="parties[party_id]"
+              :answer="answer"
+            >
             </PartyElement>
           </div>
         </div>
@@ -184,6 +204,12 @@ main {
     padding-top: 50px;
     padding-bottom: 56px;
 
+    @media (max-width: 575.98px) {
+      padding-inline: 21px;
+      padding-top: 18px;
+      padding-bottom: 32px;
+    }
+
     .category {
       display: inline-block;
       margin-bottom: 16px;
@@ -199,12 +225,22 @@ main {
       font-size: 32px;
       line-height: 40px;
       font-weight: 700;
+
+      @media (max-width: 575.98px) {
+        font-size: 24px;
+        line-height: 30px;
+      }
     }
 
     .description {
       margin-bottom: 22px;
       font-size: 21px;
       line-height: 31px;
+
+      @media (max-width: 575.98px) {
+        font-size: 15px;
+        line-height: 22px;
+      }
     }
 
     .buttons {
@@ -213,6 +249,11 @@ main {
       justify-content: center;
       align-items: flex-end;
       margin-top: 42px;
+
+      @media (max-width: 575.98px) {
+        gap: 9px;
+        margin-top: 32px;
+      }
 
       .agree,
       .disagree,
@@ -226,6 +267,12 @@ main {
         align-items: center;
         justify-content: flex-start;
         cursor: pointer;
+
+        @media (max-width: 575.98px) {
+          span {
+            display: none;
+          }
+        }
       }
 
       .back,
@@ -238,7 +285,7 @@ main {
         color: inherit;
         text-decoration: none;
 
-        &>div {
+        & > div {
           display: flex;
         }
 
@@ -274,6 +321,10 @@ main {
         line-height: 20px;
         font-weight: 800;
 
+        @media (max-width: 575.98px) {
+          padding: 20px 18px 20px 21px;
+        }
+
         img {
           width: 28px;
         }
@@ -289,6 +340,10 @@ main {
     padding: 40px 100px;
     background-color: #f2f7ff;
     border-top: 2px solid black;
+
+    @media (max-width: 575.98px) {
+      padding: 32px 21px;
+    }
 
     .show-hide {
       & > img {
@@ -333,6 +388,11 @@ main {
       display: flex;
       gap: 26px;
       margin-top: 22px;
+
+      @media (max-width: 575.98px) {
+        flex-direction: column;
+        gap: 43px;
+      }
 
       & > div {
         flex: 1;

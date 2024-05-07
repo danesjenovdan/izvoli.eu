@@ -67,6 +67,10 @@ button {
 .container {
   width: 100%;
   max-width: 900px;
+
+  @media (max-width: 575.98px) {
+    padding-inline: 21px;
+  }
 }
 
 .body {
@@ -84,8 +88,17 @@ button {
   text-align: center;
   position: relative;
 
+  @media (max-width: 575.98px) {
+    padding-top: 26px;
+    padding-bottom: 24px;
+  }
+
   .header-logo {
     width: 292px;
+
+    @media (max-width: 575.98px) {
+      width: 194px;
+    }
   }
 
   .buttons {
@@ -169,6 +182,10 @@ button {
   text-decoration: none;
   transition: transform 0.15s ease-in-out;
   cursor: pointer;
+
+  @media (max-width: 575.98px) {
+    min-width: 189px;
+  }
 
   img {
     width: 34px;

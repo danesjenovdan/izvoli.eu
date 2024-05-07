@@ -41,6 +41,12 @@ defineProps({
     left: 0;
     z-index: 2;
     padding: 14px 11px 7px 22px;
+
+    @media (max-width: 575.98px) {
+      position: static;
+      text-align: center;
+      padding: 10px 0 7px;
+    }
   }
 
   .progress-circles {
@@ -50,6 +56,10 @@ defineProps({
     overflow-x: auto;
     scrollbar-width: thin;
     scrollbar-color: #555 transparent;
+
+    @media (max-width: 575.98px) {
+      display: none;
+    }
 
     .progress-circle {
       flex-shrink: 0;

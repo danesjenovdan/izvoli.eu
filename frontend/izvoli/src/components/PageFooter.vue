@@ -126,6 +126,11 @@ async function onNewsletterSubmit() {
 footer {
   max-width: 900px;
   margin-top: 70px;
+
+  @media (max-width: 575.98px) {
+    padding-inline: 21px;
+    margin-top: 47px;
+  }
 }
 
 .support {
@@ -137,9 +142,19 @@ footer {
   align-items: center;
   justify-content: space-between;
 
+  @media (max-width: 575.98px) {
+    flex-direction: column;
+    padding: 27px 24px;
+    gap: 21px;
+  }
+
   p {
     font-size: 15px;
     line-height: 20px;
+
+    @media (max-width: 575.98px) {
+      font-size: 12px;
+    }
 
     a {
       font-weight: 700;
@@ -215,6 +230,10 @@ footer {
 .columns {
   display: flex;
 
+  @media (max-width: 575.98px) {
+    flex-direction: column;
+  }
+
   & > div {
     flex-grow: 1;
     flex-basis: 0;
@@ -225,10 +244,19 @@ footer {
 
     &:not(:first-child) {
       border-left: 1px solid black;
+
+      @media (max-width: 575.98px) {
+        border-left: none;
+      }
     }
 
     &:not(:last-child) {
       border-right: 1px solid black;
+
+      @media (max-width: 575.98px) {
+        border-right: none;
+        border-bottom: none;
+      }
 
       &::after,
       &::before {
@@ -240,6 +268,10 @@ footer {
         width: 12px;
         z-index: 1;
         right: -7px;
+
+        @media (max-width: 575.98px) {
+          display: none;
+        }
       }
 
       &::before {
@@ -255,6 +287,11 @@ footer {
       font-size: 15px;
       line-height: 20px;
 
+      @media (max-width: 575.98px) {
+        font-size: 12px;
+        line-height: 15px;
+      }
+
       a {
         font-weight: 700;
         color: black;
@@ -269,10 +306,18 @@ footer {
     &:first-child {
       padding-left: 12px;
 
+      @media (max-width: 575.98px) {
+        padding-left: 21px;
+      }
+
       & > div {
         display: flex;
         align-items: center;
         margin-bottom: 24px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
       }
 
       .i-vodic {
@@ -289,8 +334,16 @@ footer {
     &:last-child {
       padding-right: 12px;
 
+      @media (max-width: 575.98px) {
+        padding-right: 21px;
+      }
+
       & > div {
         margin-bottom: 24px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
       }
     }
   }
@@ -385,6 +438,13 @@ footer {
   gap: 38px;
   padding: 16px 52px;
 
+  @media (max-width: 575.98px) {
+    flex-direction: column;
+    padding: 18px 21px;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
   img {
     height: 42px;
   }
@@ -392,6 +452,11 @@ footer {
   p {
     font-size: 12px;
     line-height: 16px;
+
+    @media (max-width: 575.98px) {
+      font-size: 10px;
+      line-height: 14px;
+    }
   }
 }
 </style>
