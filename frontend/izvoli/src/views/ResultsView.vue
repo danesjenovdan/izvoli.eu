@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, toRaw } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import PartyDonutChart from '../components/PartyDonutChart.vue'
@@ -11,6 +11,9 @@ const storeInitialized = computed(() => store.getters.getStoreInitialized)
 const quizFinished = computed(() => store.getters.getQuizFinished)
 const parties = computed(() => store.getters.getParties)
 const results = computed(() => store.getters.getResults)
+const answers = computed(() => store.getters.getAnswers)
+const questions = computed(() => store.getters.getQuestions)
+const questionsList = computed(() => store.getters.getQuestionsList)
 const chosenParties = ref([])
 const partiesNoAnswer = computed(() => {
   const p = {}
@@ -27,6 +30,17 @@ const winners = computed(() => {
   const winners = [...results.value]
   winners.splice(3)
   return winners
+})
+
+const winnerIDs = computed(() => {
+  if (results.value) {
+    const winnerPercentage = results.value[0].percentage
+    const winners = results.value.filter((res) => toRaw(res).percentage == winnerPercentage)
+    const winnerIDs = winners.map((res) => parties.value[res.party_id].votematch_id)
+    return [winnerIDs.toString(), winnerPercentage]
+  } else {
+    return ["", ""]
+  }
 })
 
 const compareWithWinningParties = () => {
@@ -49,7 +63,12 @@ const unselectAllParties = () => {
   chosenParties.value = []
 }
 
+const compareWithEU = () => {
+
+}
+
 onMounted(() => {
+  // initialize store
   if (!storeInitialized.value) {
     store.dispatch('initializeStore').then((quiz_finished) => {
       if (!quiz_finished) {
@@ -57,15 +76,26 @@ onMounted(() => {
       }
     })
   }
+  // redirect if quiz is not yet finished
   if (!quizFinished.value) {
     router.push('/')
   }
+  // EU comparison
+  let recaptchaScript = document.createElement('script')
+  recaptchaScript.setAttribute('src', '//assets.votematch.eu/embed.min.js')
+  document.head.appendChild(recaptchaScript)
 })
 
 function partyImageUrl(url) {
   if (!url) return ''
   const newUrl = new URL(url, store.getters.getApiUrl)
   return newUrl.toString()
+}
+
+function answerToValue(answer) {
+  if (answer == "YES") return "1"
+  if (answer == "NEUTRAL") return "0"
+  if (answer == "NO") return "-1"
 }
 </script>
 
@@ -121,14 +151,26 @@ function partyImageUrl(url) {
             <img src="../assets/img/puscica.svg" alt="" />
           </button>
         </div>
+        <div class="button-wrapper">
+          <button class="button-go VotematchEU-button"> <!--@click="compareWithEU"-->
+            Kako pa so odgovarjale druge EU stranke?
+            <img src="../assets/img/eyes-right.svg" alt="" />
+          </button>
+        </div>
       </div>
     </div>
-    <!-- <div class="body">
-      <div class="content">
-        <h2>Primerjaj svoja stališča z drugimi evropskimi strankami</h2>
-        <p>Neki kratek tagline, kaj se tu zgodi. Kao evropski spirit pa to bla bla bla.</p>
-      </div>
-    </div> -->
+    <form id="VotematchEU-settings">
+      <input type="hidden" name="lang" value="SL">
+    </form>
+    <form id="VotematchEU-results">
+      <input type="hidden" name="country" value="SI">
+      <input type="hidden" name="bestmatch" :value="winnerIDs[0]">
+      <input type="hidden" name="bestscore" :value="winnerIDs[1]">
+      <template v-for="qNo in questionsList">
+        <input v-if="qNo in answers && questions[qNo].votematch_id" type="hidden" :name="questions[qNo].votematch_id"
+          :value="answerToValue(answers[qNo])">
+      </template>
+    </form>
   </main>
 </template>
 
