@@ -170,7 +170,7 @@ def party_summary(request, election_slug=None):
 
     party = Party.objects.get(user=request.user)
 
-    answers = StatementAnswer.objects.filter(party=party)
+    answers = StatementAnswer.objects.filter(party=party).order_by("statement__id")
 
     return render(
         request,

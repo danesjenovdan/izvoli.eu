@@ -50,16 +50,16 @@ const partiesNeutral = computed(() => {
   return parties
 })
 
-const skipQuestion = (id, answer) => {
-  // remove saved answer
-  store.commit('removeAnswer', { id, answer })
-  if (questionIndex.value < questionsNo.value - 1) {
-    router.push(`/vprasanje/${questionNumber.value + 1}`)
-  } else {
-    store.commit('calculateResults')
-    router.push('/rezultati')
-  }
-}
+// const skipQuestion = (id, answer) => {
+//   // remove saved answer
+//   store.commit('removeAnswer', { id, answer })
+//   if (questionIndex.value < questionsNo.value - 1) {
+//     router.push(`/vprasanje/${questionNumber.value + 1}`)
+//   } else {
+//     store.commit('calculateResults')
+//     router.push('/rezultati')
+//   }
+// }
 
 const saveAnswer = (id, answer) => {
   // save answer
@@ -101,19 +101,16 @@ router.beforeEach((to, from) => {
         <h1 v-if="question.title" class="title">{{ question.title }}</h1>
         <p v-if="question.description" class="description">{{ question.description }}</p>
         <div class="buttons">
-          <RouterLink
-            :to="
+          <RouterLink :to="
               questionIndex <= 0
                 ? { name: 'introduction' }
                 : { name: 'question', params: { id: questionNumber - 1 } }
-            "
-            class="back"
-          >
+            " class="back">
             <div>
               <img src="../assets/img/puscica-trikotnik.svg" alt="" />
               <img src="../assets/img/puscica-trikotnik.svg" alt="" />
             </div>
-            Nazaj
+            Popravi prejšnjo izbiro
           </RouterLink>
           <button @click="saveAnswer(questionId, 'NO')" class="disagree">
             <img src="../assets/img/ne-strinjam.svg" />
@@ -123,8 +120,8 @@ router.beforeEach((to, from) => {
             <img src="../assets/img/strinjam.svg" />
             Se strinjam
           </button>
-          <button @click="skipQuestion(questionId, true)" class="skip">
-            Preskoči
+          <button @click="saveAnswer(questionId, 'NEUTRAL')" class="skip">
+            Brez stališča
             <div>
               <img src="../assets/img/puscica-trikotnik.svg" alt="" />
               <img src="../assets/img/puscica-trikotnik.svg" alt="" />
@@ -138,13 +135,8 @@ router.beforeEach((to, from) => {
           <img src="../assets/img/eyes-down.svg" v-if="moreInfo || moreInfoHover" />
           <img src="../assets/img/eyes-right.svg" v-else />
           <span>Kaj mislijo stranke?</span>
-          <button
-            @click="moreInfo = true"
-            @mouseenter="moreInfoHover = true"
-            @mouseleave="moreInfoHover = false"
-            v-if="!moreInfo"
-            class="show"
-          >
+          <button @click="moreInfo = true" @mouseenter="moreInfoHover = true" @mouseleave="moreInfoHover = false"
+            v-if="!moreInfo" class="show">
             Prikaži
             <img src="../assets/img/puscica-trikotnik-modra.svg" />
           </button>
@@ -156,32 +148,20 @@ router.beforeEach((to, from) => {
         <div class="parties" v-if="moreInfo">
           <div>
             <div class="head">Se strinja</div>
-            <PartyElement
-              v-for="(answer, party_id) in partiesAgree"
-              :key="party_id"
-              :party="parties[party_id]"
-              :answer="answer"
-            >
+            <PartyElement v-for="(answer, party_id) in partiesAgree" :key="party_id" :party="parties[party_id]"
+              :answer="answer">
             </PartyElement>
           </div>
           <div>
             <div class="head">Se ne strinja</div>
-            <PartyElement
-              v-for="(answer, party_id) in partiesDisagree"
-              :key="party_id"
-              :party="parties[party_id]"
-              :answer="answer"
-            >
+            <PartyElement v-for="(answer, party_id) in partiesDisagree" :key="party_id" :party="parties[party_id]"
+              :answer="answer">
             </PartyElement>
           </div>
           <div>
             <div class="head">Neopredeljena / ni odgovora</div>
-            <PartyElement
-              v-for="(answer, party_id) in partiesNeutral"
-              :key="party_id"
-              :party="parties[party_id]"
-              :answer="answer"
-            >
+            <PartyElement v-for="(answer, party_id) in partiesNeutral" :key="party_id" :party="parties[party_id]"
+              :answer="answer">
             </PartyElement>
           </div>
         </div>
@@ -251,12 +231,16 @@ main {
       .back,
       .skip {
         padding: 14px 10px;
-        width: 100px;
+        width: 120px;
         font-size: 10px;
         line-height: 1;
         font-weight: 500;
         color: inherit;
         text-decoration: none;
+
+        &>div {
+          display: flex;
+        }
 
         img {
           height: 16px;
