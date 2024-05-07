@@ -137,6 +137,7 @@ const store = createStore({
         state.parties[parties[index].id] = {
           name: parties[index].name,
           image: parties[index].image,
+          votematch_id: parties[index].votematch_id
           // url: parties[index].url
         }
       }
