@@ -36,6 +36,7 @@ class Party(models.Model):
     election = models.ForeignKey(
         Election, on_delete=models.CASCADE, verbose_name="Volitve"
     )
+    votematch_id = models.CharField(verbose_name="Votematch ID", blank=True, default="")
     # municipality = models.ForeignKey(
     #     Municipality, null=True, on_delete=models.SET_NULL, verbose_name="Občina"
     # )
@@ -97,6 +98,7 @@ class Statement(models.Model):
     election = models.ForeignKey(
         Election, on_delete=models.CASCADE, verbose_name="Volitve"
     )
+    votematch_id = models.CharField(verbose_name="Votematch ID", blank=True, default="")
 
     def __str__(self):
         return self.title

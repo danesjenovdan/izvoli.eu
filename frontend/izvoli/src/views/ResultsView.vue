@@ -73,14 +73,9 @@ function partyImageUrl(url) {
   <main class="container">
     <div class="body" v-if="results.length > 0">
       <div class="content">
-        <h1>Najbolj se ujemaš s:</h1>
+        <h1>Najbolj se ujemaš s strankami:</h1>
         <div class="winners">
-          <PartyDonutChart
-            v-for="result in winners"
-            :key="result.party_id"
-            :result="result"
-            :parties="parties"
-          />
+          <PartyDonutChart v-for="result in winners" :key="result.party_id" :result="result" :parties="parties" />
         </div>
         <div class="button-wrapper">
           <button class="button-go" @click="compareWithWinningParties">
@@ -91,7 +86,7 @@ function partyImageUrl(url) {
       </div>
       <div class="more-info">
         <p>
-          <span>Izberi stranke za primerjavo</span>
+          <span>Izberi stranke za primerjavo svojih odgovorov</span>
           <button @click="compareWithAllParties" v-if="chosenParties.length == 0">Izberi vse
             stranke</button>
           <button @click="unselectAllParties" v-if="chosenParties.length > 0">Odstrani vse
@@ -106,15 +101,9 @@ function partyImageUrl(url) {
               {{ parties[party.party_id].name }}
             </label>
             <div class="progress">
-              <div
-                class="progress-bar"
-                role="progressbar"
-                :aria-valuenow="party.percentage"
-                aria-valuemin="0"
-                :aria-valuemax="100"
-                :style="{ width: `${party.percentage}%` }"
-                :class="{ 'border-end': party.percentage > 0 && party.percentage < 100 }"
-              ></div>
+              <div class="progress-bar" role="progressbar" :aria-valuenow="party.percentage" aria-valuemin="0"
+                :aria-valuemax="100" :style="{ width: `${party.percentage}%` }"
+                :class="{ 'border-end': party.percentage > 0 && party.percentage < 100 }"></div>
             </div>
             <span class="party-percentage">{{ party.percentage }} %</span>
           </div>
