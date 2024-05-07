@@ -84,7 +84,7 @@ onMounted(() => {
   }
 })
 
-router.beforeEach((to, from) => {
+router.beforeEach(() => {
   if (moreInfo.value) {
     moreInfo.value = false;
     return false;
