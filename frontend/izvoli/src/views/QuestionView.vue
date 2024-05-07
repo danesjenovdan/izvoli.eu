@@ -134,7 +134,7 @@ router.beforeEach((to, from) => {
         <div class="show-hide">
           <img src="../assets/img/eyes-down.svg" v-if="moreInfo || moreInfoHover" />
           <img src="../assets/img/eyes-right.svg" v-else />
-          <span>Kaj mislijo stranke?</span>
+          <span>Kaj o tem mislijo stranke?</span>
           <button @click="moreInfo = true" @mouseenter="moreInfoHover = true" @mouseleave="moreInfoHover = false"
             v-if="!moreInfo" class="show">
             Prikaži
@@ -159,7 +159,7 @@ router.beforeEach((to, from) => {
             </PartyElement>
           </div>
           <div>
-            <div class="head">Neopredeljena / ni odgovora</div>
+            <div class="head">Brez stališča</div>
             <PartyElement v-for="(answer, party_id) in partiesNeutral" :key="party_id" :party="parties[party_id]"
               :answer="answer">
             </PartyElement>

@@ -29,60 +29,49 @@ function onNewsletterSubmit(event) {
     <div class="support">
       <p>
         Aplikacijo je pripravil
-        <a href="https://danesjenovdan.si/" target="_blank">Danes je nov dan</a> v sklopu
-        <a href="https://votematch.eu/" target="_blank">VoteMatch Europe Network</a>.
+        <a href="https://danesjenovdan.si/" target="_blank">Danes je nov dan</a> v sodelovanju z mednarodno mrežo
+        <a href="https://votematch.eu/" target="_blank">VoteMatch Europe</a>.
       </p>
-      <a href="https://danesjenovdan.si/doniraj" target="_blank" class="button"
-        >Podpri nas z donacijo!<img src="../assets/img/donacija.svg" alt=""
-      /></a>
+      <a href="https://danesjenovdan.si/doniraj" target="_blank" class="button">Podpri naše delo!<img
+          src="../assets/img/donacija.svg" alt="" /></a>
     </div>
     <div class="columns">
       <div>
         <div>
           <img src="../assets/img/vodic.svg" alt="" class="i-vodic" />
           <p>
-            <a href="https://vodici.djnd.si/volitve/evropske/" target="_blank"
-              >Obišči tudi volilni vodič za alternativno oddajo glasu!</a
-            >
+            <a href="https://vodici.djnd.si/volitve/evropske/" target="_blank">Obišči volilni vodič za vse, ki ne morejo
+              glasovati na običajen način</a>
           </p>
         </div>
         <div>
           <img src="../assets/img/opomnik.svg" alt="" class="i-opomnik" />
           <p>
-            <a href="javascript:;" @click.prevent="onCalClick"
-              >Dodaj opomnik za volitve v svoj koledar!</a
-            >
+            <a href="javascript:;" @click.prevent="onCalClick">Dodaj opomnik za volitve v svoj koledar</a>
           </p>
         </div>
       </div>
       <div class="newsletter">
-        <p><strong>Prijavi se na DJND novice</strong></p>
+        <p><strong>Prijavi se na naš Občasnik!</strong></p>
         <form @submit.prevent="onNewsletterSubmit">
-          <label for="newsletter-email">Vpiši svoj e-naslov</label>
-          <input
-            type="email"
-            id="newsletter-email"
-            name="newsletter-email"
-            placeholder="ime@email.si"
-          />
+          <label for="newsletter-email">Vpiši svoj e-naslov:</label>
+          <input type="email" id="newsletter-email" name="newsletter-email" placeholder="ime@email.si" />
           <label for="newsletter-agree" class="newsletter-agree">
             <input type="checkbox" id="newsletter-agree" />
-            Strinjam se, da mi Danes je nov dan občasno pošlje email.
+            Strinjam se, da mi Danes je nov dan občasno pošlje elektronsko sporočilo.
           </label>
-          <button type="submit">Prijavi me</button>
+          <button type="submit">Prijavi me!</button>
         </form>
       </div>
       <div>
         <div>
           <p>
-            <RouterLink to="/politika-zasebnosti"
-              >Politika zasebnosti in varovanja osebnih podatkov</RouterLink
-            >
+            <RouterLink to="/politika-zasebnosti">Politika zasebnosti in varovanja osebnih podatkov</RouterLink>
           </p>
         </div>
         <div>
           <p>
-            <RouterLink to="/metodologija">Metodologija</RouterLink>
+            <RouterLink to="/metodologija">Spoznaj več o Izvoli.eu</RouterLink>
           </p>
         </div>
       </div>
@@ -90,9 +79,9 @@ function onNewsletterSubmit(event) {
     <div class="financer">
       <img src="../assets/img/fundedby.png" class="" />
       <p>
-        Financirano s strani Evropske unije. Izražena stališča in mnenja ne odražajo nujno stališč
-        in mnenj Evropske unije ali Evropskega parlamenta. Zanje ne moreta biti odgovorna niti
-        Evropska unija niti Evropski parlament.
+        Projekt je sofinanciran s strani Evropske unije v okviru programa nepovratnih sredstev Evropskega parlamenta za
+        komunikacije. Izražena stališča in mnenja ne odražajo nujno stališč in mnenj Evropske unije ali Evropskega
+        parlamenta. Zanje ne moreta biti odgovorna niti Evropska unija niti Evropski parlament.
       </p>
     </div>
   </footer>
@@ -116,6 +105,7 @@ footer {
   p {
     font-size: 15px;
     line-height: 20px;
+    margin-right: 20px;
 
     a {
       font-weight: 700;
@@ -138,6 +128,7 @@ footer {
     color: black;
     text-decoration: none;
     position: relative;
+    flex-shrink: 0;
 
     img {
       position: absolute;
