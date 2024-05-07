@@ -1,6 +1,11 @@
 <script setup>
+import axios from 'axios'
+import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import { atcb_action } from 'add-to-calendar-button'
+
+const newsletterEmail = ref('')
+const newsletterLoading = ref(false)
 
 const config = {
   name: 'Volitve v Evropski parlament',
@@ -19,8 +24,25 @@ function onCalClick(event) {
   atcb_action(config, event.currentTarget)
 }
 
-function onNewsletterSubmit(event) {
-  console.log('onNewsletterSubmit', event)
+async function onNewsletterSubmit() {
+  newsletterLoading.value = true
+  try {
+    const response = await axios.post('https://podpri.lb.djnd.si/api/subscribe/', {
+      email: newsletterEmail.value,
+      segment_id: 21
+    })
+    if (response.data.msg === 'mail sent') {
+      newsletterEmail.value = ''
+      newsletterLoading.value = false
+      alert('Hvala! Poslali smo ti sporočilo s povezavo, na kateri lahko potrdiš prijavo!')
+    } else {
+      newsletterLoading.value = false
+      alert('Prišlo je do napake :(')
+    }
+  } catch (error) {
+    newsletterLoading.value = false
+    alert('Prišlo je do napake :(')
+  }
 }
 </script>
 
@@ -64,12 +86,14 @@ function onNewsletterSubmit(event) {
             id="newsletter-email"
             name="newsletter-email"
             placeholder="ime@email.si"
+            required
+            v-model="newsletterEmail"
           />
           <label for="newsletter-agree" class="newsletter-agree">
-            <input type="checkbox" id="newsletter-agree" />
+            <input type="checkbox" id="newsletter-agree" required />
             Strinjam se, da mi Danes je nov dan občasno pošlje email.
           </label>
-          <button type="submit">Prijavi me</button>
+          <button type="submit" :disabled="newsletterLoading">Prijavi me</button>
         </form>
       </div>
       <div>
@@ -343,8 +367,13 @@ footer {
       text-align: left;
       cursor: pointer;
 
-      &:hover {
+      &:not(:disabled):hover {
         background-color: rgba(255, 255, 255, 0.33);
+      }
+
+      &:disabled {
+        background-color: rgba(255, 255, 255, 0.22);
+        cursor: progress;
       }
     }
   }
