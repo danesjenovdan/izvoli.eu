@@ -24,9 +24,116 @@
     <script defer data-domain="izvoli.eu" src="https://plausible.lb.djnd.si/js/plausible.js"></script>
     <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
     <style>
-      /* #VotematchEU-dialog {
-        background: red;
-      } */
+      #VotematchEU-dialog .VotematchEU-backdrop {
+        /* background-color: #65A3FF !important; */
+      }
+
+      #VotematchEU-dialog div.VotematchEU-content {
+        background-color: #FFFBE9;
+        border: 2px solid black;
+        border-radius: 20px;
+      }
+
+      #VotematchEU-dialog form h3 {
+        font-size: 24px;
+        line-height: 30px;
+        font-family: 'wf-manrope', sans-serif;
+        font-weight: 700;
+        margin-bottom: 0;
+      }
+
+      #VotematchEU-dialog form .VotematchEU-header {
+        padding-bottom: 20px;
+      }
+
+      #VotematchEU-dialog form .VotematchEU-terms {
+        border: none;
+        padding: 0;
+      }
+
+      #VotematchEU-dialog form .VotematchEU-terms label {
+        cursor: pointer;
+        font-size: 14px;
+        line-height: 20px;
+      }
+
+      #VotematchEU-dialog form .VotematchEU-terms label a {
+        font-weight: 700;
+        text-decoration: underline;
+        color: black;
+      }
+
+      #VotematchEU-dialog form .VotematchEU-terms input[type='checkbox'] {
+        appearance: none;
+        background-color: transparent;
+        margin: 2px 0 0 0;
+        width: 16px;
+        height: 16px;
+        border: 1px solid black;
+        border-radius: 4px;
+        transform: translateY(-0.075em);
+        cursor: pointer;
+        position: relative;
+        margin-right: 5px;
+      }
+
+      #VotematchEU-dialog form .VotematchEU-terms input[type='checkbox']:checked {
+        background-color: #ffd100;
+      }
+
+      #VotematchEU-dialog form .VotematchEU-terms input[type='checkbox']:checked::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 9px;
+        height: 5px;
+        border: solid black;
+        border-width: 0 0 2px 2px;
+        transform: scale(1) rotate(-45deg) translateX(-12%) translateY(90%);
+      }
+
+      #VotematchEU-dialog form .VotematchEU-cta .VotematchEU-content-btn {
+        background-color: #ffd100;
+        color: black;
+        border: 2px solid black;
+        border-radius: 20px;
+        font-size: 18px;
+        line-height: 20px;
+        font-weight: 800;
+        transition: transform 0.15s ease-in-out;
+      }
+
+      #VotematchEU-dialog form .VotematchEU-cta .VotematchEU-content-btn:not(:disabled):hover {
+        transform: scale(0.9);
+      }
+
+      #VotematchEU-dialog form .VotematchEU-cta .VotematchEU-content-btn:disabled {
+        /* background-color: #F2F7FF; */
+        opacity: 0.5;
+      }
+
+      #VotematchEU-dialog form .VotematchEU-cta .VotematchEU-content-btn::after {
+        content: '';
+        display: inline-block;
+        width: 25px;
+        height: 25px;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        margin-left: 14px;
+        background-image: url('./puscica.svg');
+      }
+
+      #VotematchEU-dialog form p {
+        display: none;
+      }
+
+      #VotematchEU-dialog form header {
+        display: none;
+      }
+
+      
     </style>
   </head>
   <body>
