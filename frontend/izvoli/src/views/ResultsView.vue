@@ -125,12 +125,8 @@ function answerToValue(answer) {
         <div class="parties">
           <div v-for="party in results" :key="party.party_id" class="party">
             <label :for="`chosen-party-${party.party_id}`">
-              <input
-                type="checkbox"
-                :id="`chosen-party-${party.party_id}`"
-                :value="party.party_id"
-                v-model="chosenParties"
-              />
+              <input type="checkbox" :id="`chosen-party-${party.party_id}`" :value="party.party_id"
+                v-model="chosenParties" />
               <img :src="partyImageUrl(parties[party.party_id].image)" class="party-image" />
               {{ parties[party.party_id].name }}
             </label>
@@ -143,12 +139,7 @@ function answerToValue(answer) {
           </div>
           <div v-for="party in partiesNoAnswer" :key="party.id" class="party">
             <label :for="`chosen-party-${party.id}`">
-              <input
-                type="checkbox"
-                :id="`chosen-party-${party.id}`"
-                :value="party.id"
-                v-model="chosenParties"
-              />
+              <input type="checkbox" :id="`chosen-party-${party.id}`" :value="party.id" v-model="chosenParties" />
               <img :src="partyImageUrl(party.image)" class="party-image" />
               {{ party.name }}
             </label>
@@ -160,31 +151,45 @@ function answerToValue(answer) {
             <img src="../assets/img/puscica.svg" alt="" />
           </button>
         </div>
-        <div class="button-wrapper">
-          <button class="button-go VotematchEU-button"> <!--@click="compareWithEU"-->
-            Kako pa so odgovarjale druge EU stranke?
-            <img src="../assets/img/eyes-right.svg" alt="" />
-          </button>
-        </div>
       </div>
     </div>
-    <form id="VotematchEU-settings">
-      <input type="hidden" name="lang" value="SL">
-    </form>
-    <form id="VotematchEU-results">
-      <input type="hidden" name="country" value="SI">
-      <input type="hidden" name="bestmatch" :value="winnerIDs[0]">
-      <input type="hidden" name="bestscore" :value="winnerIDs[1]">
-      <template v-for="qNo in questionsList">
-        <input v-if="qNo in answers && questions[qNo].votematch_id" type="hidden" :name="questions[qNo].votematch_id"
-          :value="answerToValue(answers[qNo])">
-      </template>
-    </form>
+
+    <div class="body" v-if="results.length > 0">
+      <div class="content two-columns">
+        <img src="../assets/img/eu.jpg" alt="Zemljevid Evropske Unije" />
+        <div>
+          <h2>
+            Te zanima, s katerimi strankami iz drugih držav EU se ujemaš?
+          </h2>
+          <p>Primerjaj svoja stališča z odgovori političnih strank, ki kandidirajo v drugih državah članicah Evropske
+            unije, in ugotovi, kdo so tvoji zavezniki!</p>
+          <button class="VotematchEU-button">
+            Pokaži mi evropske rezultate!
+          </button>
+        </div>
+        <form id="VotematchEU-settings">
+          <input type="hidden" name="lang" value="SL">
+        </form>
+        <form id="VotematchEU-results">
+          <input type="hidden" name="country" value="SI">
+          <input type="hidden" name="bestmatch" :value="winnerIDs[0]">
+          <input type="hidden" name="bestscore" :value="winnerIDs[1]">
+          <template v-for="qNo in questionsList">
+            <input v-if="qNo in answers && questions[qNo].votematch_id" type="hidden"
+              :name="questions[qNo].votematch_id" :value="answerToValue(answers[qNo])">
+          </template>
+        </form>
+      </div>
+    </div>
   </main>
 </template>
 
 <style lang="scss" scoped>
 .body {
+  &:not(:last-child) {
+    margin-bottom: 70px;
+  }
+  
   .button-wrapper {
     margin-top: 42px;
     text-align: center;
@@ -238,6 +243,67 @@ function answerToValue(answer) {
 
       @media (max-width: 575.98px) {
         gap: 8px;
+      }
+    }
+
+    &.two-columns {
+      display: flex;
+      align-items: center;
+
+      &>img {
+        width: 230px;
+        flex-shrink: 0;
+      }
+
+      &>div {
+        margin-left: 30px;
+
+        h2 {
+          font-size: 24px;
+          line-height: 30px;
+          margin-bottom: 20px;
+        }
+
+        p {
+          font-size: 15px;
+          line-height: 22px;
+          margin-bottom: 20px;
+        }
+
+        .VotematchEU-button {
+          visibility: visible !important;
+          border: 2px solid black;
+          border-radius: 10px;
+          background-color: #FFFFFF;
+          display: flex;
+          align-items: center;
+          padding: 6px 11px 6px 14px;
+          font-size: 15px;
+          font-weight: 800;
+          line-height: 20px;
+          cursor: pointer;
+
+          &::after {
+            content: '';
+            display: inline-block;
+            width: 21px;
+            height: 21px;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            margin-left: 4px;
+            background-image: url('../assets/img/eyes-right.svg');
+        
+            @media (max-width: 575.98px) {
+              width: 16px;
+              height: 16px;
+            }
+          }
+      
+          &:hover::after {
+            background-image: url('../assets/img/eyes-down.svg');
+          }
+        }
       }
     }
   }
