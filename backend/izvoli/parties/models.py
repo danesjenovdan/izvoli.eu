@@ -91,6 +91,7 @@ class Statement(models.Model):
         on_delete=models.SET_NULL,
         verbose_name="Skupina izjav",
     )
+    tag = models.TextField(verbose_name="Oznaka", blank=True, default="")
     hide_in_app = models.BooleanField(
         default=False,
         verbose_name="Vprašanja ne prikazuj na aplikaciji izvoli.eu",

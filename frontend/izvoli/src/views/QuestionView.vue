@@ -96,18 +96,15 @@ router.beforeEach(() => {
     <div class="body" v-if="question">
       <QuestionsProgress :current="questionNumber" :count="questionsNo" />
       <div class="content">
-        <div v-if="question.category" class="category">{{ question.category }}</div>
+        <div v-if="question.tag" class="category">{{ question.tag }}</div>
         <h1 v-if="question.title" class="title">{{ question.title }}</h1>
         <p v-if="question.description" class="description">{{ question.description }}</p>
         <div class="buttons">
-          <RouterLink
-            :to="
+          <RouterLink :to="
               questionIndex <= 0
                 ? { name: 'introduction' }
                 : { name: 'question', params: { id: questionNumber - 1 } }
-            "
-            class="back"
-          >
+            " class="back">
             <div>
               <img src="../assets/img/puscica-trikotnik.svg" alt="" />
               <img src="../assets/img/puscica-trikotnik.svg" alt="" />
@@ -150,22 +147,14 @@ router.beforeEach(() => {
         <div class="parties" v-if="moreInfo">
           <div>
             <div class="head">Se strinja</div>
-            <PartyElement
-              v-for="(answer, party_id) in partiesAgree"
-              :key="party_id"
-              :party="parties[party_id]"
-              :answer="answer"
-            >
+            <PartyElement v-for="(answer, party_id) in partiesAgree" :key="party_id" :party="parties[party_id]"
+              :answer="answer">
             </PartyElement>
           </div>
           <div>
             <div class="head">Se ne strinja</div>
-            <PartyElement
-              v-for="(answer, party_id) in partiesDisagree"
-              :key="party_id"
-              :party="parties[party_id]"
-              :answer="answer"
-            >
+            <PartyElement v-for="(answer, party_id) in partiesDisagree" :key="party_id" :party="parties[party_id]"
+              :answer="answer">
             </PartyElement>
           </div>
           <div>
