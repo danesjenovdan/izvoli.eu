@@ -16,11 +16,11 @@ const show = ref(false)
     <div class="answer">
       <div v-if="party?.answer == 'YES'">
         <img src="../assets/img/strinjam.svg" />
-        Se strinjam
+        Se strinja
       </div>
       <div v-if="party?.answer == 'NO'">
         <img src="../assets/img/ne-strinjam.svg" />
-        Se ne strinjam
+        Se ne strinja
       </div>
       <div v-if="party?.answer == 'NEUTRAL'">
         <img src="../assets/img/neopredeljen.svg" />
