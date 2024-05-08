@@ -33,7 +33,7 @@ const winners = computed(() => {
 })
 
 const winnerIDs = computed(() => {
-  if (results.value) {
+  if (results.value?.[0]) {
     const winnerPercentage = results.value[0].percentage
     const winners = results.value.filter((res) => toRaw(res).percentage == winnerPercentage)
     const winnerIDs = winners.map((res) => parties.value[res.party_id].votematch_id)
