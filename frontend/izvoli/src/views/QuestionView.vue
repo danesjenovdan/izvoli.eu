@@ -99,7 +99,7 @@ router.beforeEach(() => {
         <div v-if="question.tag" class="category">{{ question.tag }}</div>
         <h1 v-if="question.title" class="title">{{ question.title }}</h1>
         <p v-if="question.description" class="description">{{ question.description }}</p>
-        <div class="buttons">
+        <div class="buttons" :key="questionNumber">
           <RouterLink :to="
               questionIndex <= 0
                 ? { name: 'introduction' }
@@ -264,6 +264,10 @@ main {
         color: inherit;
         text-decoration: none;
 
+        @media (max-width: 575.98px) {
+          width: auto;
+        }
+
         & > div {
           display: flex;
         }
@@ -302,6 +306,7 @@ main {
 
         @media (max-width: 575.98px) {
           padding: 20px 18px 20px 21px;
+          width: auto;
         }
 
         img {
