@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -19,12 +20,43 @@ const props = defineProps({
   answers: {
     type: Object,
     required: true
+  },
+  tags: {
+    type: Object,
+    required: true
   }
 })
+
+const tooltip = ref()
 
 function getAnswer(i) {
   const index = i - 1
   return props.answers[props.list[index]]
+}
+
+function getTag(i) {
+  const index = i - 1
+  return props.tags[props.list[index]]
+}
+
+function showTooltip(event) {
+  const circle = event.target
+  const tag = circle.dataset.tag
+  if (!tag) return
+  tooltip.value.style.display = 'inline-block'
+  tooltip.value.querySelector('span').textContent = tag
+  const circleCenter = circle.offsetLeft + circle.offsetWidth / 2
+  const tooltipWidth = tooltip.value.offsetWidth
+  tooltip.value.style.left = `${circleCenter - tooltipWidth / 2}px`
+  if (tooltip.value.offsetLeft < 0) {
+    tooltip.value.style.left = 0
+  } else if (tooltip.value.offsetLeft + tooltipWidth > tooltip.value.parentElement.offsetWidth) {
+    tooltip.value.style.left = `${tooltip.value.parentElement.offsetWidth - tooltipWidth}px`
+  }
+}
+
+function hideTooltip() {
+  tooltip.value.style.display = 'none'
 }
 </script>
 
@@ -36,6 +68,7 @@ function getAnswer(i) {
         v-for="i in count"
         :key="i"
         class="progress-circle"
+        :data-tag="getTag(i)"
         :class="{
           active: i === current,
           agree: getAnswer(i) === 'YES',
@@ -43,7 +76,12 @@ function getAnswer(i) {
           neutral: !getAnswer(i) || getAnswer(i) === 'NEUTRAL'
         }"
         @click="router.push({ name: 'resultsByParty', params: { id: i } })"
+        @mouseenter="showTooltip"
+        @mouseleave="hideTooltip"
       ></div>
+    </div>
+    <div class="progress-tooltip" ref="tooltip">
+      <span>tag</span>
     </div>
   </div>
 </template>
@@ -140,6 +178,25 @@ function getAnswer(i) {
       &.neutral {
         background-image: url('@/assets/img/neopredeljen.svg');
       }
+    }
+  }
+
+  .progress-tooltip {
+    position: absolute;
+    top: 40px;
+    left: 0;
+    display: none;
+    padding: 4px 8px;
+    background-color: #ece9d9;
+    border-radius: 9999px;
+    font-size: 12px;
+    line-height: 1;
+    pointer-events: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.33);
+    white-space: nowrap;
+
+    @media (max-width: 575.98px) {
+      display: none !important;
     }
   }
 }
