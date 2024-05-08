@@ -137,19 +137,35 @@ function answerToValue(answer) {
         </p>
         <div class="parties">
           <div v-for="party in results" :key="party.party_id" class="party">
-            <label :for="`chosen-party-${party.party_id}`" :class="{ 'no-answers': party.percentage < 0 }">
-              <input type="checkbox" :id="`chosen-party-${party.party_id}`" :value="party.party_id"
-                v-model="chosenParties" v-if="party.percentage >= 0" />
+            <label
+              :for="`chosen-party-${party.party_id}`"
+              :class="{ 'no-answers': party.percentage < 0 }"
+            >
+              <input
+                type="checkbox"
+                :id="`chosen-party-${party.party_id}`"
+                :value="party.party_id"
+                v-model="chosenParties"
+                v-if="party.percentage >= 0"
+              />
               <img :src="partyImageUrl(parties[party.party_id].image)" class="party-image" />
               {{ parties[party.party_id].name }}
             </label>
 
             <div v-if="party.percentage >= 0" class="progress">
-              <div class="progress-bar" role="progressbar" :aria-valuenow="party.percentage" aria-valuemin="0"
-                :aria-valuemax="100" :style="{ width: `${party.percentage}%` }"
-                :class="{ 'border-end': party.percentage > 0 && party.percentage < 100 }"></div>
+              <div
+                class="progress-bar"
+                role="progressbar"
+                :aria-valuenow="party.percentage"
+                aria-valuemin="0"
+                :aria-valuemax="100"
+                :style="{ width: `${party.percentage}%` }"
+                :class="{ 'border-end': party.percentage > 0 && party.percentage < 100 }"
+              ></div>
             </div>
-            <span v-if="party.percentage >= 0" class="party-percentage">{{ party.percentage }} %</span>
+            <span v-if="party.percentage >= 0" class="party-percentage"
+              >{{ party.percentage }} %</span
+            >
             <p v-if="party.percentage < 0">Niso odgovorili na vprašanja</p>
             <span v-if="party.percentage < 0" class="party-percentage">0 %</span>
           </div>
@@ -538,7 +554,14 @@ function answerToValue(answer) {
           line-height: 18px;
           color: #525252;
 
-          &+span {
+          @media (max-width: 575.98px) {
+            grid-row: 2;
+            grid-column: 1 / -1;
+            margin-left: 32px;
+            margin-top: 8px;
+          }
+
+          & + span {
             flex: 0.25;
             color: #525252;
           }

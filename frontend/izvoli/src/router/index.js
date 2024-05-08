@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import LandingView from '../views/LandingView.vue'
+// import LandingView from '../views/LandingView.vue'
 import IntroductionView from '../views/IntroductionView.vue'
 import InstructionsView from '@/views/InstructionsView.vue'
 import QuestionView from '../views/QuestionView.vue'
@@ -25,12 +25,12 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'landing',
-      component: LandingView
+      name: 'introduction',
+      component: IntroductionView
     },
     {
       path: '/intro',
-      name: 'introduction',
+      name: 'introduction-old',
       component: IntroductionView
     },
     {

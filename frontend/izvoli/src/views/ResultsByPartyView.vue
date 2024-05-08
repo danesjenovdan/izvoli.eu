@@ -118,7 +118,7 @@ main {
     display: inline-block;
     margin-bottom: 16px;
     padding: 4px 8px;
-    background-color: rgb(127, 127, 127, 0.15);
+    background-color: #FFFFFF;
     border-radius: 9999px;
     font-size: 12px;
     line-height: 1;

@@ -81,7 +81,7 @@ function hideTooltip() {
       ></div>
     </div>
     <div class="progress-tooltip" ref="tooltip">
-      <span>tag</span>
+      <span></span>
     </div>
   </div>
 </template>
@@ -187,12 +187,12 @@ function hideTooltip() {
     left: 0;
     display: none;
     padding: 4px 8px;
-    background-color: #ece9d9;
-    border-radius: 9999px;
-    font-size: 12px;
+    background-color: #484848;
+    border-radius: 5px;
+    font-size: 11px;
     line-height: 1;
+    color: white;
     pointer-events: none;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.33);
     white-space: nowrap;
 
     @media (max-width: 575.98px) {
