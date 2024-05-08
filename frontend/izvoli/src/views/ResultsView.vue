@@ -277,21 +277,40 @@ function answerToValue(answer) {
       & > img {
         width: 230px;
         flex-shrink: 0;
+
+        @media (max-width: 575.98px) {
+          display: none;
+        }
       }
 
       & > div {
         margin-left: 30px;
 
+        @media (max-width: 575.98px) {
+          margin-left: 0;
+        }
+
         h2 {
           font-size: 24px;
           line-height: 30px;
           margin-bottom: 20px;
+
+          @media (max-width: 575.98px) {
+            font-size: 18px;
+            line-height: 21px;
+            margin-bottom: 10px;
+          }
         }
 
         p {
           font-size: 15px;
           line-height: 22px;
           margin-bottom: 20px;
+
+          @media (max-width: 575.98px) {
+            font-size: 12px;
+            line-height: 16px;
+          }
         }
 
         .VotematchEU-button {
