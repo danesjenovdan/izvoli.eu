@@ -5,4 +5,4 @@ class PartySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Party
-        fields = ['id', 'name', 'image', 'votematch_id']
+        fields = ['id', 'name', 'image', 'votematch_id', 'finished_quiz']
