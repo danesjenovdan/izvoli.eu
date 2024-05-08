@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, toRaw } from 'vue'
+import { ref, computed, onMounted, toRaw, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import PartyDonutChart from '../components/PartyDonutChart.vue'
@@ -39,7 +39,7 @@ const winnerIDs = computed(() => {
     const winnerIDs = winners.map((res) => parties.value[res.party_id].votematch_id)
     return [winnerIDs.toString(), winnerPercentage]
   } else {
-    return ["", ""]
+    return ['', '']
   }
 })
 
@@ -63,10 +63,6 @@ const unselectAllParties = () => {
   chosenParties.value = []
 }
 
-const compareWithEU = () => {
-
-}
-
 onMounted(() => {
   // initialize store
   if (!storeInitialized.value) {
@@ -81,9 +77,19 @@ onMounted(() => {
     router.push('/')
   }
   // EU comparison
-  let recaptchaScript = document.createElement('script')
-  recaptchaScript.setAttribute('src', '//assets.votematch.eu/embed.min.js')
-  document.head.appendChild(recaptchaScript)
+  if (!window.VotematchEU) {
+    let votematchScript = document.createElement('script')
+    votematchScript.setAttribute('src', 'https://assets.votematch.eu/embed.js')
+    document.head.appendChild(votematchScript)
+  }
+})
+
+onBeforeUnmount(() => {
+  if (window.VotematchEU) {
+    let votematchScript = document.querySelector('head script[src*="votematch"]')
+    document.head.removeChild(votematchScript)
+    window.VotematchEU = null
+  }
 })
 
 function partyImageUrl(url) {
@@ -93,9 +99,9 @@ function partyImageUrl(url) {
 }
 
 function answerToValue(answer) {
-  if (answer == "YES") return "1"
-  if (answer == "NEUTRAL") return "0"
-  if (answer == "NO") return "-1"
+  if (answer == 'YES') return '1'
+  if (answer == 'NEUTRAL') return '0'
+  if (answer == 'NO') return '-1'
 }
 </script>
 
@@ -105,7 +111,12 @@ function answerToValue(answer) {
       <div class="content">
         <h1>Najbolj se ujemaš s strankami:</h1>
         <div class="winners">
-          <PartyDonutChart v-for="result in winners" :key="result.party_id" :result="result" :parties="parties" />
+          <PartyDonutChart
+            v-for="result in winners"
+            :key="result.party_id"
+            :result="result"
+            :parties="parties"
+          />
         </div>
         <div class="button-wrapper">
           <button class="button-go" @click="compareWithWinningParties">
@@ -117,10 +128,12 @@ function answerToValue(answer) {
       <div class="more-info">
         <p>
           <span>Izberi stranke za primerjavo svojih odgovorov</span>
-          <button @click="compareWithAllParties" v-if="chosenParties.length == 0">Izberi vse
-            stranke</button>
-          <button @click="unselectAllParties" v-if="chosenParties.length > 0">Odstrani vse
-            stranke</button>
+          <button @click="compareWithAllParties" v-if="chosenParties.length == 0">
+            Izberi vse stranke
+          </button>
+          <button @click="unselectAllParties" v-if="chosenParties.length > 0">
+            Odstrani vse stranke
+          </button>
         </p>
         <div class="parties">
           <div v-for="party in results" :key="party.party_id" class="party">
@@ -135,9 +148,15 @@ function answerToValue(answer) {
               {{ parties[party.party_id].name }}
             </label>
             <div class="progress">
-              <div class="progress-bar" role="progressbar" :aria-valuenow="party.percentage" aria-valuemin="0"
-                :aria-valuemax="100" :style="{ width: `${party.percentage}%` }"
-                :class="{ 'border-end': party.percentage > 0 && party.percentage < 100 }"></div>
+              <div
+                class="progress-bar"
+                role="progressbar"
+                :aria-valuenow="party.percentage"
+                aria-valuemin="0"
+                :aria-valuemax="100"
+                :style="{ width: `${party.percentage}%` }"
+                :class="{ 'border-end': party.percentage > 0 && party.percentage < 100 }"
+              ></div>
             </div>
             <span class="party-percentage">{{ party.percentage }} %</span>
           </div>
@@ -161,7 +180,7 @@ function answerToValue(answer) {
           </button>
         </div>
         <div class="button-wrapper">
-          <button class="button-go VotematchEU-button"> <!--@click="compareWithEU"-->
+          <button class="button-go VotematchEU-button">
             Kako pa so odgovarjale druge EU stranke?
             <img src="../assets/img/eyes-right.svg" alt="" />
           </button>
@@ -169,15 +188,20 @@ function answerToValue(answer) {
       </div>
     </div>
     <form id="VotematchEU-settings">
-      <input type="hidden" name="lang" value="SL">
+      <input type="hidden" name="lang" value="SL" />
     </form>
     <form id="VotematchEU-results">
-      <input type="hidden" name="country" value="SI">
-      <input type="hidden" name="bestmatch" :value="winnerIDs[0]">
-      <input type="hidden" name="bestscore" :value="winnerIDs[1]">
+      <input type="hidden" name="country" value="SI" />
+      <input type="hidden" name="bestmatch" :value="winnerIDs[0]" />
+      <input type="hidden" name="bestscore" :value="winnerIDs[1]" />
       <template v-for="qNo in questionsList">
-        <input v-if="qNo in answers && questions[qNo].votematch_id" type="hidden" :name="questions[qNo].votematch_id"
-          :value="answerToValue(answers[qNo])">
+        <input
+          v-if="qNo in answers && questions[qNo].votematch_id"
+          :key="qNo"
+          type="hidden"
+          :name="questions[qNo].votematch_id"
+          :value="answerToValue(answers[qNo])"
+        />
       </template>
     </form>
   </main>
@@ -256,7 +280,6 @@ function answerToValue(answer) {
     }
 
     & > p {
-
       @media (max-width: 575.98px) {
         display: flex;
         align-items: center;
