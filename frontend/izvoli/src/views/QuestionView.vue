@@ -109,7 +109,7 @@ router.beforeEach(() => {
               <img src="../assets/img/puscica-trikotnik.svg" alt="" />
               <img src="../assets/img/puscica-trikotnik.svg" alt="" />
             </div>
-            <span>Popravi prejšnjo izbiro</span>
+            <span>Prejšnja trditev</span>
           </RouterLink>
           <button @click="saveAnswer(questionId, 'NO')" class="disagree">
             <img src="../assets/img/ne-strinjam.svg" />
@@ -150,18 +150,21 @@ router.beforeEach(() => {
             <PartyElement v-for="(answer, party_id) in partiesAgree" :key="party_id" :party="parties[party_id]"
               :answer="answer">
             </PartyElement>
+            <p v-if="Object.keys(partiesAgree).length == 0">Nobena stranka ni izbrala tega odgovora.</p>
           </div>
           <div>
             <div class="head">Se ne strinja</div>
             <PartyElement v-for="(answer, party_id) in partiesDisagree" :key="party_id" :party="parties[party_id]"
               :answer="answer">
             </PartyElement>
+            <p v-if="Object.keys(partiesDisagree).length == 0">Nobena stranka ni izbrala tega odgovora.</p>
           </div>
           <div>
             <div class="head">Brez stališča</div>
             <PartyElement v-for="(answer, party_id) in partiesNeutral" :key="party_id" :party="parties[party_id]"
               :answer="answer">
             </PartyElement>
+            <p v-if="Object.keys(partiesNeutral).length == 0">Nobena stranka ni izbrala tega odgovora.</p>
           </div>
         </div>
       </div>
@@ -382,6 +385,12 @@ main {
           font-size: 13px;
           line-height: 18px;
           font-weight: 600;
+
+          &+p {
+            padding: 6px 8px;
+            font-size: 13px;
+            line-height: 18px;
+          }
         }
       }
     }

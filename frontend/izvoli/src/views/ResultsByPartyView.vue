@@ -35,28 +35,17 @@ onMounted(() => {
 <template>
   <main class="container">
     <div class="body" v-if="question">
-      <ResultsProgress
-        :current="questionNumber"
-        :count="questionsNo"
-        :list="questionsList"
-        :answers="answers"
-      />
+      <ResultsProgress :current="questionNumber" :count="questionsNo" :list="questionsList" :answers="answers" />
       <div class="content">
         <span v-if="question.category">{{ question.category }}</span>
         <h1>{{ question.title }}</h1>
         <p>{{ question.description }}</p>
-        <RouterLink
-          :to="{ name: 'resultsByParty', params: { id: questionNumber - 1 } }"
-          class="back"
-          :class="{ hidden: questionIndex <= 0 }"
-        >
+        <RouterLink :to="{ name: 'resultsByParty', params: { id: questionNumber - 1 } }" class="back"
+          :class="{ hidden: questionIndex <= 0 }">
           <img src="../assets/img/arrow.svg" />
         </RouterLink>
-        <RouterLink
-          :to="{ name: 'resultsByParty', params: { id: questionNumber + 1 } }"
-          class="skip"
-          :class="{ hidden: questionIndex >= questionsNo - 1 }"
-        >
+        <RouterLink :to="{ name: 'resultsByParty', params: { id: questionNumber + 1 } }" class="skip"
+          :class="{ hidden: questionIndex >= questionsNo - 1 }">
           <img src="../assets/img/arrow.svg" />
         </RouterLink>
       </div>
@@ -72,9 +61,9 @@ onMounted(() => {
             <img src="../assets/img/ne-strinjam.svg" />
             Se ne strinjam
           </div>
-          <div v-if="!(`${questionId}` in answers)">
+          <div v-if="answers[questionId] == 'NEUTRAL'">
             <img src="../assets/img/neopredeljen.svg" />
-            Neopredeljeno
+            Brez stališča
           </div>
         </div>
         <div class="parties">

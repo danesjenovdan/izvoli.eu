@@ -23,7 +23,7 @@ const show = ref(false)
         <p>{{ party.name }}</p>
       </div>
       <button @click="show = true" v-if="!show && answer.comment">
-        Prikaži
+        Obrazložitev
         <img src="../assets/img/puscica-trikotnik-modra.svg" />
       </button>
       <button @click="show = false" v-if="show && answer.comment">
