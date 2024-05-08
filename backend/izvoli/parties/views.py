@@ -328,7 +328,8 @@ class Volitvomat(APIView):
                 "title": statement.title,
                 "description": statement.description,
                 "votematch_id": statement.votematch_id,
-                "category": statement.statement_group.name if statement.statement_group else "",
+                # "category": statement.statement_group.name if statement.statement_group else "",
+                "tag": statement.tag,
                 "parties": {},
                 # "category": question.workgroup.id if question.workgroup else None,
             }
