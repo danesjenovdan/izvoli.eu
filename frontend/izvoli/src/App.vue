@@ -19,11 +19,13 @@ const restartQuiz = () => {
 
 <template>
   <header class="header-wrapper">
-    <img
-      src="./assets/img/header-logo.svg"
-      class="header-logo"
-      alt="Izvoli EU, prva pomoč za evropske volitve"
-    />
+    <RouterLink :to="{ name: 'introduction' }">
+      <img
+        src="./assets/img/header-logo.svg"
+        class="header-logo"
+        alt="Izvoli EU, prva pomoč za evropske volitve"
+      />
+    </RouterLink>
     <div class="buttons" v-if="quizFinished">
       <RouterLink
         v-if="currentRouteName != 'results'"
@@ -154,7 +156,7 @@ button {
         @media (max-width: 575.98px) {
           width: 16px;
           height: 16px;
-      }
+        }
       }
 
       &:hover {
