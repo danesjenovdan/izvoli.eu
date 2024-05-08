@@ -17,6 +17,12 @@ const questionsList = computed(() => store.getters.getQuestionsList)
 const questionsNo = computed(() => questionsList.value.length)
 const questionId = computed(() => questionsList.value[questionIndex.value])
 const question = computed(() => store.state.questions[questionId.value])
+const questionTags = computed(() => {
+  const tagEntries = Object.entries(store.state.questions).map(([key, value]) => {
+    return [key, value.tag]
+  })
+  return Object.fromEntries(tagEntries)
+})
 const answers = computed(() => store.getters.getAnswers)
 const parties = computed(() => store.getters.getParties)
 const partiesToCompare = computed(() => store.getters.getPartiesToCompare)
@@ -40,9 +46,10 @@ onMounted(() => {
         :count="questionsNo"
         :list="questionsList"
         :answers="answers"
+        :tags="questionTags"
       />
       <div class="content">
-        <span v-if="question.category">{{ question.category }}</span>
+        <span v-if="question.tag">{{ question.tag }}</span>
         <h1>{{ question.title }}</h1>
         <p>{{ question.description }}</p>
         <RouterLink

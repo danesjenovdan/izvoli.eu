@@ -5,6 +5,7 @@ import { RouterLink } from 'vue-router'
 import { atcb_action } from 'add-to-calendar-button'
 
 const newsletterEmail = ref('')
+const newsletterConsent = ref(false)
 const newsletterLoading = ref(false)
 
 const config = {
@@ -33,6 +34,7 @@ async function onNewsletterSubmit() {
     })
     if (response.data.msg === 'mail sent') {
       newsletterEmail.value = ''
+      newsletterConsent.value = false
       newsletterLoading.value = false
       alert('Hvala! Poslali smo ti sporočilo s povezavo, na kateri lahko potrdiš prijavo!')
     } else {
@@ -51,25 +53,29 @@ async function onNewsletterSubmit() {
     <div class="support">
       <p>
         Aplikacijo je pripravil
-        <a href="https://danesjenovdan.si/" target="_blank">Danes je nov dan</a> v sodelovanju z mednarodno mrežo
-        <a href="https://votematch.eu/" target="_blank">VoteMatch Europe</a>.
+        <a href="https://danesjenovdan.si/" target="_blank">Danes je nov dan</a> v sodelovanju z
+        mednarodno mrežo <a href="https://votematch.eu/" target="_blank">VoteMatch Europe</a>.
       </p>
-      <a href="https://danesjenovdan.si/doniraj" target="_blank" class="button">Podpri naše delo!<img
-          src="../assets/img/donacija.svg" alt="" /></a>
+      <a href="https://danesjenovdan.si/doniraj" target="_blank" class="button"
+        >Podpri naše delo!<img src="../assets/img/donacija.svg" alt=""
+      /></a>
     </div>
     <div class="columns">
       <div>
         <div>
           <img src="../assets/img/vodic.svg" alt="" class="i-vodic" />
           <p>
-            <a href="https://vodici.djnd.si/volitve/evropske/" target="_blank">Obišči volilni vodič za vse, ki ne morejo
-              glasovati na običajen način</a>
+            <a href="https://vodici.djnd.si/volitve/evropske/" target="_blank"
+              >Obišči volilni vodič za vse, ki ne morejo glasovati na običajen način</a
+            >
           </p>
         </div>
         <div>
           <img src="../assets/img/opomnik.svg" alt="" class="i-opomnik" />
           <p>
-            <a href="javascript:;" @click.prevent="onCalClick">Dodaj opomnik za volitve v svoj koledar</a>
+            <a href="javascript:;" @click.prevent="onCalClick"
+              >Dodaj opomnik za volitve v svoj koledar</a
+            >
           </p>
         </div>
       </div>
@@ -86,7 +92,7 @@ async function onNewsletterSubmit() {
             v-model="newsletterEmail"
           />
           <label for="newsletter-agree" class="newsletter-agree">
-            <input type="checkbox" id="newsletter-agree" required />
+            <input type="checkbox" id="newsletter-agree" required v-model="newsletterConsent" />
             Strinjam se, da mi Danes je nov dan občasno pošlje elektronsko sporočilo.
           </label>
           <button type="submit" :disabled="newsletterLoading">Prijavi me!</button>
@@ -95,12 +101,14 @@ async function onNewsletterSubmit() {
       <div>
         <div>
           <p>
-            <RouterLink to="/politika-zasebnosti">Politika zasebnosti in varovanja osebnih podatkov</RouterLink>
+            <RouterLink :to="{ name: 'privacyPolicy' }"
+              >Politika zasebnosti in varovanja osebnih podatkov</RouterLink
+            >
           </p>
         </div>
         <div>
           <p>
-            <RouterLink to="/metodologija">Spoznaj več o Izvoli.eu</RouterLink>
+            <RouterLink :to="{ name: 'about' }">Spoznaj več o Izvoli.eu</RouterLink>
           </p>
         </div>
       </div>
@@ -108,9 +116,10 @@ async function onNewsletterSubmit() {
     <div class="financer">
       <img src="../assets/img/fundedby.png" class="" />
       <p>
-        Projekt je sofinanciran s strani Evropske unije v okviru programa nepovratnih sredstev Evropskega parlamenta za
-        komunikacije. Izražena stališča in mnenja ne odražajo nujno stališč in mnenj Evropske unije ali Evropskega
-        parlamenta. Zanje ne moreta biti odgovorna niti Evropska unija niti Evropski parlament.
+        Projekt je sofinanciran s strani Evropske unije v okviru programa nepovratnih sredstev
+        Evropskega parlamenta za komunikacije. Izražena stališča in mnenja ne odražajo nujno stališč
+        in mnenj Evropske unije ali Evropskega parlamenta. Zanje ne moreta biti odgovorna niti
+        Evropska unija niti Evropski parlament.
       </p>
     </div>
   </footer>

@@ -3,9 +3,9 @@ import LandingView from '../views/LandingView.vue'
 import IntroductionView from '../views/IntroductionView.vue'
 import QuestionView from '../views/QuestionView.vue'
 import ResultsView from '../views/ResultsView.vue'
-// import StatisticsView from '../views/StatisticsView.vue'
 import ResultsByPartyView from '../views/ResultsByPartyView.vue'
-// import NoCandidatesView from '../views/NoCandidatesView.vue'
+import PrivacyPolicyView from '../views/PrivacyPolicyView.vue'
+import AboutView from '../views/AboutView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,11 +32,16 @@ const router = createRouter({
       name: 'introduction',
       component: IntroductionView
     },
-    // {
-    //   path: '/:slug/ni-podatkov',
-    //   name: 'noCandidates',
-    //   component: NoCandidatesView
-    // },
+    {
+      path: '/o-aplikaciji',
+      name: 'about',
+      component: AboutView
+    },
+    {
+      path: '/politika-zasebnosti',
+      name: 'privacyPolicy',
+      component: PrivacyPolicyView
+    },
     {
       path: '/vprasanje/:id',
       name: 'question',
@@ -52,11 +57,6 @@ const router = createRouter({
       name: 'resultsByParty',
       component: ResultsByPartyView
     }
-    // {
-    //   path: '/:slug/statistika',
-    //   name: 'statistics',
-    //   component: StatisticsView
-    // }
   ]
 })
 

@@ -99,7 +99,7 @@ router.beforeEach(() => {
         <div v-if="question.tag" class="category">{{ question.tag }}</div>
         <h1 v-if="question.title" class="title">{{ question.title }}</h1>
         <p v-if="question.description" class="description">{{ question.description }}</p>
-        <div class="buttons">
+        <div class="buttons" :key="questionNumber">
           <RouterLink :to="
               questionIndex <= 0
                 ? { name: 'introduction' }
@@ -145,19 +145,19 @@ router.beforeEach(() => {
           </button>
         </div>
         <div class="parties" v-if="moreInfo">
-          <div>
+          <div v-if="Object.keys(partiesAgree).length">
             <div class="head">Se strinja</div>
             <PartyElement v-for="(answer, party_id) in partiesAgree" :key="party_id" :party="parties[party_id]"
               :answer="answer">
             </PartyElement>
           </div>
-          <div>
+          <div v-if="Object.keys(partiesDisagree).length">
             <div class="head">Se ne strinja</div>
             <PartyElement v-for="(answer, party_id) in partiesDisagree" :key="party_id" :party="parties[party_id]"
               :answer="answer">
             </PartyElement>
           </div>
-          <div>
+          <div v-if="Object.keys(partiesNeutral).length">
             <div class="head">Brez stališča</div>
             <PartyElement v-for="(answer, party_id) in partiesNeutral" :key="party_id" :party="parties[party_id]"
               :answer="answer">
@@ -264,6 +264,10 @@ main {
         color: inherit;
         text-decoration: none;
 
+        @media (max-width: 575.98px) {
+          width: auto;
+        }
+
         & > div {
           display: flex;
         }
@@ -302,6 +306,7 @@ main {
 
         @media (max-width: 575.98px) {
           padding: 20px 18px 20px 21px;
+          width: auto;
         }
 
         img {
