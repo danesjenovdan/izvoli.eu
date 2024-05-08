@@ -145,21 +145,21 @@ router.beforeEach(() => {
           </button>
         </div>
         <div class="parties" v-if="moreInfo">
-          <div v-if="Object.keys(partiesAgree).length">
+          <div>
             <div class="head">Se strinja</div>
             <PartyElement v-for="(answer, party_id) in partiesAgree" :key="party_id" :party="parties[party_id]"
               :answer="answer">
             </PartyElement>
             <p v-if="Object.keys(partiesAgree).length == 0">Nobena stranka ni izbrala tega odgovora.</p>
           </div>
-          <div v-if="Object.keys(partiesDisagree).length">
+          <div>
             <div class="head">Se ne strinja</div>
             <PartyElement v-for="(answer, party_id) in partiesDisagree" :key="party_id" :party="parties[party_id]"
               :answer="answer">
             </PartyElement>
             <p v-if="Object.keys(partiesDisagree).length == 0">Nobena stranka ni izbrala tega odgovora.</p>
           </div>
-          <div v-if="Object.keys(partiesNeutral).length">
+          <div>
             <div class="head">Brez stališča</div>
             <PartyElement v-for="(answer, party_id) in partiesNeutral" :key="party_id" :party="parties[party_id]"
               :answer="answer">
