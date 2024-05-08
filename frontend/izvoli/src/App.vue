@@ -204,6 +204,7 @@ button {
   @media (max-width: 575.98px) {
     min-width: 189px;
     padding: 10px 15px 10px 18px;
+    font-size: 18px;
   }
 
   img {
