@@ -124,18 +124,21 @@ function answerToValue(answer) {
         </p>
         <div class="parties">
           <div v-for="party in results" :key="party.party_id" class="party">
-            <label :for="`chosen-party-${party.party_id}`">
+            <label :for="`chosen-party-${party.party_id}`" :class="{ 'no-answers': party.percentage < 0 }">
               <input type="checkbox" :id="`chosen-party-${party.party_id}`" :value="party.party_id"
-                v-model="chosenParties" />
+                v-model="chosenParties" v-if="party.percentage >= 0" />
               <img :src="partyImageUrl(parties[party.party_id].image)" class="party-image" />
               {{ parties[party.party_id].name }}
             </label>
-            <div class="progress">
+
+            <div v-if="party.percentage >= 0" class="progress">
               <div class="progress-bar" role="progressbar" :aria-valuenow="party.percentage" aria-valuemin="0"
                 :aria-valuemax="100" :style="{ width: `${party.percentage}%` }"
                 :class="{ 'border-end': party.percentage > 0 && party.percentage < 100 }"></div>
             </div>
-            <span class="party-percentage">{{ party.percentage }} %</span>
+            <span v-if="party.percentage >= 0" class="party-percentage">{{ party.percentage }} %</span>
+            <p v-if="party.percentage < 0">Niso odgovorili na vprašanja</p>
+            <span v-if="party.percentage < 0" class="party-percentage">0 %</span>
           </div>
           <div v-for="party in partiesNoAnswer" :key="party.id" class="party">
             <label :for="`chosen-party-${party.id}`">
@@ -375,6 +378,10 @@ function answerToValue(answer) {
           margin-bottom: 18px;
         }
 
+        .no-answers {
+          color: #525252;
+        }
+
         label {
           flex: 1.25;
           display: flex;
@@ -383,6 +390,13 @@ function answerToValue(answer) {
           font-size: 15px;
           line-height: 18px;
           font-weight: 800;
+          margin-right: 20px;
+
+          &.no-answers {
+            color: #525252;
+            margin-left: 16px;
+            cursor: default;
+          }
 
           @media (max-width: 575.98px) {
             grid-row: 1;
@@ -435,7 +449,6 @@ function answerToValue(answer) {
         .progress {
           flex: 2;
           height: 20px;
-          margin-left: 10px;
           background-color: #ffffff;
           border: 1px solid black;
           border-radius: 10px;
@@ -476,6 +489,19 @@ function answerToValue(answer) {
           @media (max-width: 575.98px) {
             grid-row: 1;
             grid-column: 2;
+          }
+        }
+
+        p {
+          flex: 2;
+          font-size: 12px;
+          font-weight: 500;
+          line-height: 18px;
+          color: #525252;
+
+          &+span {
+            flex: 0.25;
+            color: #525252;
           }
         }
       }

@@ -82,10 +82,18 @@ const store = createStore({
 
       // setup (count and percentage to 0 for every party)
       for (const key in state.parties) {
-        answers_party_matches[key] = {
-          count: 0,
-          percentage: 0
+        if (state.parties['finished_quiz']) {
+          answers_party_matches[key] = {
+            count: 0,
+            percentage: 0
+          }
+        } else {
+          answers_party_matches[key] = {
+            count: 0,
+            percentage: -1
+          }
         }
+          
       }
       if (answersNo > 0) {
         // count matching answers for each party
