@@ -5,6 +5,7 @@ import { RouterLink } from 'vue-router'
 import { atcb_action } from 'add-to-calendar-button'
 
 const newsletterEmail = ref('')
+const newsletterConsent = ref(false)
 const newsletterLoading = ref(false)
 
 const config = {
@@ -33,6 +34,7 @@ async function onNewsletterSubmit() {
     })
     if (response.data.msg === 'mail sent') {
       newsletterEmail.value = ''
+      newsletterConsent.value = false
       newsletterLoading.value = false
       alert('Hvala! Poslali smo ti sporočilo s povezavo, na kateri lahko potrdiš prijavo!')
     } else {
@@ -86,7 +88,7 @@ async function onNewsletterSubmit() {
             v-model="newsletterEmail"
           />
           <label for="newsletter-agree" class="newsletter-agree">
-            <input type="checkbox" id="newsletter-agree" required />
+            <input type="checkbox" id="newsletter-agree" required v-model="newsletterConsent" />
             Strinjam se, da mi Danes je nov dan občasno pošlje elektronsko sporočilo.
           </label>
           <button type="submit" :disabled="newsletterLoading">Prijavi me!</button>
