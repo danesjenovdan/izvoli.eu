@@ -22,14 +22,16 @@ const show = ref(false)
         <img :src="party.image" alt="" />
         <p>{{ party.name }}</p>
       </div>
-      <button @click="show = true" v-if="!show && answer.comment">
-        Prikaži
-        <img src="../assets/img/puscica-trikotnik-modra.svg" />
-      </button>
-      <button @click="show = false" v-if="show && answer.comment">
-        Skrij
-        <img src="../assets/img/krizec-moder.svg" class="hide" />
-      </button>
+      <div class="buttons">
+        <button @click="show = true" v-if="!show && answer.comment">
+          Prikaži
+          <img src="../assets/img/puscica-trikotnik-modra.svg" />
+        </button>
+        <button @click="show = false" v-if="show && answer.comment">
+          Skrij
+          <img src="../assets/img/krizec-moder.svg" class="hide" />
+        </button>
+      </div>
     </div>
     <p v-if="show" class="comment">{{ answer.comment }}</p>
   </div>
@@ -63,23 +65,28 @@ const show = ref(false)
       }
     }
 
-    button {
+    .buttons {
+      flex-basis: 50px;
       flex-shrink: 0;
-      padding: 0;
-      background-color: transparent;
-      border: none;
-      border-bottom: 1px solid #0e3d97;
-      color: #0e3d97;
-      font-size: 12px;
-      line-height: 14px;
-      cursor: pointer;
+      text-align: right;
 
-      img {
-        width: 10px;
-        vertical-align: middle;
+      button {
+        padding: 0;
+        background-color: transparent;
+        border: none;
+        border-bottom: 1px solid #0e3d97;
+        color: #0e3d97;
+        font-size: 12px;
+        line-height: 14px;
+        cursor: pointer;
 
-        &.hide {
-          width: 8px;
+        img {
+          width: 10px;
+          vertical-align: middle;
+
+          &.hide {
+            width: 8px;
+          }
         }
       }
     }
