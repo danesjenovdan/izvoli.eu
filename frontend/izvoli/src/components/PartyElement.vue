@@ -46,8 +46,10 @@ const show = ref(false)
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
 
     .name {
+      flex-basis: 100%;
       display: flex;
       gap: 9px;
       align-items: center;
@@ -66,7 +68,7 @@ const show = ref(false)
     }
 
     .buttons {
-      flex-basis: 50px;
+      flex-basis: 100%;
       flex-shrink: 0;
       text-align: right;
 
