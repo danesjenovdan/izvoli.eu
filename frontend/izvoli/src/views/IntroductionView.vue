@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, computed } from 'vue'
+import { ref, onMounted, computed, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 
@@ -9,18 +9,28 @@ const router = useRouter()
 const storeInitialized = computed(() => store.getters.getStoreInitialized)
 const quizFinished = computed(() => store.getters.getQuizFinished)
 
+const isMobile = ref(window.innerWidth <= 575.98)
+
+function calcMobile() {
+  isMobile.value = window.innerWidth <= 575.98
+}
+
 onMounted(() => {
-  console.log('introduction on mounted')
   if (!storeInitialized.value) {
     store.dispatch('initializeStore').then((quiz_finished) => {
       if (quiz_finished) {
-        router.push('/rezultati')
+        router.push({ name: 'results' })
       }
     })
   }
   if (quizFinished.value) {
-    router.push('/rezultati')
+    router.push({ name: 'results' })
   }
+  window.addEventListener('resize', calcMobile)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', calcMobile)
 })
 </script>
 
@@ -28,16 +38,26 @@ onMounted(() => {
   <main class="container">
     <div class="body">
       <p class="introduction">
-        Želiš izvedeti, kako si prihodnost Evropske unije predstavljajo politične stranke, ki bodo nastopile na
-        prihajajočih volitvah v Evropski parlament?
+        Želiš izvedeti, kako si prihodnost Evropske unije predstavljajo politične stranke, ki bodo
+        nastopile na prihajajočih volitvah v Evropski parlament?
       </p>
       <p>
-        Z aplikacijo Izvoli.eu lahko preprosto preveriš, s katerimi strankami se najbolj ujemajo tvoja politična
-        prepričanja. Odgovori na 30 trditev, primerjaj svoje odgovore s stališči strank in 9. junija sprejmi bolj
-        premišljeno odločitev.
+        Z aplikacijo Izvoli.eu lahko preprosto preveriš, s katerimi strankami se najbolj ujemajo
+        tvoja politična prepričanja. Odgovori na 30 trditev, primerjaj svoje odgovore s stališči
+        strank in 9. junija sprejmi bolj premišljeno odločitev.
       </p>
       <div class="button-wrapper">
-        <RouterLink to="/vprasanje/1" class="button-go">
+        <RouterLink
+          :to="
+            isMobile
+              ? { name: 'instructions' }
+              : {
+                  name: 'question',
+                  params: { id: 1 }
+                }
+          "
+          class="button-go"
+        >
           Začni <img src="../assets/img/puscica.svg" alt="" />
         </RouterLink>
       </div>

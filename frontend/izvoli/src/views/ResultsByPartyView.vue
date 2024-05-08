@@ -209,6 +209,7 @@ main {
     font-size: 18px;
     font-weight: 800;
     display: flex;
+    gap: 8px;
     align-items: center;
 
     @media (max-width: 575.98px) {
@@ -220,7 +221,7 @@ main {
     }
 
     & > span {
-      min-width: 180px;
+      flex: 1;
 
       @media (max-width: 575.98px) {
         min-width: initial;
@@ -228,12 +229,13 @@ main {
     }
 
     & > div {
+      flex: 1;
       display: flex;
       align-items: center;
+      min-width: 145px;
 
       @media (max-width: 575.98px) {
-        font-size: 13px;
-        line-height: 20px;
+        justify-content: flex-end;
       }
     }
 
@@ -260,6 +262,7 @@ main {
 
     .party {
       display: flex;
+      gap: 8px;
       align-items: start;
       padding: 20px 0;
       width: 100%;
@@ -283,7 +286,7 @@ main {
     }
 
     .head {
-      min-width: 200px;
+      flex: 1;
       display: flex;
       align-items: center;
 
