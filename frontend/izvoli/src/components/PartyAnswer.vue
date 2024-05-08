@@ -46,7 +46,7 @@ const show = ref(false)
 
 <style scoped lang="scss">
 .answer-wrapper {
-  width: 100%;
+  flex: 1;
 
   @media (max-width: 575.98px) {
     width: fit-content;
@@ -67,6 +67,7 @@ const show = ref(false)
     & > div {
       display: flex;
       align-items: center;
+      min-width: 115px;
 
       img {
         width: 28px;
