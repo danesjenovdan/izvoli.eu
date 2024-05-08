@@ -24,11 +24,11 @@ const show = ref(false)
       </div>
       <div v-if="party?.answer == 'NEUTRAL'">
         <img src="../assets/img/neopredeljen.svg" />
-        Neopredeljeno
+        Brez stališča
       </div>
       <div v-if="!party">
-        <img src="../assets/img/neopredeljen.svg" />
-        Ni odgovora
+        <img src="../assets/img/niso-odgovorili.svg" />
+        Niso odgovorili
       </div>
       <button @click="show = true" v-if="!show && party?.comment">
         Obrazložitev
