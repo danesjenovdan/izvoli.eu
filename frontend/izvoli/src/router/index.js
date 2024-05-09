@@ -11,11 +11,6 @@ import AboutView from '../views/AboutView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   scrollBehavior(to, from, savedPosition) {
-    if (to.name === 'question' && from.name === 'question') {
-      return {
-        el: 'main.container'
-      }
-    }
     if (savedPosition) {
       return savedPosition
     } else {
