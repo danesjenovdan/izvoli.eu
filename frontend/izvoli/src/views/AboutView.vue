@@ -64,8 +64,9 @@
         niso bila spremenjena s strani Danes je nov dan.
       </p>
       <p>
-        Vsa stališča kandidatnih list so zbrana v
-        <a target="_blank" href="#">tem dokumentu</a>.
+        Vsa stališča kandidatnih list so zbrana
+        <a target="_blank" href="https://drive.google.com/drive/u/2/folders/1ZOR0drn9EtlmR1nLnyeFWxl79RuFGsF3">na tem
+          mestu</a>.
       </p>
       <h2>Kako so izračunani rezultati</h2>
       <p>
