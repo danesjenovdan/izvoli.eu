@@ -42,7 +42,7 @@ function playCard(interaction) {
       setTimeout(() => {
         isInteractAnimating.value = false
         emit('cardAccepted')
-      }, 700)
+      }, 400)
       break
     case 'cardRejected':
       interactPosition.value = {
@@ -53,31 +53,51 @@ function playCard(interaction) {
       setTimeout(() => {
         isInteractAnimating.value = false
         emit('cardRejected')
-      }, 700)
+      }, 400)
       break
   }
 }
 
+const scrollY = ref(0)
+const scrolledAmount = ref(0)
+
 function setupSwipable() {
   console.log('setupSwipable')
   interact(card.value).draggable({
+    startAxis: 'xy',
+    lockAxis: 'start',
     onstart: () => {
       isInteractAnimating.value = false
+      scrollY.value = window.scrollY
+      scrolledAmount.value = 0
     },
     onmove: (event) => {
-      const x = interactPosition.value.x + event.dx
-      const y = interactPosition.value.y + event.dy
-      let rotation = interactMaxRotation * (x / interactXThreshold)
-      if (rotation > interactMaxRotation) rotation = interactMaxRotation
-      else if (rotation < -interactMaxRotation) rotation = -interactMaxRotation
-      interactPosition.value = { x, y, rotation }
+      if (Math.abs(event.dx) > 0) {
+        const x = interactPosition.value.x + event.dx
+        const y = interactPosition.value.y + event.dy
+        let rotation = interactMaxRotation * (x / interactXThreshold)
+        if (rotation > interactMaxRotation) rotation = interactMaxRotation
+        else if (rotation < -interactMaxRotation) rotation = -interactMaxRotation
+        interactPosition.value = { x, y, rotation }
+      } else if (Math.abs(event.dy) > 0) {
+        // hack for scrolling while on draggable
+        scrolledAmount.value += event.dy
+        document.body.style.marginTop = `${scrolledAmount.value}px`
+      }
     },
     onend: () => {
-      const { x } = interactPosition.value
-      isInteractAnimating.value = true
-      if (x > interactXThreshold) playCard('cardAccepted')
-      else if (x < -interactXThreshold) playCard('cardRejected')
-      else interactPosition.value = { x: 0, y: 0, rotation: 0 }
+      if (Math.abs(scrolledAmount.value) > 0) {
+        // hack for scrolling while on draggable
+        document.body.style.marginTop = ''
+        window.scrollTo(0, scrollY.value - scrolledAmount.value)
+        scrolledAmount.value = 0
+      } else {
+        const { x } = interactPosition.value
+        isInteractAnimating.value = true
+        if (x > interactXThreshold) playCard('cardAccepted')
+        else if (x < -interactXThreshold) playCard('cardRejected')
+        else interactPosition.value = { x: 0, y: 0, rotation: 0 }
+      }
     }
   })
 }
@@ -127,7 +147,7 @@ onBeforeUnmount(() => {
   touch-action: none;
 
   &.is-animating {
-    transition: transform 0.7s cubic-bezier(0.68, 0, 0.27, 1);
+    transition: transform 0.4s cubic-bezier(0.68, 0, 0.27, 1);
   }
 }
 </style>

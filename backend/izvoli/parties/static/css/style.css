@@ -674,11 +674,11 @@ button {
     margin-bottom: 10px;
 }
 
-.summary p:nth-of-type(2) {
+/* .summary p:nth-of-type(2) {
     font-weight: bold;
 }
 
 .summary p:nth-of-type(3) {
     margin-top: 0;
     margin-bottom: 30px;
-}
+} */
