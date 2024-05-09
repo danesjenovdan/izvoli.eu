@@ -110,12 +110,14 @@ const store = createStore({
       // create an array with counting results
       const ordered_results = []
       for (const party_id in answers_party_matches) {
-        ordered_results.push({
-          party_id: party_id,
-          count: answers_party_matches[party_id].count,
-          percentage: answers_party_matches[party_id].percentage,
-          finished_quiz: true
-        })
+        if (state.parties[party_id].finished_quiz) {
+          ordered_results.push({
+            party_id: party_id,
+            count: answers_party_matches[party_id].count,
+            percentage: answers_party_matches[party_id].percentage,
+            finished_quiz: true
+          })
+        }
       }
       // sort the array (descending by percentage) and save to state.results
       state.results = ordered_results.sort((a, b) => (a.percentage > b.percentage ? -1 : 1))
