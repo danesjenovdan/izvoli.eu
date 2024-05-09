@@ -82,18 +82,11 @@ const store = createStore({
 
       // setup (count and percentage to 0 for every party)
       for (const key in state.parties) {
-        if (state.parties['finished_quiz']) {
-          answers_party_matches[key] = {
-            count: 0,
-            percentage: 0
-          }
-        } else {
-          answers_party_matches[key] = {
-            count: 0,
-            percentage: -1
-          }
-        }
-          
+        answers_party_matches[key] = {
+          count: 0,
+          percentage: 0,
+          finished_quiz: state.parties[key].finished_quiz
+        }          
       }
       if (answersNo > 0) {
         // count matching answers for each party
@@ -101,12 +94,16 @@ const store = createStore({
           // go through answers
           for (const party_id in answers_party_matches) {
             // compare user answer to all parties
-            if (state.answers[id] == state.questions[id].parties[party_id]?.answer) { // TODO: tu sem dal "?." ker je drugače lahko undefined, preveri da to kalkulacijo procentov ne uniči
-              answers_party_matches[party_id].count++
-              answers_party_matches[party_id].percentage = Math.round(
-                (answers_party_matches[party_id].count / answersNo) * 100
-              )
+            if (state.parties[party_id].finished_quiz) {
+              if (state.answers[id] == state.questions[id].parties[party_id].answer) {
+                // TODO: tu sem dal "?." ker je drugače lahko undefined, preveri da to kalkulacijo procentov ne uniči
+                answers_party_matches[party_id].count++
+                answers_party_matches[party_id].percentage = Math.round(
+                  (answers_party_matches[party_id].count / answersNo) * 100
+                )
+              }
             }
+              
           }
         }
       }
@@ -116,11 +113,23 @@ const store = createStore({
         ordered_results.push({
           party_id: party_id,
           count: answers_party_matches[party_id].count,
-          percentage: answers_party_matches[party_id].percentage
+          percentage: answers_party_matches[party_id].percentage,
+          finished_quiz: true
         })
       }
       // sort the array (descending by percentage) and save to state.results
       state.results = ordered_results.sort((a, b) => (a.percentage > b.percentage ? -1 : 1))
+      for (const key in state.parties) {
+        if (!state.parties[key].finished_quiz) {
+          state.results.push({
+            party_id: key,
+            count: 0,
+            percentage: 0,
+            finished_quiz: false
+          })
+        }
+        
+      }
       state.quizFinished = true
       localStorage.setItem('quizFinished', 'true')
     },
@@ -145,7 +154,8 @@ const store = createStore({
         state.parties[parties[index].id] = {
           name: parties[index].name,
           image: parties[index].image,
-          votematch_id: parties[index].votematch_id
+          votematch_id: parties[index].votematch_id,
+          finished_quiz: parties[index].finished_quiz
           // url: parties[index].url
         }
       }
