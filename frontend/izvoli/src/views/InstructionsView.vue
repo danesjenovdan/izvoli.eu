@@ -31,7 +31,7 @@ onMounted(() => {
         <div>
           <div class="instructions">
             <div>Se ne strinjaš?</div>
-            <span>Pritisni spodnji gumb <!-- ali potegni kartico v levo --></span>
+            <span>Pritisni spodnji gumb ali potegni kartico v levo</span>
           </div>
           <button type="button" class="disagree">
             <img src="../assets/img/ne-strinjam.svg" />
@@ -40,7 +40,7 @@ onMounted(() => {
         <div>
           <div class="instructions">
             <div>Se strinjaš?</div>
-            <span>Pritisni spodnji gumb <!-- ali potegni kartico v desno --></span>
+            <span>Pritisni spodnji gumb ali potegni kartico v desno</span>
           </div>
           <button type="button" class="agree">
             <img src="../assets/img/strinjam.svg" />

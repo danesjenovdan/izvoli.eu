@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import PartyElement from '@/components/PartyElement.vue'
 import QuestionsProgress from '@/components/QuestionsProgress.vue'
+import SwipableCard from '@/components/SwipableCard.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -95,47 +96,60 @@ router.beforeEach(() => {
   <main class="container">
     <div class="body" v-if="question">
       <QuestionsProgress :current="questionNumber" :count="questionsNo" />
-      <div class="content">
-        <div v-if="question.tag" class="category">{{ question.tag }}</div>
-        <h1 v-if="question.title" class="title">{{ question.title }}</h1>
-        <p v-if="question.description" class="description">{{ question.description }}</p>
-        <div class="buttons" :key="questionNumber">
-          <RouterLink :to="
-              questionIndex <= 0
-                ? { name: 'introduction' }
-                : { name: 'question', params: { id: questionNumber - 1 } }
-            " class="back">
-            <div>
-              <img src="../assets/img/puscica-trikotnik.svg" alt="" />
-              <img src="../assets/img/puscica-trikotnik.svg" alt="" />
-            </div>
-            <span>Prejšnja trditev</span>
-          </RouterLink>
-          <button @click="saveAnswer(questionId, 'NO')" class="disagree">
-            <img src="../assets/img/ne-strinjam.svg" />
-            <span>Se ne strinjam</span>
-          </button>
-          <button @click="saveAnswer(questionId, 'YES')" class="agree">
-            <img src="../assets/img/strinjam.svg" />
-            <span>Se strinjam</span>
-          </button>
-          <button @click="saveAnswer(questionId, 'NEUTRAL')" class="skip">
-            <span>Brez stališča</span>
-            <div>
-              <img src="../assets/img/puscica-trikotnik.svg" alt="" />
-              <img src="../assets/img/puscica-trikotnik.svg" alt="" />
-            </div>
-          </button>
+      <SwipableCard
+        :key="questionNumber"
+        @card-accepted="saveAnswer(questionId, 'YES')"
+        @card-rejected="saveAnswer(questionId, 'NO')"
+      >
+        <div class="content">
+          <div v-if="question.tag" class="category">{{ question.tag }}</div>
+          <h1 v-if="question.title" class="title">{{ question.title }}</h1>
+          <p v-if="question.description" class="description">{{ question.description }}</p>
+          <div class="buttons">
+            <RouterLink
+              :to="
+                questionIndex <= 0
+                  ? { name: 'introduction' }
+                  : { name: 'question', params: { id: questionNumber - 1 } }
+              "
+              class="back"
+            >
+              <div>
+                <img src="../assets/img/puscica-trikotnik.svg" alt="" />
+                <img src="../assets/img/puscica-trikotnik.svg" alt="" />
+              </div>
+              <span>Prejšnja trditev</span>
+            </RouterLink>
+            <button @click="saveAnswer(questionId, 'NO')" class="disagree">
+              <img src="../assets/img/ne-strinjam.svg" />
+              <span>Se ne strinjam</span>
+            </button>
+            <button @click="saveAnswer(questionId, 'YES')" class="agree">
+              <img src="../assets/img/strinjam.svg" />
+              <span>Se strinjam</span>
+            </button>
+            <button @click="saveAnswer(questionId, 'NEUTRAL')" class="skip">
+              <span>Brez stališča</span>
+              <div>
+                <img src="../assets/img/puscica-trikotnik.svg" alt="" />
+                <img src="../assets/img/puscica-trikotnik.svg" alt="" />
+              </div>
+            </button>
+          </div>
         </div>
-      </div>
-
+      </SwipableCard>
       <div class="more-info">
         <div class="show-hide">
           <img src="../assets/img/eyes-down.svg" v-if="moreInfo || moreInfoHover" />
           <img src="../assets/img/eyes-right.svg" v-else />
           <span>Kaj o tem mislijo stranke?</span>
-          <button @click="moreInfo = true" @mouseenter="moreInfoHover = true" @mouseleave="moreInfoHover = false"
-            v-if="!moreInfo" class="show">
+          <button
+            @click="moreInfo = true"
+            @mouseenter="moreInfoHover = true"
+            @mouseleave="moreInfoHover = false"
+            v-if="!moreInfo"
+            class="show"
+          >
             Prikaži
             <img src="../assets/img/puscica-trikotnik-modra.svg" />
           </button>
@@ -147,24 +161,42 @@ router.beforeEach(() => {
         <div class="parties" v-if="moreInfo">
           <div>
             <div class="head">Se strinja</div>
-            <PartyElement v-for="(answer, party_id) in partiesAgree" :key="party_id" :party="parties[party_id]"
-              :answer="answer">
+            <PartyElement
+              v-for="(answer, party_id) in partiesAgree"
+              :key="party_id"
+              :party="parties[party_id]"
+              :answer="answer"
+            >
             </PartyElement>
-            <p v-if="Object.keys(partiesAgree).length == 0">Nobena stranka ni izbrala tega odgovora.</p>
+            <p v-if="Object.keys(partiesAgree).length == 0">
+              Nobena stranka ni izbrala tega odgovora.
+            </p>
           </div>
           <div>
             <div class="head">Se ne strinja</div>
-            <PartyElement v-for="(answer, party_id) in partiesDisagree" :key="party_id" :party="parties[party_id]"
-              :answer="answer">
+            <PartyElement
+              v-for="(answer, party_id) in partiesDisagree"
+              :key="party_id"
+              :party="parties[party_id]"
+              :answer="answer"
+            >
             </PartyElement>
-            <p v-if="Object.keys(partiesDisagree).length == 0">Nobena stranka ni izbrala tega odgovora.</p>
+            <p v-if="Object.keys(partiesDisagree).length == 0">
+              Nobena stranka ni izbrala tega odgovora.
+            </p>
           </div>
           <div>
             <div class="head">Brez stališča</div>
-            <PartyElement v-for="(answer, party_id) in partiesNeutral" :key="party_id" :party="parties[party_id]"
-              :answer="answer">
+            <PartyElement
+              v-for="(answer, party_id) in partiesNeutral"
+              :key="party_id"
+              :party="parties[party_id]"
+              :answer="answer"
+            >
             </PartyElement>
-            <p v-if="Object.keys(partiesNeutral).length == 0">Nobena stranka ni izbrala tega odgovora.</p>
+            <p v-if="Object.keys(partiesNeutral).length == 0">
+              Nobena stranka ni izbrala tega odgovora.
+            </p>
           </div>
         </div>
       </div>
@@ -196,7 +228,7 @@ main {
       display: inline-block;
       margin-bottom: 16px;
       padding: 4px 8px;
-      background-color: #FFFFFF;
+      background-color: #ffffff;
       border-radius: 9999px;
       font-size: 12px;
       line-height: 1;
@@ -241,7 +273,7 @@ main {
       .disagree,
       .back,
       .skip {
-        background: transparent;
+        background: rgba(255, 255, 255, 0.8);
         border: 2px solid black;
         border-radius: 20px;
         display: flex;
@@ -300,7 +332,6 @@ main {
       .agree,
       .disagree {
         gap: 10px;
-        background-color: #fff;
         padding: 20px 9px 20px 18px;
         width: 200px;
         font-size: 18px;
@@ -391,7 +422,7 @@ main {
           line-height: 18px;
           font-weight: 600;
 
-          &+p {
+          & + p {
             padding: 6px 8px;
             font-size: 13px;
             line-height: 18px;

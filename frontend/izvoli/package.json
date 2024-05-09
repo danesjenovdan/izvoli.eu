@@ -13,6 +13,7 @@
   "dependencies": {
     "add-to-calendar-button": "^2.6.13",
     "axios": "^1.6.8",
+    "interactjs": "^1.10.27",
     "vue": "^3.4.21",
     "vue-axios": "^3.5.2",
     "vue-router": "^4.3.0",
