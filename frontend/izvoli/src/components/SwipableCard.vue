@@ -124,6 +124,7 @@ onBeforeUnmount(() => {
   background-color: #fffbe9;
   outline: 2px solid black;
   user-select: none;
+  touch-action: none;
 
   &.is-animating {
     transition: transform 0.7s cubic-bezier(0.68, 0, 0.27, 1);
