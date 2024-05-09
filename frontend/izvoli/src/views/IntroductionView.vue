@@ -43,9 +43,13 @@ onBeforeUnmount(() => {
       </p>
       <p>
         Z aplikacijo Izvoli.eu lahko preprosto preveriš, s katerimi strankami se najbolj ujemajo
-        tvoja politična prepričanja. Odgovori na 30 trditev, primerjaj svoje odgovore s stališči
-        strank in 9. junija sprejmi bolj premišljeno odločitev.
+        tvoja politična prepričanja.
       </p>
+      <ul>
+        <li>Odgovori na 30 trditev.</li>
+        <li>Primerjaj svoje odgovore s stališči strank.</li>
+        <li>Na volitvah 9. junija sprejmi bolj premišljeno odločitev.</li>
+      </ul>
       <div class="button-wrapper">
         <RouterLink
           :to="
@@ -77,7 +81,8 @@ onBeforeUnmount(() => {
     padding-bottom: 33px;
   }
 
-  p {
+  p,
+  ul {
     margin-bottom: 24px;
     font-size: 15px;
     line-height: 24px;
@@ -90,6 +95,16 @@ onBeforeUnmount(() => {
         font-size: 21px;
         line-height: 27px;
       }
+    }
+  }
+
+  ul {
+    padding: 0;
+    padding-left: 1em;
+    list-style: '➜';
+
+    li {
+      padding-left: 0.25em;
     }
   }
 
