@@ -10,16 +10,19 @@
         <div class="summary">
             <h2>{{ forloop.counter }}. {{ answer.statement.title }}</h2>
             {% if answer.statement.description %}
-                <p>{{ answer.statement.description }}</p>
+                <h4>{{ answer.statement.description }}</h4>
             {% endif %}
-            <p>
-                {% if answer.answer == "YES" %}
-                DA
-                {% elif answer.answer == "NO" %}
-                NE
-                {% else %}
-                NEOPREDELJENO
-                {% endif %}</p>
+            <p>Odgovor stranke: 
+                <strong>
+                    {% if answer.answer == "YES" %}
+                        DA
+                    {% elif answer.answer == "NO" %}
+                        NE
+                    {% else %}
+                        NEOPREDELJENO
+                    {% endif %}
+                </strong>
+            </p>
             {% if answer.comment %}
                 <p><strong>Komentar:</strong></p>
                 <p>{{ answer.comment }}</p>
