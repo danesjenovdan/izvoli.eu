@@ -49,7 +49,7 @@ const show = ref(false)
     flex-wrap: wrap;
 
     .name {
-      flex-basis: 100%;
+      flex: 1;
       display: flex;
       gap: 9px;
       align-items: center;
@@ -68,7 +68,7 @@ const show = ref(false)
     }
 
     .buttons {
-      flex-basis: 100%;
+      flex-basis: 90px;
       flex-shrink: 0;
       text-align: right;
 
