@@ -111,12 +111,7 @@ function answerToValue(answer) {
       <div class="content">
         <h1>Najbolj se ujemaš s strankami:</h1>
         <div class="winners">
-          <PartyDonutChart
-            v-for="result in winners"
-            :key="result.party_id"
-            :result="result"
-            :parties="parties"
-          />
+          <PartyDonutChart v-for="result in winners" :key="result.party_id" :result="result" :parties="parties" />
         </div>
         <div class="button-wrapper">
           <button class="button-go" @click="compareWithWinningParties">
@@ -137,46 +132,25 @@ function answerToValue(answer) {
         </p>
         <div class="parties">
           <div v-for="party in results" :key="party.party_id" class="party">
-            <label
-              :for="`chosen-party-${party.party_id}`"
-              :class="{ 'no-answers': party.percentage < 0 }"
-            >
-              <input
-                type="checkbox"
-                :id="`chosen-party-${party.party_id}`"
-                :value="party.party_id"
-                v-model="chosenParties"
-                v-if="party.percentage >= 0"
-              />
+            <label :for="`chosen-party-${party.party_id}`" :class="{ 'no-answers': !party.finished_quiz }">
+              <input type="checkbox" :id="`chosen-party-${party.party_id}`" :value="party.party_id"
+                v-model="chosenParties" v-if="party.finished_quiz" />
               <img :src="partyImageUrl(parties[party.party_id].image)" class="party-image" />
               {{ parties[party.party_id].name }}
             </label>
 
-            <div v-if="party.percentage >= 0" class="progress">
-              <div
-                class="progress-bar"
-                role="progressbar"
-                :aria-valuenow="party.percentage"
-                aria-valuemin="0"
-                :aria-valuemax="100"
-                :style="{ width: `${party.percentage}%` }"
-                :class="{ 'border-end': party.percentage > 0 && party.percentage < 100 }"
-              ></div>
+            <div v-if="party.finished_quiz" class="progress">
+              <div class="progress-bar" role="progressbar" :aria-valuenow="party.percentage" aria-valuemin="0"
+                :aria-valuemax="100" :style="{ width: `${party.percentage}%` }"
+                :class="{ 'border-end': party.percentage > 0 && party.percentage < 100 }"></div>
             </div>
-            <span v-if="party.percentage >= 0" class="party-percentage"
-              >{{ party.percentage }} %</span
-            >
-            <p v-if="party.percentage < 0">Niso odgovorili na vprašanja</p>
-            <span v-if="party.percentage < 0" class="party-percentage">0 %</span>
+            <span v-if="party.finished_quiz" class="party-percentage">{{ party.percentage }} %</span>
+            <p v-if="!party.finished_quiz">Niso odgovorili na vprašanja</p>
+            <span v-if="!party.finished_quiz" class="party-percentage">0 %</span>
           </div>
           <div v-for="party in partiesNoAnswer" :key="party.id" class="party">
             <label :for="`chosen-party-${party.id}`">
-              <input
-                type="checkbox"
-                :id="`chosen-party-${party.id}`"
-                :value="party.id"
-                v-model="chosenParties"
-              />
+              <input type="checkbox" :id="`chosen-party-${party.id}`" :value="party.id" v-model="chosenParties" />
               <img :src="partyImageUrl(party.image)" class="party-image" />
               {{ party.name }}
             </label>
@@ -210,13 +184,8 @@ function answerToValue(answer) {
           <input type="hidden" name="bestmatch" :value="winnerIDs[0]" />
           <input type="hidden" name="bestscore" :value="winnerIDs[1]" />
           <template v-for="qNo in questionsList">
-            <input
-              v-if="qNo in answers && questions[qNo].votematch_id"
-              :key="qNo"
-              type="hidden"
-              :name="questions[qNo].votematch_id"
-              :value="answerToValue(answers[qNo])"
-            />
+            <input v-if="qNo in answers && questions[qNo].votematch_id" :key="qNo" type="hidden"
+              :name="questions[qNo].votematch_id" :value="answerToValue(answers[qNo])" />
           </template>
         </form>
       </div>
