@@ -43,6 +43,14 @@ const winnerIDs = computed(() => {
   }
 })
 
+const isMobile = computed(() => {
+  if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    return true
+  } else {
+    return false
+  }
+})
+
 const compareWithWinningParties = () => {
   const parties = [...results.value.map((res) => res.party_id)]
   parties.splice(3)
@@ -102,6 +110,30 @@ function answerToValue(answer) {
   if (answer == 'YES') return '1'
   if (answer == 'NEUTRAL') return '0'
   if (answer == 'NO') return '-1'
+}
+
+const urlCopied = ref(false)
+
+function copyToClipboard() {
+  navigator.clipboard.writeText("https://izvoli.eu/").then(function () {
+    urlCopied.value = true
+    alert('Povezava je skopirana v odložišče!')
+  }, function () {
+    // ni se skopiralo ...
+  });
+}
+
+function shareOnMobile() {
+  if (navigator.share) {
+    urlCopied.value = true
+    navigator.share({
+      title: 'Izvoli.eu',
+      text: 'Odgovori na 30 trditev in preveri, s katerimi strankami se tvoja stališča najbolj ujemajo!',
+      url: 'https://izvoli.eu/'
+    })
+  } else {
+    console.log("Can't share on this device.")
+  }
 }
 </script>
 
@@ -165,6 +197,14 @@ function answerToValue(answer) {
       </div>
     </div>
 
+    <button v-if="!isMobile" class="share-button-desktop" :class="{ 'copied': urlCopied }"
+      @click="copyToClipboard"></button>
+    <div class="share-button-mobile-wrapper">
+      <button v-if="isMobile" class="share-button-mobile" :class="{ 'copied': urlCopied }"
+        @click="shareOnMobile"></button>
+    </div>
+
+
     <div class="body" v-if="results.length > 0">
       <div class="content two-columns">
         <img src="../assets/img/eu.jpg" alt="Zemljevid Evropske Unije" />
@@ -197,6 +237,10 @@ function answerToValue(answer) {
 .body {
   &:not(:last-child) {
     margin-bottom: 70px;
+
+    @media (max-width: 575.98px) {
+      margin-bottom: 40px;
+    }
   }
 
   .button-wrapper {
@@ -537,6 +581,80 @@ function answerToValue(answer) {
         }
       }
     }
+  }
+}
+
+.share-button-desktop {
+  width: 200px;
+  height: 200px;
+  background-color: transparent;
+  border: none;
+  background-image: url("../assets/img/deli.png");
+  background-size: contain;
+  z-index: 1;
+  position: fixed;
+  right: 30px;
+  top: 50%;
+  animation-name: spin;
+  animation-duration: 4000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  cursor: pointer;
+
+  &.copied {
+    background-image: url("../assets/img/skopirana.png");
+    animation-play-state: paused;
+  }
+  
+  &:hover {
+    // animation-play-state: paused;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: translateY(-50%) rotate(0deg);
+  }
+
+  to {
+    transform: translateY(-50%) rotate(360deg);
+  }
+}
+
+.share-button-mobile-wrapper {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.share-button-mobile {
+  width: 200px;
+  height: 200px;
+  background-color: transparent;
+  border: none;
+  background-image: url("../assets/img/deli.png");
+  background-size: contain;
+  animation-name: spin-mobile;
+  animation-duration: 4000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+
+  &.copied {
+    background-image: url("../assets/img/skopirana.png");
+    // animation-play-state: paused;
+  }
+
+  &:hover {
+    // animation-play-state: paused;
+  }
+}
+
+@keyframes spin-mobile {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
   }
 }
 </style>
