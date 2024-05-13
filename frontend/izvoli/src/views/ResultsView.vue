@@ -589,20 +589,20 @@ function shareOnMobile() {
   height: 200px;
   background-color: transparent;
   border: none;
-  background-image: url("../assets/img/deli.png");
+  background-image: url("../assets/img/deli.svg");
   background-size: contain;
   z-index: 1;
   position: fixed;
   right: 30px;
   top: 50%;
   animation-name: spin;
-  animation-duration: 4000ms;
+  animation-duration: 6000ms;
   animation-iteration-count: infinite;
   animation-timing-function: linear;
   cursor: pointer;
 
   &.copied {
-    background-image: url("../assets/img/skopirana.png");
+    background-image: url("../assets/img/skopirana.svg");
     animation-play-state: paused;
   }
   
@@ -631,15 +631,15 @@ function shareOnMobile() {
   height: 200px;
   background-color: transparent;
   border: none;
-  background-image: url("../assets/img/deli.png");
+  background-image: url("../assets/img/deli.svg");
   background-size: contain;
   animation-name: spin-mobile;
-  animation-duration: 4000ms;
+  animation-duration: 6000ms;
   animation-iteration-count: infinite;
   animation-timing-function: linear;
 
   &.copied {
-    background-image: url("../assets/img/skopirana.png");
+    background-image: url("../assets/img/skopirana.svg");
     // animation-play-state: paused;
   }
 
