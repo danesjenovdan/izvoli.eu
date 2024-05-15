@@ -154,7 +154,7 @@ function shareOnMobile() {
       </div>
       <div class="more-info">
         <p>
-          <span>Izberi stranke za primerjavo svojih odgovorov</span>
+          <span>Izberi stranke s spodnjega seznama, s katerimi želiš primerjati svoje odgovore!</span>
           <button @click="compareWithAllParties" v-if="chosenParties.length == 0">
             Izberi vse stranke
           </button>
@@ -190,7 +190,7 @@ function shareOnMobile() {
         </div>
         <div class="button-wrapper">
           <button class="button-go" @click="compareWithChosenParties">
-            Primerjaj svoje odgovore s temi strankami
+            Primerjaj svoje odgovore z izbranimi strankami
             <img src="../assets/img/puscica.svg" alt="" />
           </button>
         </div>
@@ -401,8 +401,8 @@ function shareOnMobile() {
       }
 
       span {
-        font-size: 18px;
-        line-height: 20px;
+        font-size: 24px;
+        line-height: 30px;
         font-weight: 800;
 
         @media (max-width: 575.98px) {

@@ -80,6 +80,33 @@
         stališča kandidatne liste, točk ne dodelimo.
       </p>
       <p>Izvoli.eu prikazuje ujemanja s kandidatno listo v odstotkih.</p>
+      <h2>Spremembe v podatkih po objavi aplikacije</h2>
+      <p>Ker Piratska stranka Slovenije ni zbrala dovolj podpisov, da bi lahko vložila uradno kandidaturo, smo njene
+        odgovore 9. 5. odstranili iz aplikacije.</p>
+      <p>Po objavi aplikacije Izvoli.eu je stranka NSi 10. 5. prosila za spremembo stališč pri 4 trditvah, do katerih se
+        prej ni opredelila. Spremembe so:
+      </p>
+      <ul>
+        <li>Evropska unija bi si morala prizadevati za uvedbo štiridnevnega delovnega tedna. (Se ne strinja)</li>
+        <li>Evropska unija bi morala s priporočili, ukrepi in drugimi metodami preprečevati špekulativne naložbe v
+          stanovanja. (Se ne strinja)
+        </li>
+        <li>Evropska unija bi morala zagotoviti, da je posilstvo na podlagi neprivolitve kaznivo dejanje v vseh državah
+          članicah. (Se strinja)</li>
+        <li>Evropska unija bi morala pripraviti ukrepe, ki spodbujajo postavljanje zgornje meje cen osnovnih
+          življenjskih potrebščin v državah članicah. (Se ne strinja)</li>
+      </ul>
+      <p>Prav tako je stranka NSi podala dodatne obrazložitve pri trditvah:</p>
+      <ul>
+        <li>Evropska unija bi morala vztrajati pri zamrzniti evropskih sredstev za države članice, ki kršijo njene
+          zakone in vrednote.</li>
+        <li>Zvišati bi morali davek na uvoz kitajskih električnih avtomobilov.</li>
+        <li>Evropska unija bi morala omejiti razvojno pomoč državam, ki ne sprejemajo nazaj zavrnjenih prosilcev za
+          azil.</li>
+        <li>Na embalaži vseh živil, ki so naprodaj v Evropski uniji, bi moral biti označen njihov vpliv na okolje.</li>
+      </ul>
+      <p>15. 5. smo dodali dodatno obrazložitev pri trditvi “Evropska unija bi morala zagotoviti, da je posilstvo na
+        podlagi neprivolitve kaznivo dejanje v vseh državah članicah”.</p>
       <h2>Kaj je Votematch EU</h2>
       <p>
         Votematch Europe je prostovoljna mreža organizacij iz držav članic EU, katere namen je

@@ -65,6 +65,7 @@ onBeforeUnmount(() => {
           Začni <img src="../assets/img/puscica.svg" alt="" />
         </RouterLink>
       </div>
+      <p class="notice">Reševanje kviza je anonimno.</p>
     </div>
   </main>
 </template>
@@ -115,6 +116,13 @@ onBeforeUnmount(() => {
     @media (max-width: 575.98px) {
       margin-top: 33px;
     }
+  }
+
+  .notice {
+    text-align: center;
+    margin-top: 5px;
+    font-size: 12px;
+    color: #545454;
   }
 }
 </style>
