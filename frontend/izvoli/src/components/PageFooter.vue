@@ -11,8 +11,8 @@ const newsletterLoading = ref(false)
 const config = {
   name: 'Volitve v Evropski parlament',
   description: 'Volitve v Evropski parlament',
-  startDate: '2023-06-09',
-  endDate: '2023-06-09',
+  startDate: '2024-06-09',
+  endDate: '2024-06-09',
   timeZone: 'Europe/Ljubljana',
   uid: '29173902-a18f-4e82-bc15-6e7a15234805',
   options: ['Apple', 'Google', 'iCal', 'Microsoft365', 'MicrosoftTeams', 'Outlook.com', 'Yahoo'],
