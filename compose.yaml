@@ -2,7 +2,7 @@ volumes:
   postgres-data:
 
 services:
-  frontend:
+  izvoli:
     build:
       context: ./izvoli
       dockerfile: Dockerfile.dev
