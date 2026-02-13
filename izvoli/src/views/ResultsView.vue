@@ -1,149 +1,169 @@
 <script setup>
-import { ref, computed, onMounted, toRaw, onBeforeUnmount } from 'vue'
-import { useRouter } from 'vue-router'
-import { useStore } from 'vuex'
-import PartyDonutChart from '../components/PartyDonutChart.vue'
+import { ref, computed, onMounted, toRaw, onBeforeUnmount } from "vue";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+import PartyDonutChart from "../components/PartyDonutChart.vue";
 
-const store = useStore()
-const router = useRouter()
+const store = useStore();
+const router = useRouter();
 
-const storeInitialized = computed(() => store.getters.getStoreInitialized)
-const quizFinished = computed(() => store.getters.getQuizFinished)
-const parties = computed(() => store.getters.getParties)
-const results = computed(() => store.getters.getResults)
-const answers = computed(() => store.getters.getAnswers)
-const questions = computed(() => store.getters.getQuestions)
-const questionsList = computed(() => store.getters.getQuestionsList)
-const chosenParties = ref([])
+const storeInitialized = computed(() => store.getters.getStoreInitialized);
+const quizFinished = computed(() => store.getters.getQuizFinished);
+const parties = computed(() => store.getters.getParties);
+const results = computed(() => store.getters.getResults);
+const answers = computed(() => store.getters.getAnswers);
+const questions = computed(() => store.getters.getQuestions);
+const questionsList = computed(() => store.getters.getQuestionsList);
+const chosenParties = ref([]);
 const partiesNoAnswer = computed(() => {
-  const p = {}
-  const partiesAnswered = [...results.value].map((el) => el.party_id)
+  const p = {};
+  const partiesAnswered = [...results.value].map((el) => el.party_id);
   for (const [key, value] of Object.entries(parties.value)) {
     if (!partiesAnswered.includes(key)) {
-      p[key] = value
+      p[key] = value;
     }
   }
-  return p
-})
+  return p;
+});
 
 const winners = computed(() => {
-  const winners = [...results.value]
-  winners.splice(3)
-  return winners
-})
+  const winners = [...results.value];
+  winners.splice(3);
+  return winners;
+});
 
 const winnerIDs = computed(() => {
   if (results.value?.[0]) {
-    const winnerPercentage = results.value[0].percentage
-    const winners = results.value.filter((res) => toRaw(res).percentage == winnerPercentage)
-    const winnerIDs = winners.map((res) => parties.value[res.party_id].votematch_id)
-    return [winnerIDs.toString(), winnerPercentage]
+    const winnerPercentage = results.value[0].percentage;
+    const winners = results.value.filter(
+      (res) => toRaw(res).percentage == winnerPercentage,
+    );
+    const winnerIDs = winners.map(
+      (res) => parties.value[res.party_id].votematch_id,
+    );
+    return [winnerIDs.toString(), winnerPercentage];
   } else {
-    return ['', '']
+    return ["", ""];
   }
-})
+});
 
 const isMobile = computed(() => {
-  if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-    return true
+  if (
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent,
+    )
+  ) {
+    return true;
   } else {
-    return false
+    return false;
   }
-})
+});
 
 const compareWithWinningParties = () => {
-  const parties = [...results.value.map((res) => res.party_id)]
-  parties.splice(3)
-  store.commit('setPartiesToCompare', { parties: parties })
-  router.push({ name: 'resultsByParty', params: { id: 1 } })
-}
+  const parties = [...results.value.map((res) => res.party_id)];
+  parties.splice(3);
+  store.commit("setPartiesToCompare", { parties: parties });
+  router.push({ name: "resultsByParty", params: { id: 1 } });
+};
 
 const compareWithChosenParties = () => {
-  store.commit('setPartiesToCompare', { parties: chosenParties.value })
-  router.push({ name: 'resultsByParty', params: { id: 1 } })
-}
+  store.commit("setPartiesToCompare", { parties: chosenParties.value });
+  router.push({ name: "resultsByParty", params: { id: 1 } });
+};
 
 const compareWithAllParties = () => {
-  chosenParties.value = [...results.value.map((res) => res.party_id)]
-}
+  chosenParties.value = [...results.value.map((res) => res.party_id)];
+};
 
 const unselectAllParties = () => {
-  chosenParties.value = []
-}
+  chosenParties.value = [];
+};
 
 onMounted(() => {
   // initialize store
   if (!storeInitialized.value) {
-    store.dispatch('initializeStore').then((quiz_finished) => {
+    store.dispatch("initializeStore").then((quiz_finished) => {
       if (!quiz_finished) {
-        router.push('/')
+        router.push("/");
       }
-    })
+    });
   }
   // redirect if quiz is not yet finished
   if (!quizFinished.value) {
-    router.push('/')
+    router.push("/");
   }
   // EU comparison
   if (!window.VotematchEU) {
-    let votematchScript = document.createElement('script')
-    votematchScript.setAttribute('src', 'https://assets.votematch.eu/embed.js')
-    document.head.appendChild(votematchScript)
+    let votematchScript = document.createElement("script");
+    votematchScript.setAttribute("src", "https://assets.votematch.eu/embed.js");
+    document.head.appendChild(votematchScript);
   }
-})
+});
 
 onBeforeUnmount(() => {
   if (window.VotematchEU) {
-    let votematchScript = document.querySelector('head script[src*="votematch"]')
-    document.head.removeChild(votematchScript)
-    window.VotematchEU = null
+    let votematchScript = document.querySelector(
+      'head script[src*="votematch"]',
+    );
+    document.head.removeChild(votematchScript);
+    window.VotematchEU = null;
   }
-})
+});
 
 function partyImageUrl(url) {
-  if (!url) return ''
-  const newUrl = new URL(url, store.getters.getApiUrl)
-  return newUrl.toString()
+  if (!url) return "";
+  const newUrl = new URL(url, store.getters.getApiUrl);
+  return newUrl.toString();
 }
 
 function answerToValue(answer) {
-  if (answer == 'YES') return '1'
-  if (answer == 'NEUTRAL') return '0'
-  if (answer == 'NO') return '-1'
+  if (answer == "YES") return "1";
+  if (answer == "NEUTRAL") return "0";
+  if (answer == "NO") return "-1";
 }
 
-const urlCopied = ref(false)
+const urlCopied = ref(false);
 
 function copyToClipboard() {
-  navigator.clipboard.writeText("https://izvoli.eu/").then(function () {
-    urlCopied.value = true
-    alert('Povezava je skopirana v odložišče!')
-  }, function () {
-    // ni se skopiralo ...
-  });
+  navigator.clipboard.writeText("https://izvoli.eu/").then(
+    function () {
+      urlCopied.value = true;
+      // eslint-disable-next-line no-alert
+      alert("Povezava je skopirana v odložišče!");
+    },
+    function () {
+      // ni se skopiralo ...
+    },
+  );
 }
 
 function shareOnMobile() {
   if (navigator.share) {
-    urlCopied.value = true
+    urlCopied.value = true;
     navigator.share({
-      title: 'Izvoli.eu',
-      text: 'Odgovori na 30 trditev in preveri, s katerimi strankami se tvoja stališča najbolj ujemajo!',
-      url: 'https://izvoli.eu/'
-    })
+      title: "Izvoli.eu",
+      text: "Odgovori na 30 trditev in preveri, s katerimi strankami se tvoja stališča najbolj ujemajo!",
+      url: "https://izvoli.eu/",
+    });
   } else {
-    console.log("Can't share on this device.")
+    // eslint-disable-next-line no-alert
+    alert("Can't share on this device.");
   }
 }
 </script>
 
 <template>
   <main class="container">
-    <div class="body" v-if="results.length > 0">
+    <div v-if="results.length > 0" class="body">
       <div class="content">
         <h1>Najbolj se ujemaš s strankami:</h1>
         <div class="winners">
-          <PartyDonutChart v-for="result in winners" :key="result.party_id" :result="result" :parties="parties" />
+          <PartyDonutChart
+            v-for="result in winners"
+            :key="result.party_id"
+            :result="result"
+            :parties="parties"
+          />
         </div>
         <div class="button-wrapper">
           <button class="button-go" @click="compareWithWinningParties">
@@ -154,35 +174,69 @@ function shareOnMobile() {
       </div>
       <div class="more-info">
         <p>
-          <span>Izberi stranke s spodnjega seznama, s katerimi želiš primerjati svoje odgovore!</span>
-          <button @click="compareWithAllParties" v-if="chosenParties.length == 0">
+          <span
+            >Izberi stranke s spodnjega seznama, s katerimi želiš primerjati
+            svoje odgovore!</span
+          >
+          <button
+            v-if="chosenParties.length == 0"
+            @click="compareWithAllParties"
+          >
             Izberi vse stranke
           </button>
-          <button @click="unselectAllParties" v-if="chosenParties.length > 0">
+          <button v-if="chosenParties.length > 0" @click="unselectAllParties">
             Odstrani vse stranke
           </button>
         </p>
         <div class="parties">
           <div v-for="party in results" :key="party.party_id" class="party">
-            <label :for="`chosen-party-${party.party_id}`" :class="{ 'no-answers': !party.finished_quiz }">
-              <input type="checkbox" :id="`chosen-party-${party.party_id}`" :value="party.party_id"
-                v-model="chosenParties" v-if="party.finished_quiz" />
-              <img :src="partyImageUrl(parties[party.party_id].image)" class="party-image" />
+            <label
+              :for="`chosen-party-${party.party_id}`"
+              :class="{ 'no-answers': !party.finished_quiz }"
+            >
+              <input
+                v-if="party.finished_quiz"
+                :id="`chosen-party-${party.party_id}`"
+                v-model="chosenParties"
+                type="checkbox"
+                :value="party.party_id"
+              />
+              <img
+                :src="partyImageUrl(parties[party.party_id].image)"
+                class="party-image"
+              />
               {{ parties[party.party_id].name }}
             </label>
 
             <div v-if="party.finished_quiz" class="progress">
-              <div class="progress-bar" role="progressbar" :aria-valuenow="party.percentage" aria-valuemin="0"
-                :aria-valuemax="100" :style="{ width: `${party.percentage}%` }"
-                :class="{ 'border-end': party.percentage > 0 && party.percentage < 100 }"></div>
+              <div
+                class="progress-bar"
+                role="progressbar"
+                :aria-valuenow="party.percentage"
+                aria-valuemin="0"
+                :aria-valuemax="100"
+                :style="{ width: `${party.percentage}%` }"
+                :class="{
+                  'border-end': party.percentage > 0 && party.percentage < 100,
+                }"
+              ></div>
             </div>
-            <span v-if="party.finished_quiz" class="party-percentage">{{ party.percentage }} %</span>
+            <span v-if="party.finished_quiz" class="party-percentage"
+              >{{ party.percentage }} %</span
+            >
             <p v-if="!party.finished_quiz">Niso odgovorili na vprašanja</p>
-            <span v-if="!party.finished_quiz" class="party-percentage">0 %</span>
+            <span v-if="!party.finished_quiz" class="party-percentage"
+              >0 %</span
+            >
           </div>
           <div v-for="party in partiesNoAnswer" :key="party.id" class="party">
             <label :for="`chosen-party-${party.id}`">
-              <input type="checkbox" :id="`chosen-party-${party.id}`" :value="party.id" v-model="chosenParties" />
+              <input
+                :id="`chosen-party-${party.id}`"
+                v-model="chosenParties"
+                type="checkbox"
+                :value="party.id"
+              />
               <img :src="partyImageUrl(party.image)" class="party-image" />
               {{ party.name }}
             </label>
@@ -197,24 +251,34 @@ function shareOnMobile() {
       </div>
     </div>
 
-    <button v-if="!isMobile" class="share-button-desktop" :class="{ 'copied': urlCopied }"
-      @click="copyToClipboard"></button>
+    <button
+      v-if="!isMobile"
+      class="share-button-desktop"
+      :class="{ copied: urlCopied }"
+      @click="copyToClipboard"
+    ></button>
     <div class="share-button-mobile-wrapper">
-      <button v-if="isMobile" class="share-button-mobile" :class="{ 'copied': urlCopied }"
-        @click="shareOnMobile"></button>
+      <button
+        v-if="isMobile"
+        class="share-button-mobile"
+        :class="{ copied: urlCopied }"
+        @click="shareOnMobile"
+      ></button>
     </div>
 
-
-    <div class="body" v-if="results.length > 0">
+    <div v-if="results.length > 0" class="body">
       <div class="content two-columns">
         <img src="../assets/img/eu.jpg" alt="Zemljevid Evropske Unije" />
         <div>
           <h2>Te zanima, s katerimi strankami iz drugih držav EU se ujemaš?</h2>
           <p>
-            Primerjaj svoja stališča z odgovori političnih strank, ki kandidirajo v drugih državah
-            članicah Evropske unije, in ugotovi, kdo so tvoji zavezniki!
+            Primerjaj svoja stališča z odgovori političnih strank, ki
+            kandidirajo v drugih državah članicah Evropske unije, in ugotovi,
+            kdo so tvoji zavezniki!
           </p>
-          <button class="VotematchEU-button">Pokaži mi evropske rezultate!</button>
+          <button class="VotematchEU-button">
+            Pokaži mi evropske rezultate!
+          </button>
         </div>
         <form id="VotematchEU-settings">
           <input type="hidden" name="lang" value="SL" />
@@ -224,8 +288,13 @@ function shareOnMobile() {
           <input type="hidden" name="bestmatch" :value="winnerIDs[0]" />
           <input type="hidden" name="bestscore" :value="winnerIDs[1]" />
           <template v-for="qNo in questionsList">
-            <input v-if="qNo in answers && questions[qNo].votematch_id" :key="qNo" type="hidden"
-              :name="questions[qNo].votematch_id" :value="answerToValue(answers[qNo])" />
+            <input
+              v-if="qNo in answers && questions[qNo].votematch_id"
+              :key="qNo"
+              type="hidden"
+              :name="questions[qNo].votematch_id"
+              :value="answerToValue(answers[qNo])"
+            />
           </template>
         </form>
       </div>
@@ -356,7 +425,7 @@ function shareOnMobile() {
           cursor: pointer;
 
           &::after {
-            content: '';
+            content: "";
             display: inline-block;
             width: 21px;
             height: 21px;
@@ -364,7 +433,7 @@ function shareOnMobile() {
             background-position: center;
             background-size: contain;
             margin-left: 4px;
-            background-image: url('../assets/img/eyes-right.svg');
+            background-image: url("../assets/img/eyes-right.svg");
 
             @media (max-width: 575.98px) {
               width: 16px;
@@ -373,7 +442,7 @@ function shareOnMobile() {
           }
 
           &:hover::after {
-            background-image: url('../assets/img/eyes-down.svg');
+            background-image: url("../assets/img/eyes-down.svg");
           }
         }
       }
@@ -471,7 +540,7 @@ function shareOnMobile() {
             grid-column: 1;
           }
 
-          input[type='checkbox'] {
+          input[type="checkbox"] {
             flex-shrink: 0;
             appearance: none;
             background-color: transparent;
@@ -488,7 +557,7 @@ function shareOnMobile() {
               background-color: #ffd100;
 
               &::before {
-                content: '';
+                content: "";
                 position: absolute;
                 left: 0;
                 top: 0;
@@ -496,7 +565,8 @@ function shareOnMobile() {
                 height: 5px;
                 border: solid black;
                 border-width: 0 0 2px 2px;
-                transform: scale(1) rotate(-45deg) translateX(-12%) translateY(90%);
+                transform: scale(1) rotate(-45deg) translateX(-12%)
+                  translateY(90%);
               }
             }
           }
@@ -605,7 +675,7 @@ function shareOnMobile() {
     background-image: url("../assets/img/skopirana.svg");
     animation-play-state: paused;
   }
-  
+
   &:hover {
     // animation-play-state: paused;
   }

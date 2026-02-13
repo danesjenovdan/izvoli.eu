@@ -2,13 +2,13 @@
 defineProps({
   current: {
     type: Number,
-    required: true
+    required: true,
   },
   count: {
     type: Number,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 </script>
 
 <template>
@@ -74,7 +74,7 @@ defineProps({
 
       &:not(:last-child) {
         &::after {
-          content: '';
+          content: "";
           position: absolute;
           top: 6px;
           right: -11px;
@@ -88,7 +88,7 @@ defineProps({
         background-color: #ffe468;
 
         &::before {
-          content: '';
+          content: "";
           position: absolute;
           left: 0;
           top: 0;
@@ -104,7 +104,7 @@ defineProps({
         background-color: #7fb2ff;
 
         &::before {
-          content: '';
+          content: "";
           width: 8px;
           height: 8px;
           background-color: black;

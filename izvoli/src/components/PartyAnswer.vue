@@ -1,14 +1,14 @@
 <script setup>
-import { ref } from 'vue'
+import { ref } from "vue";
 
 defineProps({
   party: {
     type: Object,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
-const show = ref(false)
+const show = ref(false);
 </script>
 
 <template>
@@ -30,11 +30,11 @@ const show = ref(false)
         <img src="../assets/img/niso-odgovorili.svg" />
         Niso odgovorili
       </div>
-      <button @click="show = true" v-if="!show && party?.comment">
+      <button v-if="!show && party?.comment" @click="show = true">
         Obrazložitev
         <img src="../assets/img/puscica-trikotnik-modra.svg" />
       </button>
-      <button @click="show = false" v-if="show && party?.comment">
+      <button v-if="show && party?.comment" @click="show = false">
         Skrij
         <img src="../assets/img/krizec-moder.svg" class="hide" />
       </button>
@@ -108,7 +108,6 @@ const show = ref(false)
       }
     }
   }
-
 }
 
 .comment {

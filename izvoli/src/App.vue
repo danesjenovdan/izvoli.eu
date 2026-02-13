@@ -1,20 +1,20 @@
 <script setup>
-import { computed } from 'vue'
-import { RouterLink, RouterView, useRouter } from 'vue-router'
-import { useStore } from 'vuex'
+import { computed } from "vue";
+import { RouterLink, RouterView, useRouter } from "vue-router";
+import { useStore } from "vuex";
 
-import PageFooter from '@/components/PageFooter.vue'
+import PageFooter from "@/components/PageFooter.vue";
 
-const store = useStore()
-const router = useRouter()
+const store = useStore();
+const router = useRouter();
 
-const quizFinished = computed(() => store.getters.getQuizFinished)
-const currentRouteName = computed(() => router.currentRoute.value.name)
+const quizFinished = computed(() => store.getters.getQuizFinished);
+const currentRouteName = computed(() => router.currentRoute.value.name);
 
 const restartQuiz = () => {
-  store.dispatch('clearStore')
-  router.push({ name: 'introduction' })
-}
+  store.dispatch("clearStore");
+  router.push({ name: "introduction" });
+};
 </script>
 
 <template>
@@ -26,7 +26,7 @@ const restartQuiz = () => {
         alt="Izvoli EU, prva pomoč za evropske volitve"
       />
     </RouterLink>
-    <div class="buttons" v-if="quizFinished">
+    <div v-if="quizFinished" class="buttons">
       <RouterLink
         v-if="currentRouteName != 'results'"
         class="show-results"
@@ -42,7 +42,7 @@ const restartQuiz = () => {
 </template>
 
 <style lang="scss">
-@import '@/assets/fonts/selfhosted.css';
+@import "@/assets/fonts/selfhosted.css";
 
 *,
 *::before,
@@ -53,7 +53,7 @@ const restartQuiz = () => {
 
 body {
   background: #7fb2ff;
-  font-family: 'wf-manrope', sans-serif;
+  font-family: "wf-manrope", sans-serif;
 }
 
 button {
@@ -144,7 +144,7 @@ button {
       }
 
       &::after {
-        content: '';
+        content: "";
         display: inline-block;
         width: 21px;
         height: 21px;
@@ -165,17 +165,17 @@ button {
 
       &.show-results {
         &::after {
-          background-image: url('./assets/img/eyes-right.svg');
+          background-image: url("./assets/img/eyes-right.svg");
         }
 
         &:hover::after {
-          background-image: url('./assets/img/eyes-down.svg');
+          background-image: url("./assets/img/eyes-down.svg");
         }
       }
 
       &.restart-quiz {
         &::after {
-          background-image: url('./assets/img/reset.svg');
+          background-image: url("./assets/img/reset.svg");
         }
       }
     }

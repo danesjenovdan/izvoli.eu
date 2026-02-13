@@ -1,83 +1,92 @@
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
-import { useStore } from 'vuex'
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { useStore } from "vuex";
 
 const props = defineProps({
   result: {
     type: Object,
-    required: true
+    required: true,
   },
   parties: {
     type: Object,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
-const store = useStore()
+const store = useStore();
 
 const partyImageUrl = computed(() => {
-  const url = props.parties?.[props.result?.party_id]?.image
-  if (!url) return ''
-  const newUrl = new URL(url, store.getters.getApiUrl)
-  return newUrl.toString()
-})
-const partyName = computed(() => props.parties?.[props.result?.party_id]?.name || '???')
+  const url = props.parties?.[props.result?.party_id]?.image;
+  if (!url) return "";
+  const newUrl = new URL(url, store.getters.getApiUrl);
+  return newUrl.toString();
+});
+const partyName = computed(
+  () => props.parties?.[props.result?.party_id]?.name || "???",
+);
 
 function dashOffsetFromPercentage(percentage) {
-  const circumference = 2 * Math.PI * 39
-  const amount = ((percentage - 25) / 100) * circumference
-  return circumference - amount
+  const circumference = 2 * Math.PI * 39;
+  const amount = ((percentage - 25) / 100) * circumference;
+  return circumference - amount;
 }
 
 function dashArrayFromPercentage(percentage) {
-  const circumference = 2 * Math.PI * 39
-  const amount = (percentage / 100) * circumference
-  const remainder = circumference - amount
-  return `${amount} ${remainder}`
+  const circumference = 2 * Math.PI * 39;
+  const amount = (percentage / 100) * circumference;
+  const remainder = circumference - amount;
+  return `${amount} ${remainder}`;
 }
 
 function dashArrayFromRemainderPercentage(percentage) {
-  const circumference = 2 * Math.PI * 39
-  const amount = (percentage / 100) * circumference
-  const remainder = circumference - amount
-  return `${remainder} ${amount}`
+  const circumference = 2 * Math.PI * 39;
+  const amount = (percentage / 100) * circumference;
+  const remainder = circumference - amount;
+  return `${remainder} ${amount}`;
 }
 
-const animationDuration = 1500
-const currentPercentage = ref(0)
-const targetPercentage = ref(props.result.percentage)
+const animationDuration = 1500;
+const currentPercentage = ref(0);
+const targetPercentage = ref(props.result.percentage);
 
-const dashOffset0 = dashOffsetFromPercentage(0)
-const dashOffset = ref(dashOffsetFromPercentage(currentPercentage.value))
-const dashArray = ref(dashArrayFromPercentage(currentPercentage.value))
-const dashArrayRemainder = ref(dashArrayFromRemainderPercentage(currentPercentage.value))
+const dashOffset0 = dashOffsetFromPercentage(0);
+const dashOffset = ref(dashOffsetFromPercentage(currentPercentage.value));
+const dashArray = ref(dashArrayFromPercentage(currentPercentage.value));
+const dashArrayRemainder = ref(
+  dashArrayFromRemainderPercentage(currentPercentage.value),
+);
 
 const easeInOut = (t) => {
-  return t > 0.5 ? 4 * Math.pow(t - 1, 3) + 1 : 4 * Math.pow(t, 3)
-}
+  return t > 0.5 ? 4 * Math.pow(t - 1, 3) + 1 : 4 * Math.pow(t, 3);
+};
 
-let startTimestamp = null
+let startTimestamp = null;
 const stepFunction = (timestamp) => {
-  if (targetPercentage.value <= 0) return
-  if (!startTimestamp) startTimestamp = timestamp
-  const progress = timestamp - startTimestamp
-  const newPercentage = easeInOut(Math.min(progress / animationDuration, 1))
-  currentPercentage.value = Math.min(newPercentage * targetPercentage.value, targetPercentage.value)
-  dashOffset.value = dashOffsetFromPercentage(currentPercentage.value + 0.5)
-  dashArray.value = dashArrayFromPercentage(currentPercentage.value)
-  dashArrayRemainder.value = dashArrayFromRemainderPercentage(currentPercentage.value + 1)
+  if (targetPercentage.value <= 0) return;
+  if (!startTimestamp) startTimestamp = timestamp;
+  const progress = timestamp - startTimestamp;
+  const newPercentage = easeInOut(Math.min(progress / animationDuration, 1));
+  currentPercentage.value = Math.min(
+    newPercentage * targetPercentage.value,
+    targetPercentage.value,
+  );
+  dashOffset.value = dashOffsetFromPercentage(currentPercentage.value + 0.5);
+  dashArray.value = dashArrayFromPercentage(currentPercentage.value);
+  dashArrayRemainder.value = dashArrayFromRemainderPercentage(
+    currentPercentage.value + 1,
+  );
   if (progress < animationDuration) {
-    window.requestAnimationFrame(stepFunction)
+    window.requestAnimationFrame(stepFunction);
   }
-}
+};
 
 onMounted(() => {
-  window.requestAnimationFrame(stepFunction)
-})
+  window.requestAnimationFrame(stepFunction);
+});
 
 onBeforeUnmount(() => {
-  window.cancelAnimationFrame(stepFunction)
-})
+  window.cancelAnimationFrame(stepFunction);
+});
 </script>
 
 <template>
@@ -93,7 +102,13 @@ onBeforeUnmount(() => {
           viewBox="0 0 100 100"
         >
           <rect x="0" y="0" width="100" height="100" fill="#fff"></rect>
-          <image x="0" y="0" width="100" height="100" :href="partyImageUrl"></image>
+          <image
+            x="0"
+            y="0"
+            width="100"
+            height="100"
+            :href="partyImageUrl"
+          ></image>
         </pattern>
       </defs>
       <circle cx="43" cy="43" r="43" fill="#000" />
@@ -117,7 +132,12 @@ onBeforeUnmount(() => {
         :stroke-dashoffset="dashOffset"
         :stroke-dasharray="dashArrayRemainder"
       />
-      <circle cx="43" cy="43" r="35" :fill="`url(#donut-image-${result.party_id})`" />
+      <circle
+        cx="43"
+        cy="43"
+        r="35"
+        :fill="`url(#donut-image-${result.party_id})`"
+      />
     </svg>
     <p class="party-name">{{ partyName }}</p>
     <p class="party-percentage">{{ result.percentage }} %</p>

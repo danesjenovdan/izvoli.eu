@@ -1,49 +1,50 @@
 <script setup>
-import { ref, onMounted, computed, onBeforeUnmount } from 'vue'
-import { useRouter } from 'vue-router'
-import { useStore } from 'vuex'
+import { ref, onMounted, computed, onBeforeUnmount } from "vue";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
-const store = useStore()
-const router = useRouter()
+const store = useStore();
+const router = useRouter();
 
-const storeInitialized = computed(() => store.getters.getStoreInitialized)
-const quizFinished = computed(() => store.getters.getQuizFinished)
+const storeInitialized = computed(() => store.getters.getStoreInitialized);
+const quizFinished = computed(() => store.getters.getQuizFinished);
 
-const isMobile = ref(window.innerWidth <= 575.98)
+const isMobile = ref(window.innerWidth <= 575.98);
 
 function calcMobile() {
-  isMobile.value = window.innerWidth <= 575.98
+  isMobile.value = window.innerWidth <= 575.98;
 }
 
 onMounted(() => {
   if (!storeInitialized.value) {
-    store.dispatch('initializeStore').then((quiz_finished) => {
+    store.dispatch("initializeStore").then((quiz_finished) => {
       if (quiz_finished) {
-        router.push({ name: 'results' })
+        router.push({ name: "results" });
       }
-    })
+    });
   }
   if (quizFinished.value) {
-    router.push({ name: 'results' })
+    router.push({ name: "results" });
   }
-  window.addEventListener('resize', calcMobile)
-})
+  window.addEventListener("resize", calcMobile);
+});
 
 onBeforeUnmount(() => {
-  window.removeEventListener('resize', calcMobile)
-})
+  window.removeEventListener("resize", calcMobile);
+});
 </script>
 
 <template>
   <main class="container">
     <div class="body">
       <p class="introduction">
-        Želiš izvedeti, kako si prihodnost Evropske unije predstavljajo politične stranke, ki bodo
-        nastopile na prihajajočih volitvah v Evropski parlament?
+        Želiš izvedeti, kako si prihodnost Evropske unije predstavljajo
+        politične stranke, ki bodo nastopile na prihajajočih volitvah v Evropski
+        parlament?
       </p>
       <p>
-        Z aplikacijo Izvoli.eu lahko preprosto preveriš, s katerimi strankami se najbolj ujemajo
-        tvoja politična prepričanja.
+        Z aplikacijo Izvoli.eu lahko preprosto preveriš, s katerimi strankami se
+        najbolj ujemajo tvoja politična prepričanja.
       </p>
       <ul>
         <li>Odgovori na 30 trditev.</li>
@@ -57,7 +58,7 @@ onBeforeUnmount(() => {
               ? { name: 'instructions' }
               : {
                   name: 'question',
-                  params: { id: 1 }
+                  params: { id: 1 },
                 }
           "
           class="button-go"
@@ -102,7 +103,7 @@ onBeforeUnmount(() => {
   ul {
     padding: 0;
     padding-left: 1em;
-    list-style: '➜';
+    list-style: "➜";
 
     li {
       padding-left: 0.25em;

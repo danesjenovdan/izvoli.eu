@@ -1,26 +1,26 @@
 <script setup>
-import { onMounted, computed } from 'vue'
-import { useRouter } from 'vue-router'
-import { useStore } from 'vuex'
+import { onMounted, computed } from "vue";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
-const store = useStore()
-const router = useRouter()
+const store = useStore();
+const router = useRouter();
 
-const storeInitialized = computed(() => store.getters.getStoreInitialized)
-const quizFinished = computed(() => store.getters.getQuizFinished)
+const storeInitialized = computed(() => store.getters.getStoreInitialized);
+const quizFinished = computed(() => store.getters.getQuizFinished);
 
 onMounted(() => {
   if (!storeInitialized.value) {
-    store.dispatch('initializeStore').then((quiz_finished) => {
+    store.dispatch("initializeStore").then((quiz_finished) => {
       if (quiz_finished) {
-        router.push({ name: 'results' })
+        router.push({ name: "results" });
       }
-    })
+    });
   }
   if (quizFinished.value) {
-    router.push({ name: 'results' })
+    router.push({ name: "results" });
   }
-})
+});
 </script>
 
 <template>
@@ -68,7 +68,10 @@ onMounted(() => {
         </div>
       </div>
       <div class="button-wrapper">
-        <RouterLink :to="{ name: 'question', params: { id: 1 } }" class="button-go">
+        <RouterLink
+          :to="{ name: 'question', params: { id: 1 } }"
+          class="button-go"
+        >
           Začni <img src="../assets/img/puscica.svg" alt="" />
         </RouterLink>
       </div>

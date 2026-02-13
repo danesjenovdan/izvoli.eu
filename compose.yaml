@@ -7,14 +7,14 @@ services:
       context: ./izvoli
       dockerfile: Dockerfile.dev
     ports:
-      - 5173:5173
+      - 3000:3000
     environment:
       - VITE_API_URL_BASE=http://localhost:8000/api
     volumes:
-      - ./frontend/izvoli/public:/app/public:delegated,rw
-      - ./frontend/izvoli/src:/app/src:delegated,rw
-      - ./frontend/izvoli/.eslintrc.cjs:/app/.eslintrc.cjs:delegated,rw
-      - ./frontend/izvoli/.prettierrc.json:/app/.prettierrc.json:delegated,rw
-      - ./frontend/izvoli/index.html:/app/index.html:delegated,rw
-      - ./frontend/izvoli/jsconfig.json:/app/jsconfig.json:delegated,rw
-      - ./frontend/izvoli/vite.config.js:/app/vite.config.js:delegated,rw
+      - ./izvoli/public:/app/public:delegated,rw
+      - ./izvoli/src:/app/src:delegated,rw
+      - ./izvoli/.prettierrc.json:/app/.prettierrc.json:delegated,rw
+      - ./izvoli/eslint.config.js:/app/eslint.config.js:delegated,rw
+      - ./izvoli/index.html:/app/index.html:delegated,rw
+      - ./izvoli/jsconfig.json:/app/jsconfig.json:delegated,rw
+      - ./izvoli/vite.config.js:/app/vite.config.js:delegated,rw

@@ -1,49 +1,65 @@
 <script setup>
-import axios from 'axios'
-import { ref } from 'vue'
-import { RouterLink } from 'vue-router'
-import { atcb_action } from 'add-to-calendar-button'
+import axios from "axios";
+import { ref } from "vue";
+import { RouterLink } from "vue-router";
+import { atcb_action } from "add-to-calendar-button";
 
-const newsletterEmail = ref('')
-const newsletterConsent = ref(false)
-const newsletterLoading = ref(false)
+const newsletterEmail = ref("");
+const newsletterConsent = ref(false);
+const newsletterLoading = ref(false);
 
 const config = {
-  name: 'Volitve v Evropski parlament',
-  description: 'Volitve v Evropski parlament',
-  startDate: '2024-06-09',
-  endDate: '2024-06-09',
-  timeZone: 'Europe/Ljubljana',
-  uid: '29173902-a18f-4e82-bc15-6e7a15234805',
-  options: ['Apple', 'Google', 'iCal', 'Microsoft365', 'MicrosoftTeams', 'Outlook.com', 'Yahoo'],
+  name: "Volitve v Evropski parlament",
+  description: "Volitve v Evropski parlament",
+  startDate: "2024-06-09",
+  endDate: "2024-06-09",
+  timeZone: "Europe/Ljubljana",
+  uid: "29173902-a18f-4e82-bc15-6e7a15234805",
+  options: [
+    "Apple",
+    "Google",
+    "iCal",
+    "Microsoft365",
+    "MicrosoftTeams",
+    "Outlook.com",
+    "Yahoo",
+  ],
   customLabels: {
-    close: 'Zapri'
-  }
-}
+    close: "Zapri",
+  },
+};
 
 function onCalClick(event) {
-  atcb_action(config, event.currentTarget)
+  atcb_action(config, event.currentTarget);
 }
 
 async function onNewsletterSubmit() {
-  newsletterLoading.value = true
+  newsletterLoading.value = true;
   try {
-    const response = await axios.post('https://podpri.lb.djnd.si/api/subscribe/', {
-      email: newsletterEmail.value,
-      segment_id: 21
-    })
-    if (response.data.msg === 'mail sent') {
-      newsletterEmail.value = ''
-      newsletterConsent.value = false
-      newsletterLoading.value = false
-      alert('Hvala! Poslali smo ti sporočilo s povezavo, na kateri lahko potrdiš prijavo!')
+    const response = await axios.post(
+      "https://podpri.lb.djnd.si/api/subscribe/",
+      {
+        email: newsletterEmail.value,
+        segment_id: 21,
+      },
+    );
+    if (response.data.msg === "mail sent") {
+      newsletterEmail.value = "";
+      newsletterConsent.value = false;
+      newsletterLoading.value = false;
+      // eslint-disable-next-line no-alert
+      alert(
+        "Hvala! Poslali smo ti sporočilo s povezavo, na kateri lahko potrdiš prijavo!",
+      );
     } else {
-      newsletterLoading.value = false
-      alert('Prišlo je do napake :(')
+      newsletterLoading.value = false;
+      // eslint-disable-next-line no-alert
+      alert("Prišlo je do napake :(");
     }
-  } catch (error) {
-    newsletterLoading.value = false
-    alert('Prišlo je do napake :(')
+  } catch {
+    newsletterLoading.value = false;
+    // eslint-disable-next-line no-alert
+    alert("Prišlo je do napake :(");
   }
 }
 </script>
@@ -53,8 +69,9 @@ async function onNewsletterSubmit() {
     <div class="support">
       <p>
         Aplikacijo je pripravil
-        <a href="https://danesjenovdan.si/" target="_blank">Danes je nov dan</a> v sodelovanju z
-        mednarodno mrežo <a href="https://votematch.eu/" target="_blank">VoteMatch Europe</a>.
+        <a href="https://danesjenovdan.si/" target="_blank">Danes je nov dan</a>
+        v sodelovanju z mednarodno mrežo
+        <a href="https://votematch.eu/" target="_blank">VoteMatch Europe</a>.
       </p>
       <a href="https://danesjenovdan.si/doniraj" target="_blank" class="button"
         >Podpri naše delo!<img src="../assets/img/donacija.svg" alt=""
@@ -66,7 +83,8 @@ async function onNewsletterSubmit() {
           <img src="../assets/img/vodic.svg" alt="" class="i-vodic" />
           <p>
             <a href="https://vodici.djnd.si/volitve/evropske/" target="_blank"
-              >Obišči volilni vodič za vse, ki ne morejo glasovati na običajen način</a
+              >Obišči volilni vodič za vse, ki ne morejo glasovati na običajen
+              način</a
             >
           </p>
         </div>
@@ -84,18 +102,26 @@ async function onNewsletterSubmit() {
         <form @submit.prevent="onNewsletterSubmit">
           <label for="newsletter-email">Vpiši svoj e-naslov:</label>
           <input
-            type="email"
             id="newsletter-email"
+            v-model="newsletterEmail"
+            type="email"
             name="newsletter-email"
             placeholder="ime@email.si"
             required
-            v-model="newsletterEmail"
           />
           <label for="newsletter-agree" class="newsletter-agree">
-            <input type="checkbox" id="newsletter-agree" required v-model="newsletterConsent" />
-            Strinjam se, da mi Danes je nov dan občasno pošlje elektronsko sporočilo.
+            <input
+              id="newsletter-agree"
+              v-model="newsletterConsent"
+              type="checkbox"
+              required
+            />
+            Strinjam se, da mi Danes je nov dan občasno pošlje elektronsko
+            sporočilo.
           </label>
-          <button type="submit" :disabled="newsletterLoading">Prijavi me!</button>
+          <button type="submit" :disabled="newsletterLoading">
+            Prijavi me!
+          </button>
         </form>
       </div>
       <div>
@@ -108,7 +134,9 @@ async function onNewsletterSubmit() {
         </div>
         <div>
           <p>
-            <RouterLink :to="{ name: 'about' }">Spoznaj več o Izvoli.eu</RouterLink>
+            <RouterLink :to="{ name: 'about' }"
+              >Spoznaj več o Izvoli.eu</RouterLink
+            >
           </p>
         </div>
       </div>
@@ -116,10 +144,11 @@ async function onNewsletterSubmit() {
     <div class="financer">
       <img src="../assets/img/fundedby.png" class="" />
       <p>
-        Projekt je sofinanciran s strani Evropske unije v okviru programa nepovratnih sredstev
-        Evropskega parlamenta za komunikacije. Izražena stališča in mnenja ne odražajo nujno stališč
-        in mnenj Evropske unije ali Evropskega parlamenta. Zanje ne moreta biti odgovorna niti
-        Evropska unija niti Evropski parlament.
+        Projekt je sofinanciran s strani Evropske unije v okviru programa
+        nepovratnih sredstev Evropskega parlamenta za komunikacije. Izražena
+        stališča in mnenja ne odražajo nujno stališč in mnenj Evropske unije ali
+        Evropskega parlamenta. Zanje ne moreta biti odgovorna niti Evropska
+        unija niti Evropski parlament.
       </p>
     </div>
   </footer>
@@ -266,7 +295,7 @@ footer {
       &::after,
       &::before {
         background-color: #7fb2ff;
-        content: '';
+        content: "";
         display: block;
         height: 8px;
         position: absolute;
@@ -396,7 +425,7 @@ footer {
           background-color: #ffd100;
 
           &::before {
-            content: '';
+            content: "";
             position: absolute;
             left: 0;
             top: 0;
@@ -410,7 +439,7 @@ footer {
       }
     }
 
-    button[type='submit'] {
+    button[type="submit"] {
       display: block;
       width: 100%;
       padding: 6px 14px;

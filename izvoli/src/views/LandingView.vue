@@ -4,7 +4,8 @@
   <main class="container">
     <div class="body">
       <p>
-        9. maja ti pomagamo ugotoviti, s katero listo se tvoja politična stališča najbolj ujemajo.
+        9. maja ti pomagamo ugotoviti, s katero listo se tvoja politična
+        stališča najbolj ujemajo.
       </p>
       <p>Se vidimo kmalu!</p>
     </div>

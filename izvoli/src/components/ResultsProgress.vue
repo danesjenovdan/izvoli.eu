@@ -1,62 +1,65 @@
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref } from "vue";
+import { useRouter } from "vue-router";
 
-const router = useRouter()
+const router = useRouter();
 
 const props = defineProps({
   current: {
     type: Number,
-    required: true
+    required: true,
   },
   count: {
     type: Number,
-    required: true
+    required: true,
   },
   list: {
     type: Array,
-    required: true
+    required: true,
   },
   answers: {
     type: Object,
-    required: true
+    required: true,
   },
   tags: {
     type: Object,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
-const tooltip = ref()
+const tooltip = ref();
 
 function getAnswer(i) {
-  const index = i - 1
-  return props.answers[props.list[index]]
+  const index = i - 1;
+  return props.answers[props.list[index]];
 }
 
 function getTag(i) {
-  const index = i - 1
-  return props.tags[props.list[index]]
+  const index = i - 1;
+  return props.tags[props.list[index]];
 }
 
 function showTooltip(event) {
-  const circle = event.target
-  const tag = circle.dataset.tag
-  if (!tag) return
-  tooltip.value.style.display = 'inline-block'
-  tooltip.value.querySelector('span').textContent = tag
-  const circleCenter = circle.offsetLeft + circle.offsetWidth / 2
-  const tooltipWidth = tooltip.value.offsetWidth
-  tooltip.value.style.left = `${circleCenter - tooltipWidth / 2}px`
+  const circle = event.target;
+  const tag = circle.dataset.tag;
+  if (!tag) return;
+  tooltip.value.style.display = "inline-block";
+  tooltip.value.querySelector("span").textContent = tag;
+  const circleCenter = circle.offsetLeft + circle.offsetWidth / 2;
+  const tooltipWidth = tooltip.value.offsetWidth;
+  tooltip.value.style.left = `${circleCenter - tooltipWidth / 2}px`;
   if (tooltip.value.offsetLeft < 0) {
-    tooltip.value.style.left = 0
-  } else if (tooltip.value.offsetLeft + tooltipWidth > tooltip.value.parentElement.offsetWidth) {
-    tooltip.value.style.left = `${tooltip.value.parentElement.offsetWidth - tooltipWidth}px`
+    tooltip.value.style.left = 0;
+  } else if (
+    tooltip.value.offsetLeft + tooltipWidth >
+    tooltip.value.parentElement.offsetWidth
+  ) {
+    tooltip.value.style.left = `${tooltip.value.parentElement.offsetWidth - tooltipWidth}px`;
   }
 }
 
 function hideTooltip() {
-  tooltip.value.style.display = 'none'
+  tooltip.value.style.display = "none";
 }
 </script>
 
@@ -73,14 +76,14 @@ function hideTooltip() {
           active: i === current,
           agree: getAnswer(i) === 'YES',
           disagree: getAnswer(i) === 'NO',
-          neutral: !getAnswer(i) || getAnswer(i) === 'NEUTRAL'
+          neutral: !getAnswer(i) || getAnswer(i) === 'NEUTRAL',
         }"
         @click="router.push({ name: 'resultsByParty', params: { id: i } })"
         @mouseenter="showTooltip"
         @mouseleave="hideTooltip"
       ></div>
     </div>
-    <div class="progress-tooltip" ref="tooltip">
+    <div ref="tooltip" class="progress-tooltip">
       <span></span>
     </div>
   </div>
@@ -147,7 +150,7 @@ function hideTooltip() {
 
       &:not(:last-child) {
         &::after {
-          content: '';
+          content: "";
           position: absolute;
           top: 7px;
           right: -10px;
@@ -168,15 +171,15 @@ function hideTooltip() {
       }
 
       &.agree {
-        background-image: url('@/assets/img/strinjam.svg');
+        background-image: url("@/assets/img/strinjam.svg");
       }
 
       &.disagree {
-        background-image: url('@/assets/img/ne-strinjam.svg');
+        background-image: url("@/assets/img/ne-strinjam.svg");
       }
 
       &.neutral {
-        background-image: url('@/assets/img/neopredeljen.svg');
+        background-image: url("@/assets/img/neopredeljen.svg");
       }
     }
   }

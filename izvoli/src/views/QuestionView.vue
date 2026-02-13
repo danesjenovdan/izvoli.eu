@@ -1,55 +1,55 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useStore } from 'vuex'
-import PartyElement from '@/components/PartyElement.vue'
-import QuestionsProgress from '@/components/QuestionsProgress.vue'
-import SwipableCard from '@/components/SwipableCard.vue'
+import { ref, computed, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { useStore } from "vuex";
+import PartyElement from "@/components/PartyElement.vue";
+import QuestionsProgress from "@/components/QuestionsProgress.vue";
+import SwipableCard from "@/components/SwipableCard.vue";
 
-const route = useRoute()
-const router = useRouter()
-const store = useStore()
+const route = useRoute();
+const router = useRouter();
+const store = useStore();
 
-const moreInfo = ref(false)
-const moreInfoHover = ref(false)
+const moreInfo = ref(false);
+const moreInfoHover = ref(false);
 
-const questionIndex = computed(() => parseInt(route.params.id, 10) - 1)
-const questionNumber = computed(() => questionIndex.value + 1)
+const questionIndex = computed(() => parseInt(route.params.id, 10) - 1);
+const questionNumber = computed(() => questionIndex.value + 1);
 
-const storeInitialized = computed(() => store.getters.getStoreInitialized)
-const questionsList = computed(() => store.getters.getQuestionsList)
-const questionsNo = computed(() => questionsList.value.length)
-const questionId = computed(() => questionsList.value[questionIndex.value])
-const question = computed(() => store.state.questions[questionId.value])
+const storeInitialized = computed(() => store.getters.getStoreInitialized);
+const questionsList = computed(() => store.getters.getQuestionsList);
+const questionsNo = computed(() => questionsList.value.length);
+const questionId = computed(() => questionsList.value[questionIndex.value]);
+const question = computed(() => store.state.questions[questionId.value]);
 // const answers = computed(() => store.getters.getAnswers)
-const parties = computed(() => store.getters.getParties)
+const parties = computed(() => store.getters.getParties);
 const partiesAgree = computed(() => {
-  const parties = {}
+  const parties = {};
   for (const [key, value] of Object.entries(question.value.parties)) {
-    if (value.answer == 'YES') {
-      parties[key] = value
+    if (value.answer == "YES") {
+      parties[key] = value;
     }
   }
-  return parties
-})
+  return parties;
+});
 const partiesDisagree = computed(() => {
-  const parties = {}
+  const parties = {};
   for (const [key, value] of Object.entries(question.value.parties)) {
-    if (value.answer == 'NO') {
-      parties[key] = value
+    if (value.answer == "NO") {
+      parties[key] = value;
     }
   }
-  return parties
-})
+  return parties;
+});
 const partiesNeutral = computed(() => {
-  const parties = {}
+  const parties = {};
   for (const [key, value] of Object.entries(question.value.parties)) {
-    if (value.answer == 'NEUTRAL') {
-      parties[key] = value
+    if (value.answer == "NEUTRAL") {
+      parties[key] = value;
     }
   }
-  return parties
-})
+  return parties;
+});
 
 // const skipQuestion = (id, answer) => {
 //   // remove saved answer
@@ -64,37 +64,37 @@ const partiesNeutral = computed(() => {
 
 const saveAnswer = (id, answer) => {
   // save answer
-  store.commit('addAnswer', { id, answer })
+  store.commit("addAnswer", { id, answer });
   // navigate to next question
   if (questionIndex.value < questionsNo.value - 1) {
-    router.push(`/vprasanje/${questionNumber.value + 1}`)
+    router.push(`/vprasanje/${questionNumber.value + 1}`);
   } else {
     // last question -> calculate results and navigate to results
-    store.commit('calculateResults')
-    router.push('/rezultati')
+    store.commit("calculateResults");
+    router.push("/rezultati");
   }
-}
+};
 
 onMounted(() => {
   if (!storeInitialized.value) {
-    store.dispatch('initializeStore').then((quiz_finished) => {
+    store.dispatch("initializeStore").then((quiz_finished) => {
       if (quiz_finished) {
-        router.push('/rezultati')
+        router.push("/rezultati");
       }
-    })
+    });
   }
-})
+});
 
 router.beforeEach(() => {
   if (moreInfo.value) {
-    moreInfo.value = false
+    moreInfo.value = false;
   }
-})
+});
 </script>
 
 <template>
   <main class="container">
-    <div class="body" v-if="question">
+    <div v-if="question" class="body">
       <QuestionsProgress :current="questionNumber" :count="questionsNo" />
       <SwipableCard
         :key="questionNumber"
@@ -104,7 +104,9 @@ router.beforeEach(() => {
         <div class="content">
           <div v-if="question.tag" class="category">{{ question.tag }}</div>
           <h1 v-if="question.title" class="title">{{ question.title }}</h1>
-          <p v-if="question.description" class="description">{{ question.description }}</p>
+          <p v-if="question.description" class="description">
+            {{ question.description }}
+          </p>
           <div class="buttons">
             <RouterLink
               :to="
@@ -120,15 +122,15 @@ router.beforeEach(() => {
               </div>
               <span>Prejšnja trditev</span>
             </RouterLink>
-            <button @click="saveAnswer(questionId, 'NO')" class="disagree">
+            <button class="disagree" @click="saveAnswer(questionId, 'NO')">
               <img src="../assets/img/ne-strinjam.svg" />
               <span>Se ne strinjam</span>
             </button>
-            <button @click="saveAnswer(questionId, 'YES')" class="agree">
+            <button class="agree" @click="saveAnswer(questionId, 'YES')">
               <img src="../assets/img/strinjam.svg" />
               <span>Se strinjam</span>
             </button>
-            <button @click="saveAnswer(questionId, 'NEUTRAL')" class="skip">
+            <button class="skip" @click="saveAnswer(questionId, 'NEUTRAL')">
               <span>Brez stališča</span>
               <div>
                 <img src="../assets/img/puscica-trikotnik.svg" alt="" />
@@ -140,25 +142,28 @@ router.beforeEach(() => {
       </SwipableCard>
       <div class="more-info">
         <div class="show-hide">
-          <img src="../assets/img/eyes-down.svg" v-if="moreInfo || moreInfoHover" />
-          <img src="../assets/img/eyes-right.svg" v-else />
+          <img
+            v-if="moreInfo || moreInfoHover"
+            src="../assets/img/eyes-down.svg"
+          />
+          <img v-else src="../assets/img/eyes-right.svg" />
           <span>Kaj o tem mislijo stranke?</span>
           <button
+            v-if="!moreInfo"
+            class="show"
             @click="moreInfo = true"
             @mouseenter="moreInfoHover = true"
             @mouseleave="moreInfoHover = false"
-            v-if="!moreInfo"
-            class="show"
           >
             Prikaži
             <img src="../assets/img/puscica-trikotnik-modra.svg" />
           </button>
-          <button @click="moreInfo = false" v-if="moreInfo" class="hide">
+          <button v-if="moreInfo" class="hide" @click="moreInfo = false">
             Skrij
             <img src="../assets/img/puscica-trikotnik-modra.svg" />
           </button>
         </div>
-        <div class="parties" v-if="moreInfo">
+        <div v-if="moreInfo" class="parties">
           <div>
             <div class="head">Se strinja</div>
             <PartyElement

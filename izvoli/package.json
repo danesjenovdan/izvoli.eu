@@ -7,26 +7,30 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
-    "format": "prettier --write src/"
+    "lint": "eslint ."
   },
   "dependencies": {
-    "add-to-calendar-button": "^2.6.13",
-    "axios": "^1.6.8",
+    "add-to-calendar-button": "^2.13.5",
+    "axios": "^1.13.5",
     "interactjs": "^1.10.27",
-    "vue": "^3.4.21",
+    "vue": "^3.5.28",
     "vue-axios": "^3.5.2",
-    "vue-router": "^4.3.0",
+    "vue-router": "^5.0.2",
     "vuex": "^4.1.0"
   },
   "devDependencies": {
-    "@rushstack/eslint-patch": "^1.8.0",
-    "@vitejs/plugin-vue": "^5.0.4",
-    "@vue/eslint-config-prettier": "^9.0.0",
-    "eslint": "^8.57.0",
-    "eslint-plugin-vue": "^9.23.0",
-    "prettier": "^3.2.5",
-    "sass": "^1.75.0",
-    "vite": "^5.2.8"
+    "@eslint/js": "^9.39.2",
+    "@vitejs/plugin-vue": "^6.0.4",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-prettier": "^5.5.5",
+    "eslint-plugin-vue": "^10.7.0",
+    "globals": "^17.3.0",
+    "prettier": "^3.8.1",
+    "sass": "^1.97.3",
+    "vite": "^7.3.1",
+    "vite-plugin-eslint2": "^5.0.5"
   }
 }

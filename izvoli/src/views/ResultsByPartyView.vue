@@ -1,46 +1,48 @@
 <script setup>
-import { computed, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useStore } from 'vuex'
-import PartyAnswer from '@/components/PartyAnswer.vue'
-import ResultsProgress from '@/components/ResultsProgress.vue'
+import { computed, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { useStore } from "vuex";
+import PartyAnswer from "@/components/PartyAnswer.vue";
+import ResultsProgress from "@/components/ResultsProgress.vue";
 
-const route = useRoute()
-const router = useRouter()
-const store = useStore()
+const route = useRoute();
+const router = useRouter();
+const store = useStore();
 
-const questionIndex = computed(() => parseInt(route.params.id, 10) - 1)
-const questionNumber = computed(() => questionIndex.value + 1)
+const questionIndex = computed(() => parseInt(route.params.id, 10) - 1);
+const questionNumber = computed(() => questionIndex.value + 1);
 
-const storeInitialized = computed(() => store.getters.getStoreInitialized)
-const questionsList = computed(() => store.getters.getQuestionsList)
-const questionsNo = computed(() => questionsList.value.length)
-const questionId = computed(() => questionsList.value[questionIndex.value])
-const question = computed(() => store.state.questions[questionId.value])
+const storeInitialized = computed(() => store.getters.getStoreInitialized);
+const questionsList = computed(() => store.getters.getQuestionsList);
+const questionsNo = computed(() => questionsList.value.length);
+const questionId = computed(() => questionsList.value[questionIndex.value]);
+const question = computed(() => store.state.questions[questionId.value]);
 const questionTags = computed(() => {
-  const tagEntries = Object.entries(store.state.questions).map(([key, value]) => {
-    return [key, value.tag]
-  })
-  return Object.fromEntries(tagEntries)
-})
-const answers = computed(() => store.getters.getAnswers)
-const parties = computed(() => store.getters.getParties)
-const partiesToCompare = computed(() => store.getters.getPartiesToCompare)
+  const tagEntries = Object.entries(store.state.questions).map(
+    ([key, value]) => {
+      return [key, value.tag];
+    },
+  );
+  return Object.fromEntries(tagEntries);
+});
+const answers = computed(() => store.getters.getAnswers);
+const parties = computed(() => store.getters.getParties);
+const partiesToCompare = computed(() => store.getters.getPartiesToCompare);
 
 onMounted(() => {
   if (!storeInitialized.value) {
-    store.dispatch('initializeStore').then((quiz_finished) => {
+    store.dispatch("initializeStore").then((quiz_finished) => {
       if (quiz_finished) {
-        router.push('/rezultati')
+        router.push("/rezultati");
       }
-    })
+    });
   }
-})
+});
 </script>
 
 <template>
   <main class="container">
-    <div class="body" v-if="question">
+    <div v-if="question" class="body">
       <ResultsProgress
         :current="questionNumber"
         :count="questionsNo"
@@ -52,12 +54,18 @@ onMounted(() => {
         <span v-if="question.tag">{{ question.tag }}</span>
         <h1>{{ question.title }}</h1>
         <p>{{ question.description }}</p>
-        <RouterLink :to="{ name: 'resultsByParty', params: { id: questionNumber - 1 } }" class="back"
-          :class="{ hidden: questionIndex <= 0 }">
+        <RouterLink
+          :to="{ name: 'resultsByParty', params: { id: questionNumber - 1 } }"
+          class="back"
+          :class="{ hidden: questionIndex <= 0 }"
+        >
           <img src="../assets/img/arrow.svg" />
         </RouterLink>
-        <RouterLink :to="{ name: 'resultsByParty', params: { id: questionNumber + 1 } }" class="skip"
-          :class="{ hidden: questionIndex >= questionsNo - 1 }">
+        <RouterLink
+          :to="{ name: 'resultsByParty', params: { id: questionNumber + 1 } }"
+          class="skip"
+          :class="{ hidden: questionIndex >= questionsNo - 1 }"
+        >
           <img src="../assets/img/arrow.svg" />
         </RouterLink>
       </div>
@@ -118,7 +126,7 @@ main {
     display: inline-block;
     margin-bottom: 16px;
     padding: 4px 8px;
-    background-color: #FFFFFF;
+    background-color: #ffffff;
     border-radius: 9999px;
     font-size: 12px;
     line-height: 1;

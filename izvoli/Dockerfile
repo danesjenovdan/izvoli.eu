@@ -1,7 +1,7 @@
 # ---
 # build stage image
 # ---
-FROM node:20-alpine as build
+FROM node:24-alpine AS build
 
 # set current directory
 WORKDIR /app
@@ -13,15 +13,10 @@ RUN npm ci
 # copy source code
 COPY public public/
 COPY src src/
-COPY .eslintrc.cjs .prettierrc.json index.html jsconfig.json vite.config.js ./
+COPY .prettierrc.json eslint.config.js index.html jsconfig.json vite.config.js ./
 
-# set default NODE_ENV to production
-ARG NODE_ENV
-ENV NODE_ENV ${NODE_ENV:-production}
-
-# set default VITE_API_URL_BASE
-ARG VITE_API_URL_BASE
-ENV VITE_API_URL_BASE ${VITE_API_URL_BASE:-https://izvoli.eu/api}
+# set env for production build
+ENV NODE_ENV=production
 
 # run the build
 RUN npm run build
