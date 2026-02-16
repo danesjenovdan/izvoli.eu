@@ -1,12 +1,12 @@
 import { createRouter, createWebHistory } from "vue-router";
-// import LandingView from '../views/LandingView.vue'
-import IntroductionView from "../views/IntroductionView.vue";
+import AboutView from "@/views/AboutView.vue";
 import InstructionsView from "@/views/InstructionsView.vue";
-import QuestionView from "../views/QuestionView.vue";
-import ResultsView from "../views/ResultsView.vue";
-import ResultsByPartyView from "../views/ResultsByPartyView.vue";
-import PrivacyPolicyView from "../views/PrivacyPolicyView.vue";
-import AboutView from "../views/AboutView.vue";
+import IntroductionView from "@/views/IntroductionView.vue";
+import LandingView from "@/views/LandingView.vue";
+import PrivacyPolicyView from "@/views/PrivacyPolicyView.vue";
+import QuestionView from "@/views/QuestionView.vue";
+import ResultsByPartyView from "@/views/ResultsByPartyView.vue";
+import ResultsView from "@/views/ResultsView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,12 +20,12 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      name: "introduction",
-      component: IntroductionView,
+      name: "landing",
+      component: LandingView,
     },
     {
       path: "/intro",
-      name: "introduction-old",
+      name: "introduction",
       component: IntroductionView,
     },
     {

@@ -1,5 +1,4 @@
 <script setup>
-import axios from "axios";
 import { ref } from "vue";
 import { RouterLink } from "vue-router";
 import { atcb_action } from "add-to-calendar-button";
@@ -9,12 +8,12 @@ const newsletterConsent = ref(false);
 const newsletterLoading = ref(false);
 
 const config = {
-  name: "Volitve v Evropski parlament",
-  description: "Volitve v Evropski parlament",
-  startDate: "2024-06-09",
-  endDate: "2024-06-09",
+  name: "Državnozborske volitve 2026",
+  description: "Državnozborske volitve 2026",
+  startDate: "2026-03-22",
+  endDate: "2026-03-22",
   timeZone: "Europe/Ljubljana",
-  uid: "29173902-a18f-4e82-bc15-6e7a15234805",
+  uid: "f2a4df18-7f3a-4de3-9848-3a90dd1a97a8",
   options: [
     "Apple",
     "Google",
@@ -34,462 +33,390 @@ function onCalClick(event) {
 }
 
 async function onNewsletterSubmit() {
-  newsletterLoading.value = true;
-  try {
-    const response = await axios.post(
-      "https://podpri.lb.djnd.si/api/subscribe/",
-      {
-        email: newsletterEmail.value,
-        segment_id: 21,
-      },
-    );
-    if (response.data.msg === "mail sent") {
-      newsletterEmail.value = "";
-      newsletterConsent.value = false;
-      newsletterLoading.value = false;
-      // eslint-disable-next-line no-alert
-      alert(
-        "Hvala! Poslali smo ti sporočilo s povezavo, na kateri lahko potrdiš prijavo!",
-      );
-    } else {
-      newsletterLoading.value = false;
-      // eslint-disable-next-line no-alert
-      alert("Prišlo je do napake :(");
-    }
-  } catch {
-    newsletterLoading.value = false;
-    // eslint-disable-next-line no-alert
-    alert("Prišlo je do napake :(");
-  }
+  const email = newsletterEmail.value;
+
+  let campaign_slug = "glas-ljudstva";
+  let segment_id = 10;
+
+  let url = `https://moj.djnd.si/${campaign_slug}/prijava?segment_id=${segment_id}`;
+  url += `&email=${encodeURIComponent(email)}`;
+  window.open(`${url}`, `_blank`);
 }
 </script>
 
 <template>
   <footer>
-    <div class="support">
-      <p>
-        Aplikacijo je pripravil
-        <a href="https://danesjenovdan.si/" target="_blank">Danes je nov dan</a>
-        v sodelovanju z mednarodno mrežo
-        <a href="https://votematch.eu/" target="_blank">VoteMatch Europe</a>.
-      </p>
-      <a href="https://danesjenovdan.si/doniraj" target="_blank" class="button"
-        >Podpri naše delo!<img src="../assets/img/donacija.svg" alt=""
-      /></a>
-    </div>
     <div class="columns">
-      <div>
-        <div>
-          <img src="../assets/img/vodic.svg" alt="" class="i-vodic" />
-          <p>
-            <a href="https://vodici.djnd.si/volitve/evropske/" target="_blank"
-              >Obišči volilni vodič za vse, ki ne morejo glasovati na običajen
-              način</a
-            >
-          </p>
-        </div>
-        <div>
-          <img src="../assets/img/opomnik.svg" alt="" class="i-opomnik" />
-          <p>
-            <a href="javascript:;" @click.prevent="onCalClick"
-              >Dodaj opomnik za volitve v svoj koledar</a
-            >
-          </p>
+      <div class="col">
+        <div class="border">
+          <div class="content info">
+            <div class="with-image">
+              <img src="../assets/img/vodic.png" alt="" />
+              <p>
+                <a
+                  href="https://vodici.djnd.si/volitve/dz-2026/"
+                  target="_blank"
+                  >Obišči tudi volilni vodič za alternativno oddajo glasu!</a
+                >
+              </p>
+            </div>
+            <div class="with-image">
+              <img src="../assets/img/opomnik.png" alt="" />
+              <p>
+                <a href="javascript:;" @click.prevent="onCalClick"
+                  >Dodaj opomnik za volitve v svoj koledar!</a
+                >
+              </p>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="newsletter">
-        <p><strong>Prijavi se na naš Občasnik!</strong></p>
-        <form @submit.prevent="onNewsletterSubmit">
-          <label for="newsletter-email">Vpiši svoj e-naslov:</label>
-          <input
-            id="newsletter-email"
-            v-model="newsletterEmail"
-            type="email"
-            name="newsletter-email"
-            placeholder="ime@email.si"
-            required
-          />
-          <label for="newsletter-agree" class="newsletter-agree">
-            <input
-              id="newsletter-agree"
-              v-model="newsletterConsent"
-              type="checkbox"
-              required
-            />
-            Strinjam se, da mi Danes je nov dan občasno pošlje elektronsko
-            sporočilo.
-          </label>
-          <button type="submit" :disabled="newsletterLoading">
-            Prijavi me!
-          </button>
-        </form>
-      </div>
-      <div>
-        <div>
-          <p>
-            <RouterLink :to="{ name: 'privacyPolicy' }"
-              >Politika zasebnosti in varovanja osebnih podatkov</RouterLink
-            >
-          </p>
+      <div class="col">
+        <div class="border">
+          <div class="content newsletter">
+            <p><strong>Prijavi se na Glas ljudstva novice</strong></p>
+            <form @submit.prevent="onNewsletterSubmit">
+              <label for="newsletter-email">Vpiši svoj e-naslov</label>
+              <input
+                id="newsletter-email"
+                v-model="newsletterEmail"
+                type="email"
+                name="newsletter-email"
+                placeholder="ime@email.si"
+                required
+              />
+              <label for="newsletter-agree" class="newsletter-agree">
+                <input
+                  id="newsletter-agree"
+                  v-model="newsletterConsent"
+                  type="checkbox"
+                  required
+                />
+                Strinjam se, da mi Danes je nov dan občasno pošlje elektronsko
+                sporočilo.
+              </label>
+              <button type="submit" :disabled="newsletterLoading">
+                Prijavi me
+              </button>
+            </form>
+          </div>
         </div>
-        <div>
-          <p>
-            <RouterLink :to="{ name: 'about' }"
-              >Spoznaj več o Izvoli.eu</RouterLink
-            >
-          </p>
+      </div>
+      <div class="col">
+        <div class="border">
+          <div class="content about">
+            <p>
+              <RouterLink :to="{ name: 'privacyPolicy' }"
+                >Politika zasebnosti in varovanja osebnih podatkov</RouterLink
+              >
+            </p>
+            <p>
+              <RouterLink :to="{ name: 'about' }">Metodologija</RouterLink>
+            </p>
+          </div>
         </div>
       </div>
     </div>
-    <div class="financer">
-      <img src="../assets/img/fundedby.png" class="" />
-      <p>
-        Projekt je sofinanciran s strani Evropske unije v okviru programa
-        nepovratnih sredstev Evropskega parlamenta za komunikacije. Izražena
-        stališča in mnenja ne odražajo nujno stališč in mnenj Evropske unije ali
-        Evropskega parlamenta. Zanje ne moreta biti odgovorna niti Evropska
-        unija niti Evropski parlament.
-      </p>
+    <div class="columns financer">
+      <div class="col djnd">
+        <div>
+          Spletno mesto z 🖤 postavil
+          <a
+            href="https://danesjenovdan.si"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Danes je nov dan</a
+          >.
+        </div>
+      </div>
+      <div class="col eu">
+        <img src="../assets/img/fundedby.png" class="" />
+        <p>
+          Financirano s strani Evropske unije. Izražena stališča in mnenja ne
+          odražajo nujno stališč in mnenj Evropske unije ali Evropskega
+          parlamenta. Zanje ne moreta biti odgovorna niti Evropska unija niti
+          Evropski parlament.
+        </p>
+      </div>
     </div>
   </footer>
 </template>
 
 <style scoped lang="scss">
 footer {
+  width: 100%;
   max-width: 900px;
-  margin-top: 70px;
+  margin-top: 4.5rem;
 
   @media (max-width: 575.98px) {
-    padding-inline: 21px;
-    margin-top: 47px;
-  }
-}
-
-.support {
-  background-color: #99c2ff;
-  border-radius: 20px;
-  padding: 28px 26px 28px 36px;
-  margin-bottom: 26px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  @media (max-width: 575.98px) {
-    flex-direction: column;
-    padding: 27px 24px;
-    gap: 21px;
+    margin-top: 3rem;
   }
 
-  p {
-    font-size: 15px;
-    line-height: 20px;
-    margin-right: 20px;
+  .columns {
+    display: flex;
 
-    @media (max-width: 575.98px) {
-      font-size: 12px;
+    @media (max-width: 923.98px) {
+      flex-direction: column;
     }
 
-    a {
-      font-weight: 700;
-      color: black;
+    .col {
+      flex: 1;
+      display: flex;
 
-      &:hover {
-        text-decoration-color: #ffd100;
-        text-decoration-thickness: 2px;
+      .border {
+        display: flex;
+        margin-inline: 5px;
+        border: 2px solid #000;
+        border-width: 2px 0 2px 0;
+
+        @media (max-width: 923.98px) {
+          width: 100%;
+          margin-inline: 0;
+        }
+
+        .content {
+          margin-inline: -5px;
+          margin-block: 5px;
+          padding: 1rem;
+          border: 1px solid #000;
+          border-width: 0 1px 0 1px;
+
+          @media (max-width: 923.98px) {
+            width: 100%;
+            margin-inline: 0;
+            border-left-width: 0;
+            border-right-width: 0;
+          }
+
+          p:not(:last-child) {
+            font-size: 1rem;
+            line-height: 1.4;
+            margin-bottom: 1em;
+          }
+        }
       }
-    }
-  }
 
-  a.button {
-    display: block;
-    padding: 4px 84px 4px 12px;
-    border: 2px solid black;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: 800;
-    color: black;
-    text-decoration: none;
-    position: relative;
-    flex-shrink: 0;
+      &:first-child {
+        .border {
+          margin-left: 0;
 
-    img {
-      position: absolute;
-      width: 94px;
-      top: -10px;
-      right: -8px;
-    }
+          .content {
+            margin-left: 0;
+            border-left-width: 0;
+          }
+        }
+      }
 
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.33);
+      &:last-child {
+        .border {
+          margin-right: 0;
 
-      img {
-        animation: shake 1s ease-in-out;
+          .content {
+            margin-right: 0;
+            border-right-width: 0;
+          }
+        }
+      }
 
-        @keyframes shake {
-          0%,
-          100% {
-            transform: rotate(0deg);
-            transform-origin: 50% 50%;
+      &:not(:last-child) {
+        .border {
+          @media (max-width: 923.98px) {
+            border-bottom-width: 0;
+          }
+        }
+      }
+
+      .content.info {
+        .with-image {
+          display: flex;
+          align-items: center;
+          margin-left: -0.75rem;
+
+          img {
+            flex-shrink: 0;
+            display: block;
+            width: 4rem;
+            height: 4rem;
+            object-fit: contain;
+            object-position: left;
           }
 
-          10% {
-            transform: rotate(4deg);
+          a {
+            font-weight: 700;
+            color: inherit;
+
+            &:hover {
+              text-decoration-color: #006fc3;
+              text-decoration-thickness: 2px;
+            }
+          }
+        }
+      }
+
+      .content.about {
+        a {
+          color: inherit;
+
+          &:hover {
+            text-decoration-color: #006fc3;
+            text-decoration-thickness: 2px;
+          }
+        }
+      }
+
+      .content.newsletter {
+        @media (max-width: 923.98px) {
+          max-width: 500px;
+        }
+
+        label {
+          display: block;
+          margin-bottom: 0.5em;
+          font-size: 0.75rem;
+        }
+
+        input#newsletter-email {
+          display: block;
+          width: 100%;
+          background-color: transparent;
+          border: 1px solid black;
+          font: inherit;
+          font-size: 0.75rem;
+          line-height: 2.25rem;
+          height: 2.25rem;
+          padding-inline: 0.875rem;
+
+          &::placeholder {
+            color: #000;
           }
 
-          20%,
-          40%,
-          60% {
-            transform: rotate(-6deg);
+          &:focus-visible {
+            background-color: #fff;
+            outline: 2px solid #006fc3;
+            outline-offset: 2px;
           }
+        }
 
-          30%,
-          50%,
-          70% {
-            transform: rotate(6deg);
+        .newsletter-agree {
+          display: flex;
+          align-items: flex-start;
+          gap: 0.25rem;
+          margin-top: 0.5em;
+
+          input#newsletter-agree {
+            flex-shrink: 0;
+            position: relative;
+            appearance: none;
+            background-color: transparent;
+            width: 1rem;
+            height: 1rem;
+            border: 1px solid black;
+            cursor: pointer;
+
+            &:checked {
+              background-color: #65a3ff;
+
+              &::before {
+                content: "";
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 9px;
+                height: 5px;
+                border: solid #000;
+                border-width: 0 0 2px 2px;
+                transform: scale(1) rotate(-45deg) translateX(-12%)
+                  translateY(90%);
+              }
+            }
+
+            &:focus-visible {
+              outline: 2px solid #006fc3;
+              outline-offset: 2px;
+
+              &:not(:checked) {
+                background-color: #fff;
+              }
+            }
           }
+        }
 
-          80% {
-            transform: rotate(-4deg);
-          }
+        button[type="submit"] {
+          display: block;
+          width: 100%;
+          margin-top: 1em;
+          padding-block: 0.40625rem;
+          padding-inline: 0.875rem;
+          background-color: #65a3ff;
+          border: 2px solid #000;
+          font: inherit;
+          font-size: 1rem;
+          font-weight: 700;
+          text-align: left;
+          cursor: pointer;
 
-          90% {
-            transform: rotate(4deg);
+          &:not(:disabled) {
+            &:hover {
+              background-color: #006fc3;
+              color: #fff;
+            }
+
+            &:focus-visible {
+              outline: 2px solid #006fc3;
+              outline-offset: 2px;
+            }
           }
         }
       }
     }
   }
-}
 
-.columns {
-  display: flex;
+  .financer {
+    .col {
+      align-items: center;
+      padding-block: 1.5rem 1rem;
 
-  @media (max-width: 575.98px) {
-    flex-direction: column;
-  }
-
-  & > div {
-    flex-grow: 1;
-    flex-basis: 0;
-    border-top: 2px solid black;
-    border-bottom: 2px solid black;
-    padding: 18px 21px;
-    position: relative;
-
-    &:not(:first-child) {
-      border-left: 1px solid black;
-
-      @media (max-width: 575.98px) {
-        border-left: none;
-      }
-    }
-
-    &:not(:last-child) {
-      border-right: 1px solid black;
-
-      @media (max-width: 575.98px) {
-        border-right: none;
-        border-bottom: none;
+      @media (max-width: 923.98px) {
+        justify-content: center;
       }
 
-      &::after,
-      &::before {
-        background-color: #7fb2ff;
-        content: "";
-        display: block;
-        height: 8px;
-        position: absolute;
-        width: 12px;
-        z-index: 1;
-        right: -7px;
+      &.djnd {
+        flex: 1;
+        font-size: 0.875rem;
+
+        a {
+          color: inherit;
+
+          &:hover {
+            text-decoration-color: #006fc3;
+            text-decoration-thickness: 2px;
+          }
+        }
+      }
+
+      &.eu {
+        flex: 2;
+        gap: 0.75rem;
+        justify-content: flex-end;
+
+        @media (max-width: 923.98px) {
+          justify-content: center;
+        }
 
         @media (max-width: 575.98px) {
-          display: none;
+          flex-direction: column;
+          text-align: center;
+        }
+
+        p {
+          max-width: 380px;
+          font-size: 0.6875rem;
+        }
+
+        img {
+          height: 2.625rem;
         }
       }
-
-      &::before {
-        top: -2px;
-      }
-
-      &::after {
-        bottom: -2px;
-      }
-    }
-
-    p {
-      font-size: 15px;
-      line-height: 20px;
-
-      @media (max-width: 575.98px) {
-        font-size: 12px;
-        line-height: 15px;
-      }
-
-      a {
-        font-weight: 700;
-        color: black;
-
-        &:hover {
-          text-decoration-color: #ffd100;
-          text-decoration-thickness: 2px;
-        }
-      }
-    }
-
-    &:first-child {
-      padding-left: 12px;
-
-      @media (max-width: 575.98px) {
-        padding-left: 21px;
-      }
-
-      & > div {
-        display: flex;
-        align-items: center;
-        margin-bottom: 24px;
-
-        &:last-child {
-          margin-bottom: 0;
-        }
-      }
-
-      .i-vodic {
-        width: 17px;
-        margin-right: 10px;
-      }
-
-      .i-opomnik {
-        width: 14px;
-        margin-right: 13px;
-      }
-    }
-
-    &:last-child {
-      padding-right: 12px;
-
-      @media (max-width: 575.98px) {
-        padding-right: 21px;
-      }
-
-      & > div {
-        margin-bottom: 24px;
-
-        &:last-child {
-          margin-bottom: 0;
-        }
-      }
-    }
-  }
-
-  .newsletter {
-    label {
-      display: block;
-      margin-block: 10px 5px;
-      font-size: 12px;
-      line-height: 16px;
-    }
-
-    input#newsletter-email {
-      display: block;
-      width: 100%;
-      font: inherit;
-      background-color: #7fb2ff;
-      border: 1px solid black;
-      border-radius: 10px;
-      font-size: 12px;
-      line-height: 36px;
-      height: 36px;
-      padding: 0 14px;
-    }
-
-    .newsletter-agree {
-      display: flex;
-      align-items: flex-start;
-      gap: 4px;
-
-      input#newsletter-agree {
-        flex-shrink: 0;
-        appearance: none;
-        background-color: transparent;
-        margin: 2px 0 0 0;
-        width: 16px;
-        height: 16px;
-        border: 1px solid black;
-        border-radius: 4px;
-        transform: translateY(-0.075em);
-        cursor: pointer;
-        position: relative;
-
-        &:checked {
-          background-color: #ffd100;
-
-          &::before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 9px;
-            height: 5px;
-            border: solid black;
-            border-width: 0 0 2px 2px;
-            transform: scale(1) rotate(-45deg) translateX(-12%) translateY(90%);
-          }
-        }
-      }
-    }
-
-    button[type="submit"] {
-      display: block;
-      width: 100%;
-      padding: 6px 14px;
-      margin-top: 14px;
-      background-color: #65a3ff;
-      border: 2px solid black;
-      border-radius: 10px;
-      font: inherit;
-      font-size: 15px;
-      line-height: 20px;
-      font-weight: 800;
-      text-align: left;
-      cursor: pointer;
-
-      &:not(:disabled):hover {
-        background-color: rgba(255, 255, 255, 0.33);
-      }
-
-      &:disabled {
-        background-color: rgba(255, 255, 255, 0.22);
-        cursor: progress;
-      }
-    }
-  }
-}
-
-.financer {
-  display: flex;
-  align-items: center;
-  gap: 38px;
-  padding: 16px 52px;
-
-  @media (max-width: 575.98px) {
-    flex-direction: column;
-    padding: 18px 21px;
-    align-items: flex-start;
-    gap: 18px;
-  }
-
-  img {
-    height: 42px;
-  }
-
-  p {
-    font-size: 12px;
-    line-height: 16px;
-
-    @media (max-width: 575.98px) {
-      font-size: 10px;
-      line-height: 14px;
     }
   }
 }

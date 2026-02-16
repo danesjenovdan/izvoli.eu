@@ -19,7 +19,7 @@ const restartQuiz = () => {
 
 <template>
   <header class="header-wrapper">
-    <RouterLink :to="{ name: 'introduction' }">
+    <RouterLink :to="{ name: 'landing' }">
       <img
         src="./assets/img/header-logo.svg"
         class="header-logo"
@@ -38,7 +38,7 @@ const restartQuiz = () => {
     </div>
   </header>
   <RouterView />
-  <PageFooter v-if="currentRouteName != 'landing'"></PageFooter>
+  <PageFooter />
 </template>
 
 <style lang="scss">
@@ -52,6 +52,8 @@ const restartQuiz = () => {
 }
 
 body {
+  background-image: linear-gradient(107.56deg, #c2def4 31.25%, #e9ff63 100%);
+  background-attachment: fixed;
   font-family: "wf-freesans", sans-serif;
 }
 
@@ -63,42 +65,41 @@ button {
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 100vh;
+  padding-inline: 0.75rem;
+
+  & > main {
+    margin-bottom: auto;
+  }
 }
 
 .container {
   width: 100%;
   max-width: 900px;
-
-  @media (max-width: 575.98px) {
-    padding-inline: 21px;
-  }
 }
 
 .body {
-  background-color: #fffbe9;
-  border: 2px solid black;
-  border-radius: 20px;
+  background-color: #fff;
+  border: 2px solid #000;
   overflow: hidden;
 }
 
 .header-wrapper {
-  padding-top: 40px;
-  padding-bottom: 42px;
   width: 100%;
   max-width: 900px;
+  padding-block: 3.375rem;
   text-align: center;
   position: relative;
 
   @media (max-width: 575.98px) {
-    padding-top: 26px;
-    padding-bottom: 24px;
+    padding-block: 2rem;
   }
 
   .header-logo {
-    width: 292px;
+    width: 443px;
 
     @media (max-width: 575.98px) {
-      width: 194px;
+      width: 221px;
     }
   }
 
