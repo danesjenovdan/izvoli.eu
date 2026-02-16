@@ -110,12 +110,6 @@ onBeforeUnmount(() => {
   }
 });
 
-function partyImageUrl(url) {
-  if (!url) return "";
-  const newUrl = new URL(url, store.getters.getApiUrl);
-  return newUrl.toString();
-}
-
 function answerToValue(answer) {
   if (answer == "YES") return "1";
   if (answer == "NEUTRAL") return "0";
@@ -201,10 +195,7 @@ function shareOnMobile() {
                 type="checkbox"
                 :value="party.party_id"
               />
-              <img
-                :src="partyImageUrl(parties[party.party_id].image)"
-                class="party-image"
-              />
+              <img :src="null" class="party-image" />
               {{ parties[party.party_id].name }}
             </label>
 

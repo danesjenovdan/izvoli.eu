@@ -1,6 +1,5 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
-import { useStore } from "vuex";
 
 const props = defineProps({
   result: {
@@ -13,14 +12,6 @@ const props = defineProps({
   },
 });
 
-const store = useStore();
-
-const partyImageUrl = computed(() => {
-  const url = props.parties?.[props.result?.party_id]?.image;
-  if (!url) return "";
-  const newUrl = new URL(url, store.getters.getApiUrl);
-  return newUrl.toString();
-});
 const partyName = computed(
   () => props.parties?.[props.result?.party_id]?.name || "???",
 );
@@ -102,13 +93,7 @@ onBeforeUnmount(() => {
           viewBox="0 0 100 100"
         >
           <rect x="0" y="0" width="100" height="100" fill="#fff"></rect>
-          <image
-            x="0"
-            y="0"
-            width="100"
-            height="100"
-            :href="partyImageUrl"
-          ></image>
+          <image x="0" y="0" width="100" height="100" :href="null"></image>
         </pattern>
       </defs>
       <circle cx="43" cy="43" r="43" fill="#000" />
