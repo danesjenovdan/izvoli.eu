@@ -9,10 +9,11 @@ spec:
   tls:
     - hosts:
         - izvoli-si.lb.djnd.si
+        - izvoli.si
       secretName: izvoli-si-tls
   rules:
     - host: izvoli-si.lb.djnd.si
-      http:
+      http: &http_paths
         paths:
           - path: /
             pathType: Prefix
@@ -21,3 +22,5 @@ spec:
                 name: izvoli-si
                 port:
                   number: 80
+    - host: izvoli.si
+      http: *http_paths

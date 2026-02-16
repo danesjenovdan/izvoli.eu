@@ -166,11 +166,11 @@ footer {
       .border {
         display: flex;
         margin-inline: 5px;
+        width: 100%;
         border: 2px solid #000;
         border-width: 2px 0 2px 0;
 
         @media (max-width: 923.98px) {
-          width: 100%;
           margin-inline: 0;
         }
 
@@ -255,6 +255,7 @@ footer {
 
       .content.about {
         a {
+          display: none; // TODO: enable when page is live
           color: inherit;
 
           &:hover {
