@@ -52,8 +52,7 @@ const restartQuiz = () => {
 }
 
 body {
-  background: #7fb2ff;
-  font-family: "wf-manrope", sans-serif;
+  font-family: "wf-freesans", sans-serif;
 }
 
 button {
