@@ -11,10 +11,8 @@
   },
   "dependencies": {
     "add-to-calendar-button": "^2.13.5",
-    "axios": "^1.13.5",
     "interactjs": "^1.10.27",
     "vue": "^3.5.28",
-    "vue-axios": "^3.5.2",
     "vue-router": "^5.0.2",
     "vuex": "^4.1.0"
   },

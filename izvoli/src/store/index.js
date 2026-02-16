@@ -1,10 +1,8 @@
 import { createStore } from "vuex";
-import axios from "axios";
 
 const store = createStore({
   state() {
     return {
-      apiUrl: import.meta.env.VITE_API_URL_BASE,
       storeInitialized: false,
       parties: {},
       questions: {},
@@ -16,9 +14,6 @@ const store = createStore({
     };
   },
   getters: {
-    getApiUrl(state) {
-      return state.apiUrl;
-    },
     getStoreInitialized(state) {
       return state.storeInitialized;
     },
@@ -210,12 +205,14 @@ const store = createStore({
       commit("initializeStore");
       return state.quizFinished;
     },
-    async getData({ commit, state }) {
-      const response = await axios.get(`${state.apiUrl}/volitvomat`);
+    async getData({ commit }) {
+      const apiUrl = `${import.meta.env.VITE_API_URL_BASE}/drzavnozborske-volitve-2026/`;
+      const response = await fetch(apiUrl);
+      const data = await response.json();
       commit("setQuestions", {
-        questions: response.data["statements"],
+        questions: data["questions"],
       });
-      commit("setParties", response.data["parties"]);
+      commit("setParties", data["parties"]);
     },
     clearStore({ commit, dispatch }) {
       // localStorage.clear();
