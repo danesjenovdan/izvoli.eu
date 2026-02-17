@@ -25,7 +25,7 @@ const backgroundColorString = computed(() => {
   const { x } = interactPosition.value;
   if (x > interactXThreshold) return "#c8e6c9";
   else if (x < -interactXThreshold) return "#ffcdd2";
-  else return "#fffbe9";
+  else return "#fff";
 });
 
 function playCard(interaction) {

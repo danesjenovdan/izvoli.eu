@@ -1,129 +1,67 @@
-<script setup>
-import { ref, onMounted, computed, onBeforeUnmount } from "vue";
-import { useRouter } from "vue-router";
-import { useStore } from "vuex";
-
-const store = useStore();
-const router = useRouter();
-
-const storeInitialized = computed(() => store.getters.getStoreInitialized);
-const quizFinished = computed(() => store.getters.getQuizFinished);
-
-const isMobile = ref(window.innerWidth <= 575.98);
-
-function calcMobile() {
-  isMobile.value = window.innerWidth <= 575.98;
-}
-
-onMounted(() => {
-  if (!storeInitialized.value) {
-    store.dispatch("initializeStore").then((quiz_finished) => {
-      if (quiz_finished) {
-        router.push({ name: "results" });
-      }
-    });
-  }
-  if (quizFinished.value) {
-    router.push({ name: "results" });
-  }
-  window.addEventListener("resize", calcMobile);
-});
-
-onBeforeUnmount(() => {
-  window.removeEventListener("resize", calcMobile);
-});
-</script>
+<script setup></script>
 
 <template>
   <main class="container">
     <div class="body">
-      <p class="introduction">
-        Želiš izvedeti, kako si prihodnost Evropske unije predstavljajo
-        politične stranke, ki bodo nastopile na prihajajočih volitvah v Evropski
-        parlament?
+      <p class="lead">
+        Politične stranke, med katerimi bomo izbirali na volitvah 22. 3. 2026,
+        imajo različne programe in prioritete. Ker želimo volivkam in volivcem
+        olajšati odločitev, smo razvili Izvoli.si, s pomočjo katerega lahko vsak
+        preveri, s katerimi strankami se po stališčih in prepričanjih najbolj
+        ujema.
       </p>
       <p>
-        Z aplikacijo Izvoli.eu lahko preprosto preveriš, s katerimi strankami se
-        najbolj ujemajo tvoja politična prepričanja.
+        V Izvoli.si je zbranih 40 zahtev, na katere lahko podaš svoj odgovor. Na
+        podlagi rezultatov izveš, katera izmed sodelujočih strank najbolj
+        ustreza tvojim stališčem, lahko pa tudi podrobneje raziščeš, na katerih
+        točkah so razhajanja največja in zakaj.
       </p>
-      <ul>
-        <li>Odgovori na 30 trditev.</li>
-        <li>Primerjaj svoje odgovore s stališči strank.</li>
-        <li>Na volitvah 9. junija sprejmi bolj premišljeno odločitev.</li>
-      </ul>
+      <p>
+        In za konec: ne pozabi deliti povezave do Izvoli.si s prijateljicami in
+        prijatelji, saj jim lahko tako olajšaš odločitev.
+      </p>
       <div class="button-wrapper">
-        <RouterLink
-          :to="
-            isMobile
-              ? { name: 'instructions' }
-              : {
-                  name: 'question',
-                  params: { id: 1 },
-                }
-          "
-          class="button-go"
-        >
-          Začni <img src="../assets/img/puscica.svg" alt="" />
+        <RouterLink :to="{ name: 'instructions' }" class="button-go">
+          Vstopi <img src="../assets/img/puscica.svg" alt="" />
         </RouterLink>
       </div>
-      <p class="notice">Reševanje kviza je anonimno.</p>
     </div>
   </main>
 </template>
 
 <style lang="scss" scoped>
 .body {
-  padding-inline: 100px;
-  padding-top: 72px;
-  padding-bottom: 56px;
+  padding-inline: 6rem;
+  padding-block: 4.5rem;
 
   @media (max-width: 575.98px) {
-    padding-inline: 21px;
-    padding-top: 24px;
-    padding-bottom: 33px;
+    padding-inline: 1.5rem;
+    padding-block: 2rem;
   }
 
-  p,
-  ul {
-    margin-bottom: 24px;
-    font-size: 15px;
-    line-height: 24px;
+  p {
+    line-height: 1.5;
 
-    &.introduction {
-      font-size: 24px;
-      line-height: 34px;
+    &.lead {
+      font-size: 1.5rem;
 
       @media (max-width: 575.98px) {
-        font-size: 21px;
-        line-height: 27px;
+        font-size: 1.25rem;
       }
     }
-  }
 
-  ul {
-    padding: 0;
-    padding-left: 1em;
-    list-style: "➜";
-
-    li {
-      padding-left: 0.25em;
+    &:not(:last-child) {
+      margin-bottom: 1em;
     }
   }
 
   .button-wrapper {
-    margin-top: 56px;
+    margin-top: 3.5rem;
     text-align: center;
 
     @media (max-width: 575.98px) {
-      margin-top: 33px;
+      margin-top: 1.5rem;
     }
-  }
-
-  .notice {
-    text-align: center;
-    margin-top: 5px;
-    font-size: 12px;
-    color: #545454;
   }
 }
 </style>

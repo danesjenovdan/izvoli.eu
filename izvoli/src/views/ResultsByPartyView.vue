@@ -1,7 +1,6 @@
 <script setup>
 import { computed, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useStore } from "vuex";
 import PartyAnswer from "@/components/PartyAnswer.vue";
 import ResultsProgress from "@/components/ResultsProgress.vue";
 

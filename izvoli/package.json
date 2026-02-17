@@ -12,9 +12,10 @@
   "dependencies": {
     "add-to-calendar-button": "^2.13.5",
     "interactjs": "^1.10.27",
+    "marked": "^17.0.2",
+    "pinia": "^3.0.4",
     "vue": "^3.5.28",
-    "vue-router": "^5.0.2",
-    "vuex": "^4.1.0"
+    "vue-router": "^5.0.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",

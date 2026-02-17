@@ -24,16 +24,16 @@
 
   p {
     font-size: 1.5rem;
-    line-height: 1.6;
+    line-height: 1.5;
     text-align: center;
 
     @media (max-width: 575.98px) {
       font-size: 1.25rem;
     }
-  }
 
-  p:not(:last-child) {
-    margin-bottom: 1em;
+    &:not(:last-child) {
+      margin-bottom: 1em;
+    }
   }
 }
 </style>

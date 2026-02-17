@@ -1,7 +1,6 @@
 <script setup>
 import { ref, computed, onMounted, toRaw, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
-import { useStore } from "vuex";
 import PartyDonutChart from "../components/PartyDonutChart.vue";
 
 const store = useStore();

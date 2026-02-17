@@ -242,6 +242,7 @@ footer {
           }
 
           a {
+            display: inline-block;
             font-weight: 700;
             color: inherit;
 
@@ -249,18 +250,30 @@ footer {
               text-decoration-color: #006fc3;
               text-decoration-thickness: 2px;
             }
+
+            &:focus-visible {
+              outline: 2px solid #006fc3;
+              outline-offset: 2px;
+            }
           }
         }
       }
 
       .content.about {
         a {
-          display: none; // TODO: enable when page is live
+          display: inline-block;
           color: inherit;
+
+          display: none; // TODO: enable when page is live
 
           &:hover {
             text-decoration-color: #006fc3;
             text-decoration-thickness: 2px;
+          }
+
+          &:focus-visible {
+            outline: 2px solid #006fc3;
+            outline-offset: 2px;
           }
         }
       }
@@ -391,6 +404,11 @@ footer {
           &:hover {
             text-decoration-color: #006fc3;
             text-decoration-thickness: 2px;
+          }
+
+          &:focus-visible {
+            outline: 2px solid #006fc3;
+            outline-offset: 2px;
           }
         }
       }

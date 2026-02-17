@@ -1,32 +1,32 @@
 <script setup>
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import { RouterLink, RouterView, useRouter } from "vue-router";
-import { useStore } from "vuex";
-
+import { useMainStore } from "@/store.js";
+import TheLoader from "@/components/TheLoader.vue";
 import PageFooter from "@/components/PageFooter.vue";
 
-const store = useStore();
 const router = useRouter();
+const store = useMainStore();
 
-const quizFinished = computed(() => store.getters.getQuizFinished);
 const currentRouteName = computed(() => router.currentRoute.value.name);
 
-const restartQuiz = () => {
-  store.dispatch("clearStore");
-  router.push({ name: "introduction" });
-};
+onMounted(() => {
+  if (!store.loaded) {
+    store.loadData();
+  }
+});
 </script>
 
 <template>
   <header class="header-wrapper">
-    <RouterLink :to="{ name: 'landing' }">
+    <RouterLink :to="{ name: 'landing' }" class="header-logo-link">
       <img
         src="./assets/img/header-logo.svg"
         class="header-logo"
         alt="Izvoli EU, prva pomoč za evropske volitve"
       />
     </RouterLink>
-    <div v-if="quizFinished" class="buttons">
+    <div v-if="store.loaded && store.quizFinished" class="buttons">
       <RouterLink
         v-if="currentRouteName != 'results'"
         class="show-results"
@@ -34,10 +34,15 @@ const restartQuiz = () => {
       >
         Poglej rezultate
       </RouterLink>
-      <button class="restart-quiz" @click="restartQuiz">Ponovno reši</button>
+      <button class="restart-quiz" @click="store.restartQuiz">
+        Ponovno reši
+      </button>
     </div>
   </header>
-  <RouterView />
+  <RouterView v-if="store.loaded" />
+  <main v-else class="loader-container">
+    <TheLoader />
+  </main>
   <PageFooter />
 </template>
 
@@ -95,11 +100,20 @@ button {
     padding-block: 2rem;
   }
 
-  .header-logo {
-    width: 443px;
+  .header-logo-link {
+    display: inline-block;
 
-    @media (max-width: 575.98px) {
-      width: 221px;
+    .header-logo {
+      width: 443px;
+
+      @media (max-width: 575.98px) {
+        width: 221px;
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid #006fc3;
+      outline-offset: 2px;
     }
   }
 
@@ -182,41 +196,56 @@ button {
   }
 }
 
+.loader-container {
+  display: grid;
+  place-items: center;
+  min-height: 10rem;
+}
+
 .button-go {
   display: inline-flex;
-  gap: 16px;
+  gap: 1rem;
   align-items: center;
   justify-content: space-between;
-  min-width: 322px;
+  min-width: 190px;
   margin-inline: auto;
-  padding: 15px 25px 15px 31px;
-  background-color: #ffd100;
-  color: black;
+  padding-inline: 1.3125rem;
+  padding-block: 1rem;
+  background-color: #bddc00;
+  color: #000;
   border: 2px solid black;
-  border-radius: 20px;
-  font-size: 24px;
-  line-height: 20px;
-  font-weight: 800;
+  font-size: 1.5rem;
+  line-height: 1.5rem;
+  font-weight: 700;
   text-decoration: none;
   transition: transform 0.15s ease-in-out;
   cursor: pointer;
 
   @media (max-width: 575.98px) {
-    min-width: 189px;
-    padding: 10px 15px 10px 18px;
-    font-size: 18px;
+    min-width: 140px;
+    padding-inline: 1.125rem;
+    padding-block: 0.75rem;
+    font-size: 1.125rem;
+    line-height: 1.125rem;
   }
 
   img {
-    width: 34px;
+    width: 1.3125rem;
+    height: 1.3125rem;
 
     @media (max-width: 575.98px) {
-      width: 28px;
+      width: 1rem;
+      height: 1rem;
     }
   }
 
   &:hover {
-    transform: scale(0.9);
+    transform: scale(0.95);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #006fc3;
+    outline-offset: 2px;
   }
 }
 </style>
