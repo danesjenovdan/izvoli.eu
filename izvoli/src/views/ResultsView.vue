@@ -1,161 +1,86 @@
 <script setup>
-import { ref, computed, onMounted, toRaw, onBeforeUnmount } from "vue";
-import { useRouter } from "vue-router";
-import PartyDonutChart from "../components/PartyDonutChart.vue";
+import { ref, onMounted, computed } from "vue";
+// import { computed, toRaw } from "vue";
+// import { useRouter } from "vue-router";
+import { useMainStore } from "@/store.js";
+import PartyDonutChart from "@/components/PartyDonutChart.vue";
+import TheLoader from "@/components/TheLoader.vue";
 
-const store = useStore();
-const router = useRouter();
+const store = useMainStore();
+// const router = useRouter();
 
-const storeInitialized = computed(() => store.getters.getStoreInitialized);
-const quizFinished = computed(() => store.getters.getQuizFinished);
-const parties = computed(() => store.getters.getParties);
-const results = computed(() => store.getters.getResults);
-const answers = computed(() => store.getters.getAnswers);
-const questions = computed(() => store.getters.getQuestions);
-const questionsList = computed(() => store.getters.getQuestionsList);
+const topThreeResults = computed(() => {
+  return store.results.slice(0, 3);
+});
+
 const chosenParties = ref([]);
-const partiesNoAnswer = computed(() => {
-  const p = {};
-  const partiesAnswered = [...results.value].map((el) => el.party_id);
-  for (const [key, value] of Object.entries(parties.value)) {
-    if (!partiesAnswered.includes(key)) {
-      p[key] = value;
-    }
-  }
-  return p;
-});
 
-const winners = computed(() => {
-  const winners = [...results.value];
-  winners.splice(3);
-  return winners;
-});
-
-const winnerIDs = computed(() => {
-  if (results.value?.[0]) {
-    const winnerPercentage = results.value[0].percentage;
-    const winners = results.value.filter(
-      (res) => toRaw(res).percentage == winnerPercentage,
-    );
-    const winnerIDs = winners.map(
-      (res) => parties.value[res.party_id].votematch_id,
-    );
-    return [winnerIDs.toString(), winnerPercentage];
-  } else {
-    return ["", ""];
-  }
-});
-
-const isMobile = computed(() => {
-  if (
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      navigator.userAgent,
-    )
-  ) {
-    return true;
-  } else {
-    return false;
-  }
-});
-
-const compareWithWinningParties = () => {
-  const parties = [...results.value.map((res) => res.party_id)];
-  parties.splice(3);
-  store.commit("setPartiesToCompare", { parties: parties });
-  router.push({ name: "resultsByParty", params: { id: 1 } });
-};
-
-const compareWithChosenParties = () => {
-  store.commit("setPartiesToCompare", { parties: chosenParties.value });
-  router.push({ name: "resultsByParty", params: { id: 1 } });
-};
-
-const compareWithAllParties = () => {
-  chosenParties.value = [...results.value.map((res) => res.party_id)];
-};
-
-const unselectAllParties = () => {
-  chosenParties.value = [];
-};
-
-onMounted(() => {
-  // initialize store
-  if (!storeInitialized.value) {
-    store.dispatch("initializeStore").then((quiz_finished) => {
-      if (!quiz_finished) {
-        router.push("/");
-      }
-    });
-  }
-  // redirect if quiz is not yet finished
-  if (!quizFinished.value) {
-    router.push("/");
-  }
-  // EU comparison
-  if (!window.VotematchEU) {
-    let votematchScript = document.createElement("script");
-    votematchScript.setAttribute("src", "https://assets.votematch.eu/embed.js");
-    document.head.appendChild(votematchScript);
-  }
-});
-
-onBeforeUnmount(() => {
-  if (window.VotematchEU) {
-    let votematchScript = document.querySelector(
-      'head script[src*="votematch"]',
-    );
-    document.head.removeChild(votematchScript);
-    window.VotematchEU = null;
-  }
-});
-
-function answerToValue(answer) {
-  if (answer == "YES") return "1";
-  if (answer == "NEUTRAL") return "0";
-  if (answer == "NO") return "-1";
+function selectAllParties() {
+  chosenParties.value = [...store.results.map((res) => res.party_id)];
 }
+
+function unselectAllParties() {
+  chosenParties.value = [];
+}
+
+function partyImage(partyId) {
+  return store.quizData.parties.find((p) => p.id === partyId)?.image || null;
+}
+
+function partyName(partyId) {
+  return store.quizData.parties.find((p) => p.id === partyId)?.name || "???";
+}
+
+// const compareWithWinningParties = () => {
+//   const parties = [...results.value.map((res) => res.party_id)];
+//   parties.splice(3);
+//   store.commit("setPartiesToCompare", { parties: parties });
+//   router.push({ name: "resultsByParty", params: { id: 1 } });
+// };
+
+// const compareWithChosenParties = () => {
+//   store.commit("setPartiesToCompare", { parties: chosenParties.value });
+//   router.push({ name: "resultsByParty", params: { id: 1 } });
+// };
 
 const urlCopied = ref(false);
 
 function copyToClipboard() {
-  navigator.clipboard.writeText("https://izvoli.eu/").then(
-    function () {
+  navigator.clipboard
+    .writeText("https://izvoli.si/")
+    .then(() => {
       urlCopied.value = true;
       // eslint-disable-next-line no-alert
       alert("Povezava je skopirana v odložišče!");
-    },
-    function () {
-      // ni se skopiralo ...
-    },
-  );
+    })
+    .catch(() => {
+      // eslint-disable-next-line no-alert
+      alert("Prišlo je do napake. Poskusi znova.");
+    });
 }
 
-function shareOnMobile() {
-  if (navigator.share) {
-    urlCopied.value = true;
-    navigator.share({
-      title: "Izvoli.eu",
-      text: "Odgovori na 30 trditev in preveri, s katerimi strankami se tvoja stališča najbolj ujemajo!",
-      url: "https://izvoli.eu/",
-    });
-  } else {
-    // eslint-disable-next-line no-alert
-    alert("Can't share on this device.");
+onMounted(() => {
+  // TODO: enable this when live
+  // if (!store.quizFinished) {
+  //   router.push({ name: "introduction" });
+  //   return;
+  // }
+  if (!store.resultsCalculated) {
+    store.calculateResults();
   }
-}
+});
 </script>
 
 <template>
   <main class="container">
-    <div v-if="results.length > 0" class="body">
+    <div v-if="store.resultsCalculated" class="body">
       <div class="content">
-        <h1>Najbolj se ujemaš s strankami:</h1>
-        <div class="winners">
+        <h1>Najbolj se ujemaš s:</h1>
+        <div class="top-three">
           <PartyDonutChart
-            v-for="result in winners"
+            v-for="result in topThreeResults"
             :key="result.party_id"
             :result="result"
-            :parties="parties"
           />
         </div>
         <div class="button-wrapper">
@@ -166,70 +91,47 @@ function shareOnMobile() {
         </div>
       </div>
       <div class="more-info">
-        <p>
-          <span
-            >Izberi stranke s spodnjega seznama, s katerimi želiš primerjati
-            svoje odgovore!</span
-          >
-          <button
-            v-if="chosenParties.length == 0"
-            @click="compareWithAllParties"
-          >
+        <h2>
+          <span>Izberi stranke za primerjavo</span>
+          <button v-if="chosenParties.length == 0" @click="selectAllParties">
             Izberi vse stranke
           </button>
           <button v-if="chosenParties.length > 0" @click="unselectAllParties">
             Odstrani vse stranke
           </button>
-        </p>
+        </h2>
         <div class="parties">
-          <div v-for="party in results" :key="party.party_id" class="party">
-            <label
-              :for="`chosen-party-${party.party_id}`"
-              :class="{ 'no-answers': !party.finished_quiz }"
-            >
+          <div
+            v-for="result in store.results"
+            :key="result.party_id"
+            class="party"
+          >
+            <label :for="`chosen-party-${result.party_id}`">
               <input
-                v-if="party.finished_quiz"
-                :id="`chosen-party-${party.party_id}`"
+                :id="`chosen-party-${result.party_id}`"
                 v-model="chosenParties"
                 type="checkbox"
-                :value="party.party_id"
+                :value="result.party_id"
               />
-              <img :src="null" class="party-image" />
-              {{ parties[party.party_id].name }}
+              <img :src="partyImage(result.party_id)" class="party-image" />
+              {{ partyName(result.party_id) }}
             </label>
 
-            <div v-if="party.finished_quiz" class="progress">
+            <div class="progress">
               <div
                 class="progress-bar"
                 role="progressbar"
-                :aria-valuenow="party.percentage"
+                :aria-valuenow="result.percentage"
                 aria-valuemin="0"
                 :aria-valuemax="100"
-                :style="{ width: `${party.percentage}%` }"
+                :style="{ width: `${result.percentage}%` }"
                 :class="{
-                  'border-end': party.percentage > 0 && party.percentage < 100,
+                  'border-end':
+                    result.percentage > 0 && result.percentage < 100,
                 }"
               ></div>
             </div>
-            <span v-if="party.finished_quiz" class="party-percentage"
-              >{{ party.percentage }} %</span
-            >
-            <p v-if="!party.finished_quiz">Niso odgovorili na vprašanja</p>
-            <span v-if="!party.finished_quiz" class="party-percentage"
-              >0 %</span
-            >
-          </div>
-          <div v-for="party in partiesNoAnswer" :key="party.id" class="party">
-            <label :for="`chosen-party-${party.id}`">
-              <input
-                :id="`chosen-party-${party.id}`"
-                v-model="chosenParties"
-                type="checkbox"
-                :value="party.id"
-              />
-              <img :src="partyImageUrl(party.image)" class="party-image" />
-              {{ party.name }}
-            </label>
+            <span class="party-percentage">{{ result.percentage }} %</span>
           </div>
         </div>
         <div class="button-wrapper">
@@ -240,273 +142,128 @@ function shareOnMobile() {
         </div>
       </div>
     </div>
+    <div v-else class="loader-container">
+      <TheLoader />
+    </div>
 
     <button
-      v-if="!isMobile"
+      v-if="store.resultsCalculated"
       class="share-button-desktop"
       :class="{ copied: urlCopied }"
+      aria-label="Deli svoj rezultat!"
       @click="copyToClipboard"
     ></button>
-    <div class="share-button-mobile-wrapper">
-      <button
-        v-if="isMobile"
-        class="share-button-mobile"
-        :class="{ copied: urlCopied }"
-        @click="shareOnMobile"
-      ></button>
-    </div>
-
-    <div v-if="results.length > 0" class="body">
-      <div class="content two-columns">
-        <img src="../assets/img/eu.jpg" alt="Zemljevid Evropske Unije" />
-        <div>
-          <h2>Te zanima, s katerimi strankami iz drugih držav EU se ujemaš?</h2>
-          <p>
-            Primerjaj svoja stališča z odgovori političnih strank, ki
-            kandidirajo v drugih državah članicah Evropske unije, in ugotovi,
-            kdo so tvoji zavezniki!
-          </p>
-          <button class="VotematchEU-button">
-            Pokaži mi evropske rezultate!
-          </button>
-        </div>
-        <form id="VotematchEU-settings">
-          <input type="hidden" name="lang" value="SL" />
-        </form>
-        <form id="VotematchEU-results">
-          <input type="hidden" name="country" value="SI" />
-          <input type="hidden" name="bestmatch" :value="winnerIDs[0]" />
-          <input type="hidden" name="bestscore" :value="winnerIDs[1]" />
-          <template v-for="qNo in questionsList">
-            <input
-              v-if="qNo in answers && questions[qNo].votematch_id"
-              :key="qNo"
-              type="hidden"
-              :name="questions[qNo].votematch_id"
-              :value="answerToValue(answers[qNo])"
-            />
-          </template>
-        </form>
-      </div>
-    </div>
   </main>
 </template>
 
 <style lang="scss" scoped>
 .body {
-  &:not(:last-child) {
-    margin-bottom: 70px;
-
-    @media (max-width: 575.98px) {
-      margin-bottom: 40px;
-    }
-  }
-
   .button-wrapper {
-    margin-top: 42px;
+    margin-top: 3.5rem;
     text-align: center;
 
     @media (max-width: 575.98px) {
-      margin-top: 32px;
+      margin-top: 1.5rem;
     }
 
     .button-go {
-      font-size: 18px;
-      line-height: 20px;
-      padding-inline: 17px 17px;
+      font-size: 1.25rem;
+      line-height: 1.2;
+      padding-inline: 1.25rem;
+      padding-block: 0.75rem;
 
       @media (max-width: 575.98px) {
-        font-size: 15px;
-        line-height: 16px;
+        font-size: 0.875rem;
       }
     }
   }
 
   .content {
-    padding-inline: 100px;
-    padding-top: 60px;
-    padding-bottom: 56px;
+    padding-inline: 6rem;
+    padding-block: 3.25rem 4rem;
 
     @media (max-width: 575.98px) {
-      padding-inline: 21px;
-      padding-top: 21px;
-      padding-bottom: 32px;
+      padding-inline: 1.5rem;
+      padding-block: 2rem;
     }
 
     h1 {
-      margin-bottom: 20px;
-      font-size: 32px;
-      line-height: 40px;
-      font-weight: 700;
+      margin-bottom: 1em;
+      font-size: 2rem;
+      line-height: 1.2;
       text-align: center;
 
       @media (max-width: 575.98px) {
-        margin-bottom: 24px;
-        font-size: 24px;
-        line-height: 30px;
+        font-size: 1.5rem;
       }
     }
 
-    .winners {
+    .top-three {
       display: flex;
-      gap: 16px;
+      gap: 1rem;
       justify-content: center;
       flex-wrap: wrap;
 
       @media (max-width: 575.98px) {
-        gap: 8px;
-      }
-    }
-
-    &.two-columns {
-      display: flex;
-      align-items: center;
-
-      & > img {
-        width: 230px;
-        flex-shrink: 0;
-
-        @media (max-width: 575.98px) {
-          display: none;
-        }
-      }
-
-      & > div {
-        margin-left: 30px;
-
-        @media (max-width: 575.98px) {
-          margin-left: 0;
-        }
-
-        h2 {
-          font-size: 24px;
-          line-height: 30px;
-          margin-bottom: 20px;
-
-          @media (max-width: 575.98px) {
-            font-size: 18px;
-            line-height: 21px;
-            margin-bottom: 10px;
-          }
-        }
-
-        p {
-          font-size: 15px;
-          line-height: 22px;
-          margin-bottom: 20px;
-
-          @media (max-width: 575.98px) {
-            font-size: 12px;
-            line-height: 16px;
-          }
-        }
-
-        .VotematchEU-button {
-          visibility: visible !important;
-          border: 2px solid black;
-          border-radius: 10px;
-          background-color: #ffffff;
-          display: flex;
-          align-items: center;
-          padding: 6px 11px 6px 14px;
-          font-size: 15px;
-          font-weight: 800;
-          line-height: 20px;
-          cursor: pointer;
-
-          &::after {
-            content: "";
-            display: inline-block;
-            width: 21px;
-            height: 21px;
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: contain;
-            margin-left: 4px;
-            background-image: url("../assets/img/eyes-right.svg");
-
-            @media (max-width: 575.98px) {
-              width: 16px;
-              height: 16px;
-            }
-          }
-
-          &:hover::after {
-            background-image: url("../assets/img/eyes-down.svg");
-          }
-        }
+        gap: 0.5rem;
       }
     }
   }
 
   .more-info {
     border-top: 2px solid black;
-    background-color: #f2f7ff;
-    padding-inline: 100px;
-    padding-top: 60px;
-    padding-bottom: 56px;
+    background-color: #eaf5ff;
+    padding-inline: 6rem;
+    padding-block: 3.25rem 4rem;
 
     @media (max-width: 575.98px) {
-      padding-inline: 21px;
-      padding-top: 32px;
-      padding-bottom: 32px;
+      padding-inline: 1.5rem;
+      padding-block: 2rem;
     }
 
-    & > p {
+    h2 {
+      font-size: 1.25rem;
+      line-height: 1.2;
+      font-weight: 700;
+
       @media (max-width: 575.98px) {
         display: flex;
         align-items: center;
-        gap: 10px;
-      }
-
-      span {
-        font-size: 24px;
-        line-height: 30px;
-        font-weight: 800;
-
-        @media (max-width: 575.98px) {
-          font-size: 15px;
-          line-height: 16px;
-        }
+        font-size: 1.125rem;
       }
 
       button {
         flex-shrink: 0;
         display: inline-flex;
-        gap: 1px;
-        align-items: flex-end;
-        margin-left: 7px;
+        margin-left: 1rem;
         padding: 0;
         background: transparent;
         border: none;
         border-bottom: 1px solid #0e3d97;
         color: #0e3d97;
-        font-size: 15px;
+        font-size: 1rem;
         line-height: 1;
+        font-weight: 400;
         cursor: pointer;
 
         @media (max-width: 575.98px) {
-          font-size: 12px;
+          font-size: 0.875rem;
         }
       }
     }
 
     .parties {
-      margin-top: 28px;
+      margin-top: 1.75rem;
 
       .party {
         display: flex;
         align-items: center;
-        margin-bottom: 16px;
+        margin-bottom: 1rem;
 
         @media (max-width: 575.98px) {
           display: grid;
           grid-template-columns: 4fr 1fr;
-          margin-bottom: 18px;
-        }
-
-        .no-answers {
-          color: #525252;
+          margin-bottom: 1.125rem;
         }
 
         label {
@@ -514,37 +271,29 @@ function shareOnMobile() {
           display: flex;
           align-items: center;
           cursor: pointer;
-          font-size: 15px;
-          line-height: 18px;
-          font-weight: 800;
-          margin-right: 20px;
-
-          &.no-answers {
-            color: #525252;
-            margin-left: 16px;
-            cursor: default;
-          }
+          font-size: 1rem;
+          line-height: 1.2;
+          font-weight: 700;
+          margin-right: 1.25rem;
 
           @media (max-width: 575.98px) {
             grid-row: 1;
             grid-column: 1;
+            font-size: 0.875rem;
           }
 
           input[type="checkbox"] {
             flex-shrink: 0;
+            position: relative;
             appearance: none;
             background-color: transparent;
-            margin: 2px 0 0 0;
-            width: 16px;
-            height: 16px;
+            width: 1rem;
+            height: 1rem;
             border: 1px solid black;
-            border-radius: 4px;
-            transform: translateY(-0.075em);
             cursor: pointer;
-            position: relative;
 
             &:checked {
-              background-color: #ffd100;
+              background-color: #fff;
 
               &::before {
                 content: "";
@@ -553,40 +302,49 @@ function shareOnMobile() {
                 top: 0;
                 width: 9px;
                 height: 5px;
-                border: solid black;
+                border: solid #000;
                 border-width: 0 0 2px 2px;
                 transform: scale(1) rotate(-45deg) translateX(-12%)
                   translateY(90%);
+              }
+            }
+
+            &:focus-visible {
+              outline: 2px solid #006fc3;
+              outline-offset: 2px;
+
+              &:not(:checked) {
+                background-color: #fff;
               }
             }
           }
 
           .party-image {
             flex-shrink: 0;
-            margin-left: 16px;
-            margin-right: 9px;
-            width: 36px;
-            height: 36px;
-            background-color: #ffffff;
-            border: 1px solid black;
-            border-radius: 9999px;
+            margin-left: 1rem;
+            margin-right: 0.5rem;
+            width: 2.25rem;
+            height: 2.25rem;
+            background-color: #fff;
+            border: 1px solid #000;
+            border-radius: 50%;
             object-fit: contain;
           }
         }
 
         .progress {
           flex: 2;
-          height: 20px;
-          background-color: #ffffff;
-          border: 1px solid black;
-          border-radius: 10px;
+          height: 1.25rem;
+          background-color: #fff;
+          border: 1px solid #000;
           overflow: hidden;
 
           @media (max-width: 575.98px) {
             grid-row: 2;
             grid-column: 1 / -1;
-            margin-left: 32px;
-            margin-top: 8px;
+            margin-left: 2rem;
+            margin-top: 0.5rem;
+            height: 0.875rem;
           }
 
           .progress-bar {
@@ -610,33 +368,13 @@ function shareOnMobile() {
         .party-percentage {
           flex: 0.25;
           text-align: right;
-          font-size: 15px;
-          line-height: 18px;
-          font-weight: 500;
+          font-size: 1rem;
+          line-height: 1.2;
 
           @media (max-width: 575.98px) {
             grid-row: 1;
             grid-column: 2;
-          }
-        }
-
-        p {
-          flex: 2;
-          font-size: 12px;
-          font-weight: 500;
-          line-height: 18px;
-          color: #525252;
-
-          @media (max-width: 575.98px) {
-            grid-row: 2;
-            grid-column: 1 / -1;
-            margin-left: 32px;
-            margin-top: 8px;
-          }
-
-          & + span {
-            flex: 0.25;
-            color: #525252;
+            font-size: 0.875rem;
           }
         }
       }
@@ -661,13 +399,17 @@ function shareOnMobile() {
   animation-timing-function: linear;
   cursor: pointer;
 
+  border-radius: 50%;
+
   &.copied {
     background-image: url("../assets/img/skopirana.svg");
     animation-play-state: paused;
   }
 
-  &:hover {
-    // animation-play-state: paused;
+  &:focus-visible {
+    animation-play-state: paused;
+    outline: 2px solid #006fc3;
+    outline-offset: 2px;
   }
 }
 
@@ -678,43 +420,6 @@ function shareOnMobile() {
 
   to {
     transform: translateY(-50%) rotate(360deg);
-  }
-}
-
-.share-button-mobile-wrapper {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.share-button-mobile {
-  width: 200px;
-  height: 200px;
-  background-color: transparent;
-  border: none;
-  background-image: url("../assets/img/deli.svg");
-  background-size: contain;
-  animation-name: spin-mobile;
-  animation-duration: 6000ms;
-  animation-iteration-count: infinite;
-  animation-timing-function: linear;
-
-  &.copied {
-    background-image: url("../assets/img/skopirana.svg");
-    // animation-play-state: paused;
-  }
-
-  &:hover {
-    // animation-play-state: paused;
-  }
-}
-
-@keyframes spin-mobile {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
   }
 }
 </style>

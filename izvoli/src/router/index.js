@@ -6,7 +6,7 @@ import LandingView from "@/views/LandingView.vue";
 import PrivacyPolicyView from "@/views/PrivacyPolicyView.vue";
 import QuestionView from "@/views/QuestionView.vue";
 // import ResultsByPartyView from "@/views/ResultsByPartyView.vue";
-// import ResultsView from "@/views/ResultsView.vue";
+import ResultsView from "@/views/ResultsView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -48,11 +48,11 @@ const router = createRouter({
       name: "question",
       component: QuestionView,
     },
-    // {
-    //   path: "/rezultati",
-    //   name: "results",
-    //   component: ResultsView,
-    // },
+    {
+      path: "/rezultati",
+      name: "results",
+      component: ResultsView,
+    },
     // {
     //   path: "/rezultati/:id",
     //   name: "resultsByParty",

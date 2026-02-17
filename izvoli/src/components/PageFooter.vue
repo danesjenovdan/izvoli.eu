@@ -328,7 +328,7 @@ footer {
             cursor: pointer;
 
             &:checked {
-              background-color: #65a3ff;
+              background-color: #fff;
 
               &::before {
                 content: "";

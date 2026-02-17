@@ -5,7 +5,7 @@ import { marked } from "marked";
 import { useMainStore } from "@/store.js";
 import QuestionsProgress from "@/components/QuestionsProgress.vue";
 import SwipableCard from "@/components/SwipableCard.vue";
-// import PartyElement from "@/components/PartyElement.vue";
+import PartyElement from "@/components/PartyElement.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -34,59 +34,50 @@ const descriptionHtml = computed(() => {
   return marked.parse(question.value.description);
 });
 
-// // const answers = computed(() => store.getters.getAnswers)
-// const parties = computed(() => store.getters.getParties);
-// const partiesAgree = computed(() => {
-//   const parties = {};
-//   for (const [key, value] of Object.entries(question.value.parties)) {
-//     if (value.answer == "YES") {
-//       parties[key] = value;
-//     }
-//   }
-//   return parties;
-// });
-// const partiesDisagree = computed(() => {
-//   const parties = {};
-//   for (const [key, value] of Object.entries(question.value.parties)) {
-//     if (value.answer == "NO") {
-//       parties[key] = value;
-//     }
-//   }
-//   return parties;
-// });
-// const partiesNeutral = computed(() => {
-//   const parties = {};
-//   for (const [key, value] of Object.entries(question.value.parties)) {
-//     if (value.answer == "NEUTRAL") {
-//       parties[key] = value;
-//     }
-//   }
-//   return parties;
-// });
+const partiesAgree = computed(() => {
+  return store.quizData.answers
+    .filter((a) => a.question_id === question.value.id && a.agreement === true)
+    .map((a) => {
+      return {
+        ...a,
+        party: store.quizData.parties.find((p) => p.id === a.party_id),
+      };
+    });
+});
 
-// const skipQuestion = (id, answer) => {
-//   // remove saved answer
-//   store.commit('removeAnswer', { id, answer })
-//   if (questionIndex.value < questionsNo.value - 1) {
-//     router.push(`/vprasanje/${questionNumber.value + 1}`)
-//   } else {
-//     store.commit('calculateResults')
-//     router.push('/rezultati')
-//   }
-// }
+const partiesDisagree = computed(() => {
+  return store.quizData.answers
+    .filter((a) => a.question_id === question.value.id && a.agreement === false)
+    .map((a) => {
+      return {
+        ...a,
+        party: store.quizData.parties.find((p) => p.id === a.party_id),
+      };
+    });
+});
 
-// const saveAnswer = (id, answer) => {
-//   // save answer
-//   store.commit("addAnswer", { id, answer });
-//   // navigate to next question
-//   if (questionIndex.value < questionsNo.value - 1) {
-//     router.push(`/vprasanje/${questionNumber.value + 1}`);
-//   } else {
-//     // last question -> calculate results and navigate to results
-//     store.commit("calculateResults");
-//     router.push("/rezultati");
-//   }
-// };
+const navigateToNextQuestion = () => {
+  if (questionIndex.value < store.questionOrder.length - 1) {
+    router.push({
+      name: "question",
+      params: { idx: questionNumber.value + 1 },
+    });
+  } else {
+    router.push({ name: "results" });
+  }
+};
+
+const skipQuestion = () => {
+  navigateToNextQuestion();
+};
+
+const saveAnswer = (agreement) => {
+  store.saveAnswer({
+    question_id: question.value.id,
+    agreement,
+  });
+  navigateToNextQuestion();
+};
 
 router.beforeEach(() => {
   if (moreInfo.value) {
@@ -104,8 +95,8 @@ router.beforeEach(() => {
       />
       <SwipableCard
         :key="questionNumber"
-        @card-accepted="saveAnswer(questionId, 'YES')"
-        @card-rejected="saveAnswer(questionId, 'NO')"
+        @card-accepted="saveAnswer(true)"
+        @card-rejected="saveAnswer(false)"
       >
         <div class="content">
           <div v-if="workGroup" class="category">{{ workGroup.name }}</div>
@@ -124,7 +115,7 @@ router.beforeEach(() => {
               :to="
                 questionIndex <= 0
                   ? { name: 'introduction' }
-                  : { name: 'question', params: { id: questionNumber - 1 } }
+                  : { name: 'question', params: { idx: questionNumber - 1 } }
               "
               class="back"
             >
@@ -132,18 +123,18 @@ router.beforeEach(() => {
                 <img src="../assets/img/puscica-trikotnik.svg" alt="" />
                 <img src="../assets/img/puscica-trikotnik.svg" alt="" />
               </div>
-              <span>Prejšnja trditev</span>
+              <span>Nazaj</span>
             </RouterLink>
-            <button class="disagree" @click="saveAnswer(questionId, 'NO')">
+            <button class="disagree" @click="saveAnswer(false)">
               <img src="../assets/img/ne-strinjam.svg" />
               <span>Se ne strinjam</span>
             </button>
-            <button class="agree" @click="saveAnswer(questionId, 'YES')">
+            <button class="agree" @click="saveAnswer(true)">
               <img src="../assets/img/strinjam.svg" />
               <span>Se strinjam</span>
             </button>
-            <button class="skip" @click="saveAnswer(questionId, 'NEUTRAL')">
-              <span>Brez stališča</span>
+            <button class="skip" @click="skipQuestion">
+              <span>Preskoči</span>
               <div>
                 <img src="../assets/img/puscica-trikotnik.svg" alt="" />
                 <img src="../assets/img/puscica-trikotnik.svg" alt="" />
@@ -178,29 +169,29 @@ router.beforeEach(() => {
         <div v-if="moreInfo" class="parties">
           <div>
             <div class="head">Se strinjajo</div>
-            <!-- <PartyElement
-              v-for="(answer, party_id) in partiesAgree"
-              :key="party_id"
-              :party="parties[party_id]"
+            <PartyElement
+              v-for="answer in partiesAgree"
+              :key="answer.party_id"
+              :party="answer.party"
               :answer="answer"
             >
             </PartyElement>
-            <p v-if="Object.keys(partiesAgree).length == 0">
+            <p v-if="!partiesAgree.length">
               Nobena stranka ni izbrala tega odgovora.
-            </p> -->
+            </p>
           </div>
           <div>
             <div class="head">Se ne strinjajo</div>
-            <!-- <PartyElement
-              v-for="(answer, party_id) in partiesDisagree"
-              :key="party_id"
-              :party="parties[party_id]"
+            <PartyElement
+              v-for="answer in partiesDisagree"
+              :key="answer.party_id"
+              :party="answer.party"
               :answer="answer"
             >
             </PartyElement>
-            <p v-if="Object.keys(partiesDisagree).length == 0">
+            <p v-if="!partiesDisagree.length">
               Nobena stranka ni izbrala tega odgovora.
-            </p> -->
+            </p>
           </div>
         </div>
       </div>
@@ -404,6 +395,8 @@ router.beforeEach(() => {
     }
 
     .parties {
+      background-color: magenta; // TODO: fix these styles
+
       display: flex;
       gap: 26px;
       margin-top: 22px;
