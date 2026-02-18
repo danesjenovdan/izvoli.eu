@@ -32,7 +32,7 @@ const show = ref(false);
       </div>
       <button v-if="!show && party?.comment" @click="show = true">
         Obrazložitev
-        <img src="../assets/img/puscica-trikotnik-modra.svg" />
+        <img src="../assets/img/puscica-trikotnik.svg" />
       </button>
       <button v-if="show && party?.comment" @click="show = false">
         Skrij

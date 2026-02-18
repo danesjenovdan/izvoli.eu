@@ -44,7 +44,7 @@ const router = createRouter({
       component: PrivacyPolicyView,
     },
     {
-      path: "/vprasanje/:id",
+      path: "/vprasanje/:idx",
       name: "question",
       component: QuestionView,
     },

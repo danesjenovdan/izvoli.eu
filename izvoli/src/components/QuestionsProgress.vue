@@ -27,15 +27,15 @@ defineProps({
 
 <style scoped lang="scss">
 .questions-progress {
-  background-color: #f2f7ff;
+  background-color: #eaf5ff;
   border-bottom: 2px solid black;
   position: relative;
 
   .progress-number {
-    background-color: rgba(#f2f7ff, 0.85);
-    font-size: 12px;
-    line-height: 18px;
-    font-weight: 600;
+    background-color: rgba(#eaf5ff, 0.85);
+    font-size: 0.75rem;
+    line-height: 1.6;
+    font-weight: 700;
     position: absolute;
     top: 0;
     left: 0;
@@ -85,7 +85,7 @@ defineProps({
       }
 
       &.checked {
-        background-color: #ffe468;
+        background-color: #65a3ff;
 
         &::before {
           content: "";
@@ -101,7 +101,7 @@ defineProps({
       }
 
       &.active {
-        background-color: #7fb2ff;
+        background-color: #bddc00;
 
         &::before {
           content: "";

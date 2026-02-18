@@ -1,19 +1,26 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { useMainStore } from "@/store.js";
+
+const store = useMainStore();
 
 const props = defineProps({
   result: {
     type: Object,
     required: true,
   },
-  parties: {
-    type: Object,
-    required: true,
-  },
 });
 
 const partyName = computed(
-  () => props.parties?.[props.result?.party_id]?.name || "???",
+  () =>
+    store.quizData.parties.find((p) => p.id === props.result.party_id)?.name ||
+    "???",
+);
+
+const partyImage = computed(
+  () =>
+    store.quizData.parties.find((p) => p.id === props.result.party_id)?.image ||
+    null,
 );
 
 function dashOffsetFromPercentage(percentage) {
@@ -93,7 +100,13 @@ onBeforeUnmount(() => {
           viewBox="0 0 100 100"
         >
           <rect x="0" y="0" width="100" height="100" fill="#fff"></rect>
-          <image x="0" y="0" width="100" height="100" :href="null"></image>
+          <image
+            x="0"
+            y="0"
+            width="100"
+            height="100"
+            :href="partyImage"
+          ></image>
         </pattern>
       </defs>
       <circle cx="43" cy="43" r="43" fill="#000" />
@@ -131,40 +144,48 @@ onBeforeUnmount(() => {
 
 <style scoped lang="scss">
 .party-donut-chart {
-  flex: 0 0 145px;
+  flex: 0 0 10rem;
   text-align: center;
 
   @media (max-width: 575.98px) {
-    flex-basis: 85px;
+    flex-basis: 5.5rem;
   }
 
   svg {
-    width: 86px;
-    height: 86px;
+    width: 5.375rem;
+    height: 5.375rem;
 
     @media (max-width: 575.98px) {
-      width: 60px;
-      height: 60px;
+      width: 3.75rem;
+      height: 3.75rem;
     }
   }
 
   .party-donut {
     display: block;
     margin-inline: auto;
-    margin-bottom: 12px;
+    margin-bottom: 0.75rem;
   }
 
   .party-name {
-    margin-bottom: 6px;
-    font-size: 18px;
+    margin-bottom: 0.5rem;
+    font-size: 1.125rem;
     line-height: 1;
-    font-weight: 800;
+    font-weight: 700;
+
+    @media (max-width: 575.98px) {
+      font-size: 0.875rem;
+    }
   }
 
   .party-percentage {
-    font-size: 15px;
+    font-size: 1rem;
     line-height: 1;
-    font-weight: 500;
+    font-weight: 400;
+
+    @media (max-width: 575.98px) {
+      font-size: 0.875rem;
+    }
   }
 }
 </style>

@@ -1,27 +1,4 @@
-<script setup>
-import { onMounted, computed } from "vue";
-import { useRouter } from "vue-router";
-import { useStore } from "vuex";
-
-const store = useStore();
-const router = useRouter();
-
-const storeInitialized = computed(() => store.getters.getStoreInitialized);
-const quizFinished = computed(() => store.getters.getQuizFinished);
-
-onMounted(() => {
-  if (!storeInitialized.value) {
-    store.dispatch("initializeStore").then((quiz_finished) => {
-      if (quiz_finished) {
-        router.push({ name: "results" });
-      }
-    });
-  }
-  if (quizFinished.value) {
-    router.push({ name: "results" });
-  }
-});
-</script>
+<script setup></script>
 
 <template>
   <main class="container">
@@ -69,7 +46,7 @@ onMounted(() => {
       </div>
       <div class="button-wrapper">
         <RouterLink
-          :to="{ name: 'question', params: { id: 1 } }"
+          :to="{ name: 'question', params: { idx: 1 } }"
           class="button-go"
         >
           Začni <img src="../assets/img/puscica.svg" alt="" />
@@ -81,31 +58,32 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .body {
-  padding-inline: 100px;
-  padding-top: 72px;
-  padding-bottom: 56px;
+  padding-inline: 6rem;
+  padding-block: 4.5rem;
 
   @media (max-width: 575.98px) {
-    padding-inline: 21px;
-    padding-top: 24px;
-    padding-bottom: 33px;
+    padding-inline: 1.5rem;
+    padding-block: 2rem;
   }
 
   h1 {
-    margin-bottom: 23px;
-    font-size: 21px;
-    line-height: 23px;
-    font-weight: 800;
+    margin-bottom: 1em;
+    font-size: 2rem;
+    line-height: 1.2;
     text-align: center;
+
+    @media (max-width: 575.98px) {
+      font-size: 1.5rem;
+    }
   }
 
   .buttons {
+    background: magenta; // TODO: fix these styles
+
     display: flex;
     gap: 20px;
     justify-content: space-evenly;
     align-items: flex-start;
-    padding-block: 42px;
-    border-top: 2px solid black;
 
     @media (max-width: 575.98px) {
       gap: 9px;
@@ -142,12 +120,11 @@ onMounted(() => {
     .skip {
       background: transparent;
       border: 2px solid black;
-      border-radius: 20px;
       display: flex;
       gap: 6px;
       align-items: center;
       justify-content: flex-start;
-      cursor: pointer;
+      cursor: default;
     }
 
     .back,
@@ -172,10 +149,6 @@ onMounted(() => {
           margin-right: -6px;
         }
       }
-
-      &:hover {
-        background-color: #fff;
-      }
     }
 
     .skip {
@@ -199,15 +172,16 @@ onMounted(() => {
       img {
         width: 28px;
       }
-
-      &:hover {
-        background-color: #ffe368;
-      }
     }
   }
 
   .button-wrapper {
+    margin-top: 3.5rem;
     text-align: center;
+
+    @media (max-width: 575.98px) {
+      margin-top: 1.5rem;
+    }
   }
 }
 </style>

@@ -1,89 +1,83 @@
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useStore } from "vuex";
-import PartyElement from "@/components/PartyElement.vue";
+import { marked } from "marked";
+import { useMainStore } from "@/store.js";
 import QuestionsProgress from "@/components/QuestionsProgress.vue";
 import SwipableCard from "@/components/SwipableCard.vue";
+import PartyElement from "@/components/PartyElement.vue";
 
 const route = useRoute();
 const router = useRouter();
-const store = useStore();
+const store = useMainStore();
 
 const moreInfo = ref(false);
 const moreInfoHover = ref(false);
 
-const questionIndex = computed(() => parseInt(route.params.id, 10) - 1);
+const questionIndex = computed(() => parseInt(route.params.idx, 10) - 1);
 const questionNumber = computed(() => questionIndex.value + 1);
 
-const storeInitialized = computed(() => store.getters.getStoreInitialized);
-const questionsList = computed(() => store.getters.getQuestionsList);
-const questionsNo = computed(() => questionsList.value.length);
-const questionId = computed(() => questionsList.value[questionIndex.value]);
-const question = computed(() => store.state.questions[questionId.value]);
-// const answers = computed(() => store.getters.getAnswers)
-const parties = computed(() => store.getters.getParties);
+const question = computed(() => {
+  const questionId = store.questionOrder[questionIndex.value];
+  return store.quizData.questions[questionId];
+});
+
+const workGroup = computed(() => {
+  if (!question.value) return null;
+  return store.quizData.workgroups.find(
+    (wg) => wg.id === question.value.workgroup_id,
+  );
+});
+
+const descriptionHtml = computed(() => {
+  if (!question.value || !question.value.description) return "";
+  return marked.parse(question.value.description);
+});
+
 const partiesAgree = computed(() => {
-  const parties = {};
-  for (const [key, value] of Object.entries(question.value.parties)) {
-    if (value.answer == "YES") {
-      parties[key] = value;
-    }
-  }
-  return parties;
+  return store.quizData.answers
+    .filter((a) => a.question_id === question.value.id && a.agreement === true)
+    .map((a) => {
+      return {
+        ...a,
+        party: store.quizData.parties.find((p) => p.id === a.party_id),
+      };
+    });
 });
+
 const partiesDisagree = computed(() => {
-  const parties = {};
-  for (const [key, value] of Object.entries(question.value.parties)) {
-    if (value.answer == "NO") {
-      parties[key] = value;
-    }
-  }
-  return parties;
-});
-const partiesNeutral = computed(() => {
-  const parties = {};
-  for (const [key, value] of Object.entries(question.value.parties)) {
-    if (value.answer == "NEUTRAL") {
-      parties[key] = value;
-    }
-  }
-  return parties;
+  return store.quizData.answers
+    .filter((a) => a.question_id === question.value.id && a.agreement === false)
+    .map((a) => {
+      return {
+        ...a,
+        party: store.quizData.parties.find((p) => p.id === a.party_id),
+      };
+    });
 });
 
-// const skipQuestion = (id, answer) => {
-//   // remove saved answer
-//   store.commit('removeAnswer', { id, answer })
-//   if (questionIndex.value < questionsNo.value - 1) {
-//     router.push(`/vprasanje/${questionNumber.value + 1}`)
-//   } else {
-//     store.commit('calculateResults')
-//     router.push('/rezultati')
-//   }
-// }
-
-const saveAnswer = (id, answer) => {
-  // save answer
-  store.commit("addAnswer", { id, answer });
-  // navigate to next question
-  if (questionIndex.value < questionsNo.value - 1) {
-    router.push(`/vprasanje/${questionNumber.value + 1}`);
+const navigateToNextQuestion = () => {
+  if (questionIndex.value < store.questionOrder.length - 1) {
+    router.push({
+      name: "question",
+      params: { idx: questionNumber.value + 1 },
+    });
   } else {
-    // last question -> calculate results and navigate to results
-    store.commit("calculateResults");
-    router.push("/rezultati");
+    router.push({ name: "results" });
   }
 };
 
-onMounted(() => {
-  if (!storeInitialized.value) {
-    store.dispatch("initializeStore").then((quiz_finished) => {
-      if (quiz_finished) {
-        router.push("/rezultati");
-      }
-    });
-  }
-});
+const skipQuestion = () => {
+  navigateToNextQuestion();
+};
+
+const saveAnswer = (agreement) => {
+  store.saveAnswer({
+    question_id: question.value.id,
+    agreement,
+  });
+  navigateToNextQuestion();
+};
 
 router.beforeEach(() => {
   if (moreInfo.value) {
@@ -95,24 +89,33 @@ router.beforeEach(() => {
 <template>
   <main class="container">
     <div v-if="question" class="body">
-      <QuestionsProgress :current="questionNumber" :count="questionsNo" />
+      <QuestionsProgress
+        :current="questionNumber"
+        :count="store.questionOrder.length"
+      />
       <SwipableCard
         :key="questionNumber"
-        @card-accepted="saveAnswer(questionId, 'YES')"
-        @card-rejected="saveAnswer(questionId, 'NO')"
+        @card-accepted="saveAnswer(true)"
+        @card-rejected="saveAnswer(false)"
       >
         <div class="content">
-          <div v-if="question.tag" class="category">{{ question.tag }}</div>
-          <h1 v-if="question.title" class="title">{{ question.title }}</h1>
-          <p v-if="question.description" class="description">
-            {{ question.description }}
-          </p>
+          <div v-if="workGroup" class="category">{{ workGroup.name }}</div>
+          <h1 v-if="question.list_title || question.title" class="title">
+            {{ question.list_title || question.title }}
+          </h1>
+          <!-- eslint-disable vue/no-v-html -->
+          <div
+            v-if="descriptionHtml"
+            class="description"
+            v-html="descriptionHtml"
+          ></div>
+          <!-- eslint-enable vue/no-v-html -->
           <div class="buttons">
             <RouterLink
               :to="
                 questionIndex <= 0
                   ? { name: 'introduction' }
-                  : { name: 'question', params: { id: questionNumber - 1 } }
+                  : { name: 'question', params: { idx: questionNumber - 1 } }
               "
               class="back"
             >
@@ -120,18 +123,18 @@ router.beforeEach(() => {
                 <img src="../assets/img/puscica-trikotnik.svg" alt="" />
                 <img src="../assets/img/puscica-trikotnik.svg" alt="" />
               </div>
-              <span>Prejšnja trditev</span>
+              <span>Nazaj</span>
             </RouterLink>
-            <button class="disagree" @click="saveAnswer(questionId, 'NO')">
+            <button class="disagree" @click="saveAnswer(false)">
               <img src="../assets/img/ne-strinjam.svg" />
               <span>Se ne strinjam</span>
             </button>
-            <button class="agree" @click="saveAnswer(questionId, 'YES')">
+            <button class="agree" @click="saveAnswer(true)">
               <img src="../assets/img/strinjam.svg" />
               <span>Se strinjam</span>
             </button>
-            <button class="skip" @click="saveAnswer(questionId, 'NEUTRAL')">
-              <span>Brez stališča</span>
+            <button class="skip" @click="skipQuestion">
+              <span>Preskoči</span>
               <div>
                 <img src="../assets/img/puscica-trikotnik.svg" alt="" />
                 <img src="../assets/img/puscica-trikotnik.svg" alt="" />
@@ -147,7 +150,7 @@ router.beforeEach(() => {
             src="../assets/img/eyes-down.svg"
           />
           <img v-else src="../assets/img/eyes-right.svg" />
-          <span>Kaj o tem mislijo stranke?</span>
+          <span>Kaj mislijo stranke?</span>
           <button
             v-if="!moreInfo"
             class="show"
@@ -156,50 +159,37 @@ router.beforeEach(() => {
             @mouseleave="moreInfoHover = false"
           >
             Prikaži
-            <img src="../assets/img/puscica-trikotnik-modra.svg" />
+            <img src="../assets/img/puscica-trikotnik.svg" />
           </button>
           <button v-if="moreInfo" class="hide" @click="moreInfo = false">
             Skrij
-            <img src="../assets/img/puscica-trikotnik-modra.svg" />
+            <img src="../assets/img/puscica-trikotnik.svg" />
           </button>
         </div>
         <div v-if="moreInfo" class="parties">
           <div>
-            <div class="head">Se strinja</div>
+            <div class="head">Se strinjajo</div>
             <PartyElement
-              v-for="(answer, party_id) in partiesAgree"
-              :key="party_id"
-              :party="parties[party_id]"
+              v-for="answer in partiesAgree"
+              :key="answer.party_id"
+              :party="answer.party"
               :answer="answer"
             >
             </PartyElement>
-            <p v-if="Object.keys(partiesAgree).length == 0">
+            <p v-if="!partiesAgree.length">
               Nobena stranka ni izbrala tega odgovora.
             </p>
           </div>
           <div>
-            <div class="head">Se ne strinja</div>
+            <div class="head">Se ne strinjajo</div>
             <PartyElement
-              v-for="(answer, party_id) in partiesDisagree"
-              :key="party_id"
-              :party="parties[party_id]"
+              v-for="answer in partiesDisagree"
+              :key="answer.party_id"
+              :party="answer.party"
               :answer="answer"
             >
             </PartyElement>
-            <p v-if="Object.keys(partiesDisagree).length == 0">
-              Nobena stranka ni izbrala tega odgovora.
-            </p>
-          </div>
-          <div>
-            <div class="head">Brez stališča</div>
-            <PartyElement
-              v-for="(answer, party_id) in partiesNeutral"
-              :key="party_id"
-              :party="parties[party_id]"
-              :answer="answer"
-            >
-            </PartyElement>
-            <p v-if="Object.keys(partiesNeutral).length == 0">
+            <p v-if="!partiesDisagree.length">
               Nobena stranka ni izbrala tega odgovora.
             </p>
           </div>
@@ -210,64 +200,53 @@ router.beforeEach(() => {
 </template>
 
 <style scoped lang="scss">
-main {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: 100%;
-}
-
 .body {
   .content {
-    padding-inline: 100px;
-    padding-top: 50px;
-    padding-bottom: 56px;
+    padding-inline: 6rem;
+    padding-block: 3.25rem 4rem;
 
     @media (max-width: 575.98px) {
-      padding-inline: 21px;
-      padding-top: 18px;
-      padding-bottom: 32px;
+      padding-inline: 1.5rem;
+      padding-block: 2rem;
     }
 
     .category {
       display: inline-block;
-      margin-bottom: 16px;
-      padding: 4px 8px;
-      background-color: #ffffff;
-      border-radius: 9999px;
-      font-size: 12px;
+      margin-bottom: 1.25rem;
+      padding: 0.25rem;
+      background-color: #cee9c5;
+      font-size: 0.75rem;
       line-height: 1;
     }
 
     .title {
-      margin-bottom: 22px;
-      font-size: 32px;
-      line-height: 40px;
-      font-weight: 700;
+      margin-bottom: 1em;
+      font-size: 2rem;
+      line-height: 1.2;
 
       @media (max-width: 575.98px) {
-        font-size: 24px;
-        line-height: 30px;
+        font-size: 1.5rem;
       }
     }
 
     .description {
-      margin-bottom: 22px;
-      font-size: 21px;
-      line-height: 31px;
+      margin-bottom: 1em;
+      font-size: 1.3125rem;
+      line-height: 1.5;
 
       @media (max-width: 575.98px) {
-        font-size: 15px;
-        line-height: 22px;
+        font-size: 1rem;
       }
     }
 
     .buttons {
+      background: magenta; // TODO: fix these styles
+
       display: flex;
       gap: 20px;
       justify-content: center;
       align-items: flex-end;
-      margin-top: 42px;
+      margin-top: 2.5rem;
 
       @media (max-width: 575.98px) {
         gap: 9px;
@@ -370,33 +349,31 @@ main {
 
     .show-hide {
       & > img {
-        width: 21px;
-        margin-right: 5px;
+        width: 1.325rem;
+        margin-right: 0.25rem;
       }
 
       span {
-        font-size: 18px;
-        line-height: 20px;
-        font-weight: 800;
+        font-size: 1.325rem;
+        line-height: 1.5;
+        font-weight: 700;
       }
 
       button {
         display: inline-flex;
-        gap: 1px;
-        align-items: flex-end;
-        margin-left: 7px;
-        padding: 0;
+        gap: 0.25rem;
+        align-items: center;
+        margin-left: 0.5rem;
+        padding-inline: 0.75rem;
+        padding-block: 0.3rem 0.2rem;
         background: transparent;
-        border: none;
-        border-bottom: 1px solid #0e3d97;
-        color: #0e3d97;
-        font-size: 15px;
-        line-height: 1;
+        border: 1px solid #000;
+        color: #000;
+        font-size: 1rem;
         cursor: pointer;
 
         img {
-          width: 12px;
-          margin-bottom: 1px;
+          width: 0.75rem;
         }
 
         &.hide {
@@ -404,10 +381,22 @@ main {
             transform: rotate(180deg);
           }
         }
+
+        &:hover {
+          background-color: #fff;
+        }
+
+        &:focus-visible {
+          background-color: #fff;
+          outline: 2px solid #006fc3;
+          outline-offset: 2px;
+        }
       }
     }
 
     .parties {
+      background-color: magenta; // TODO: fix these styles
+
       display: flex;
       gap: 26px;
       margin-top: 22px;
