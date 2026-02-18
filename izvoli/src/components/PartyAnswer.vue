@@ -33,15 +33,15 @@ const show = ref(false);
   <div class="answer-wrapper">
     <div class="answer">
       <div v-if="agreement === true">
-        <img src="../assets/img/strinjam.svg" />
+        <img src="../assets/img/strinjam.svg" alt="" />
         Se strinjajo
       </div>
       <div v-if="agreement === false">
-        <img src="../assets/img/ne-strinjam.svg" />
+        <img src="../assets/img/ne-strinjam.svg" alt="" />
         Se ne strinjajo
       </div>
       <div v-if="agreement == null">
-        <img src="../assets/img/neopredeljen.svg" />
+        <img src="../assets/img/neopredeljen.svg" alt="" />
         Brez stališča
       </div>
       <button v-if="!show && answer?.comment" @click="show = true">

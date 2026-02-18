@@ -112,7 +112,11 @@ onMounted(() => {
                 type="checkbox"
                 :value="result.party_id"
               />
-              <img :src="partyImage(result.party_id)" class="party-image" />
+              <img
+                :src="partyImage(result.party_id)"
+                class="party-image"
+                alt=""
+              />
               {{ partyName(result.party_id) }}
             </label>
 

@@ -88,15 +88,15 @@ onMounted(() => {
         <div class="my-answer">
           <span>Tvoj odgovor</span>
           <div v-if="answer === true">
-            <img src="../assets/img/strinjam.svg" />
+            <img src="../assets/img/strinjam.svg" alt="" />
             Se strinjam
           </div>
           <div v-if="answer === false">
-            <img src="../assets/img/ne-strinjam.svg" />
+            <img src="../assets/img/ne-strinjam.svg" alt="" />
             Se ne strinjam
           </div>
           <div v-if="answer == null">
-            <img src="../assets/img/neopredeljen.svg" />
+            <img src="../assets/img/neopredeljen.svg" alt="" />
             Brez stališča
           </div>
         </div>
@@ -107,7 +107,7 @@ onMounted(() => {
             class="party"
           >
             <div class="head">
-              <img :src="partyImage(partyId)" class="party-image" />
+              <img :src="partyImage(partyId)" class="party-image" alt="" />
               <span>{{ partyName(partyId) }}</span>
             </div>
             <PartyAnswer

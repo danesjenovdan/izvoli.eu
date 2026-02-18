@@ -1,9 +1,8 @@
 <script setup>
 import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { RouterLink } from "vue-router";
 import { useMainStore } from "@/store.js";
 
-const router = useRouter();
 const store = useMainStore();
 
 defineProps({
@@ -59,7 +58,7 @@ function hideTooltip() {
   <div class="results-progress">
     <div class="progress-number">{{ current }}/{{ count }}</div>
     <div class="progress-circles">
-      <div
+      <RouterLink
         v-for="i in count"
         :key="i"
         class="progress-circle"
@@ -70,10 +69,10 @@ function hideTooltip() {
           disagree: getQuestionAnswer(i - 1) === false,
           neutral: getQuestionAnswer(i - 1) == null,
         }"
-        @click="router.push({ name: 'resultsByParty', params: { idx: i } })"
+        :to="{ name: 'resultsByParty', params: { idx: i } }"
         @mouseenter="showTooltip"
         @mouseleave="hideTooltip"
-      ></div>
+      ></RouterLink>
     </div>
     <div ref="tooltip" class="progress-tooltip">
       <span></span>
@@ -186,7 +185,7 @@ function hideTooltip() {
     padding: 4px 8px;
     background-color: #484848;
     border-radius: 5px;
-    font-size: 11px;
+    font-size: 0.75rem;
     line-height: 1;
     color: white;
     pointer-events: none;

@@ -77,11 +77,6 @@ export const useMainStore = defineStore("main", () => {
       quizFinished.value = finishedString === "true";
     }
 
-    // TODO:
-    // if (state.quizFinished) {
-    //   store.commit("calculateResults");
-    // }
-
     loaded.value = true;
   }
 
@@ -103,6 +98,11 @@ export const useMainStore = defineStore("main", () => {
       "volitvomat-answers",
       JSON.stringify(quizAnswers.value),
     );
+  }
+
+  function finishQuiz() {
+    quizFinished.value = true;
+    localStorage.setItem("volitvomat-finished", "true");
   }
 
   function calculateResults() {
@@ -160,6 +160,7 @@ export const useMainStore = defineStore("main", () => {
     fetchData,
     restartQuiz,
     saveAnswer,
+    finishQuiz,
     calculateResults,
   };
 });

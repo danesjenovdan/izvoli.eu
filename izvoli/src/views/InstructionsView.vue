@@ -11,7 +11,7 @@
             <span>Pritisni spodnji gumb ali potegni kartico v levo</span>
           </div>
           <button type="button" class="disagree" disabled>
-            <img src="../assets/img/ne-strinjam.svg" />
+            <img src="../assets/img/ne-strinjam.svg" alt="" />
           </button>
         </div>
         <div>
@@ -20,7 +20,7 @@
             <span>Pritisni spodnji gumb ali potegni kartico v desno</span>
           </div>
           <button type="button" class="agree" disabled>
-            <img src="../assets/img/strinjam.svg" />
+            <img src="../assets/img/strinjam.svg" alt="" />
           </button>
         </div>
       </div>
@@ -98,15 +98,15 @@
     }
 
     .instructions {
-      margin-bottom: 9px;
-      font-size: 12px;
-      line-height: 14px;
-      font-weight: 500;
+      margin-bottom: 0.5rem;
+      font-size: 0.75rem;
+      line-height: 1.2;
+      font-weight: 400;
 
       div {
-        margin-bottom: 4px;
-        font-size: 18px;
-        line-height: 20px;
+        margin-bottom: 0.25rem;
+        font-size: 1.125rem;
+        line-height: 1.2;
         font-weight: 700;
         text-transform: uppercase;
       }

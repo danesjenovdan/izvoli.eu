@@ -63,6 +63,7 @@ const navigateToNextQuestion = () => {
       params: { idx: questionNumber.value + 1 },
     });
   } else {
+    store.finishQuiz();
     router.push({ name: "results" });
   }
 };
@@ -126,11 +127,11 @@ router.beforeEach(() => {
               <span>Nazaj</span>
             </RouterLink>
             <button class="disagree" @click="saveAnswer(false)">
-              <img src="../assets/img/ne-strinjam.svg" />
+              <img src="../assets/img/ne-strinjam.svg" alt="" />
               <span>Se ne strinjam</span>
             </button>
             <button class="agree" @click="saveAnswer(true)">
-              <img src="../assets/img/strinjam.svg" />
+              <img src="../assets/img/strinjam.svg" alt="" />
               <span>Se strinjam</span>
             </button>
             <button class="skip" @click="skipQuestion">
@@ -148,8 +149,9 @@ router.beforeEach(() => {
           <img
             v-if="moreInfo || moreInfoHover"
             src="../assets/img/eyes-down.svg"
+            alt=""
           />
-          <img v-else src="../assets/img/eyes-right.svg" />
+          <img v-else src="../assets/img/eyes-right.svg" alt="" />
           <span>Kaj mislijo stranke?</span>
           <button
             v-if="!moreInfo"
@@ -169,7 +171,7 @@ router.beforeEach(() => {
         <div v-if="moreInfo" class="parties">
           <div>
             <div class="head">
-              <img src="../assets/img/strinjam.svg" />
+              <img src="../assets/img/strinjam.svg" alt="" />
               <span>Se strinjajo</span>
             </div>
             <PartyElement
@@ -185,7 +187,7 @@ router.beforeEach(() => {
           </div>
           <div>
             <div class="head">
-              <img src="../assets/img/ne-strinjam.svg" />
+              <img src="../assets/img/ne-strinjam.svg" alt="" />
               <span>Se ne strinjajo</span>
             </div>
             <PartyElement

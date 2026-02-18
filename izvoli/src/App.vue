@@ -23,7 +23,7 @@ onMounted(() => {
       <img
         src="./assets/img/header-logo.svg"
         class="header-logo"
-        alt="Izvoli EU, prva pomoč za evropske volitve"
+        alt="Izvoli.si – prva pomoč za državnozborske volitve"
       />
     </RouterLink>
     <div v-if="store.loaded && store.quizFinished" class="buttons">
@@ -144,37 +144,35 @@ button {
       background-position: center right 11px;
       background-size: 21px;
       border: 2px solid black;
-      border-radius: 10px;
-      font-size: 15px;
-      line-height: 20px;
-      font-weight: 800;
-      color: black;
+      font-size: 1rem;
+      line-height: 1.2;
+      font-weight: 700;
+      color: #000;
       text-decoration: none;
       cursor: pointer;
 
       @media (max-width: 575.98px) {
-        font-size: 12px;
-        line-height: 16px;
+        font-size: 0.875rem;
       }
 
       &::after {
         content: "";
         display: inline-block;
-        width: 21px;
-        height: 21px;
+        width: 1.25rem;
+        height: 1.25rem;
         background-repeat: no-repeat;
         background-position: center;
         background-size: contain;
-        margin-left: 4px;
-
-        @media (max-width: 575.98px) {
-          width: 16px;
-          height: 16px;
-        }
+        margin-left: 0.25rem;
       }
 
       &:hover {
-        background-color: rgba(255, 255, 255, 0.33);
+        background-color: #fff;
+      }
+
+      &:focus-visible {
+        outline: 2px solid #006fc3;
+        outline-offset: 2px;
       }
 
       &.show-results {
