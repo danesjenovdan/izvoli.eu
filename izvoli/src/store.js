@@ -23,6 +23,8 @@ export const useMainStore = defineStore("main", () => {
   const results = ref([]);
   const resultsCalculated = ref(false);
 
+  const partiesToCompare = ref([]);
+
   function clearData() {
     loaded.value = false;
 
@@ -37,6 +39,8 @@ export const useMainStore = defineStore("main", () => {
 
     results.value = [];
     resultsCalculated.value = false;
+
+    partiesToCompare.value = [];
   }
 
   async function loadData() {
@@ -57,7 +61,7 @@ export const useMainStore = defineStore("main", () => {
     if (questionOrderString) {
       questionOrder.value = JSON.parse(questionOrderString);
     } else {
-      const ids = Object.keys(quizData.value.questions).map((id) => Number(id));
+      const ids = quizData.value.questions.map((q) => q.id);
       questionOrder.value = shuffleArray(ids);
       localStorage.setItem(
         "volitvomat-question-order",
@@ -93,8 +97,8 @@ export const useMainStore = defineStore("main", () => {
     router.push({ name: "introduction" });
   }
 
-  function saveAnswer({ question_id, agreement }) {
-    quizAnswers.value[question_id] = agreement;
+  function saveAnswer({ questionId, agreement }) {
+    quizAnswers.value[questionId] = agreement;
     localStorage.setItem(
       "volitvomat-answers",
       JSON.stringify(quizAnswers.value),
@@ -150,6 +154,7 @@ export const useMainStore = defineStore("main", () => {
     quizFinished,
     results,
     resultsCalculated,
+    partiesToCompare,
     clearData,
     loadData,
     fetchData,

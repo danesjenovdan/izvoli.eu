@@ -19,7 +19,7 @@ const questionNumber = computed(() => questionIndex.value + 1);
 
 const question = computed(() => {
   const questionId = store.questionOrder[questionIndex.value];
-  return store.quizData.questions[questionId];
+  return store.quizData.questions.find((q) => q.id === questionId);
 });
 
 const workGroup = computed(() => {
@@ -73,7 +73,7 @@ const skipQuestion = () => {
 
 const saveAnswer = (agreement) => {
   store.saveAnswer({
-    question_id: question.value.id,
+    questionId: question.value.id,
     agreement,
   });
   navigateToNextQuestion();
@@ -159,11 +159,11 @@ router.beforeEach(() => {
             @mouseleave="moreInfoHover = false"
           >
             Prikaži
-            <img src="../assets/img/puscica-trikotnik.svg" />
+            <img src="../assets/img/puscica-trikotnik.svg" alt="" />
           </button>
           <button v-if="moreInfo" class="hide" @click="moreInfo = false">
             Skrij
-            <img src="../assets/img/puscica-trikotnik.svg" />
+            <img src="../assets/img/puscica-trikotnik.svg" alt="" />
           </button>
         </div>
         <div v-if="moreInfo" class="parties">
@@ -230,7 +230,6 @@ router.beforeEach(() => {
     }
 
     .description {
-      margin-bottom: 1em;
       font-size: 1.3125rem;
       line-height: 1.5;
 
@@ -339,12 +338,14 @@ router.beforeEach(() => {
   }
 
   .more-info {
-    padding: 40px 100px;
-    background-color: #f2f7ff;
     border-top: 2px solid black;
+    background-color: #f2f7ff;
+    padding-inline: 6rem;
+    padding-block: 3.25rem 4rem;
 
     @media (max-width: 575.98px) {
-      padding: 32px 21px;
+      padding-inline: 1.5rem;
+      padding-block: 2rem;
     }
 
     .show-hide {

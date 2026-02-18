@@ -1,11 +1,29 @@
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
+import { useMainStore } from "@/store.js";
 
-defineProps({
-  party: {
-    type: Object,
+const props = defineProps({
+  questionIndex: {
+    type: Number,
     required: true,
   },
+  partyId: {
+    type: Number,
+    required: true,
+  },
+});
+
+const store = useMainStore();
+
+const answer = computed(() => {
+  const questionId = store.questionOrder[props.questionIndex];
+  return store.quizData.answers.find(
+    (a) => a.question_id === questionId && a.party_id === props.partyId,
+  );
+});
+
+const agreement = computed(() => {
+  return answer.value?.agreement;
 });
 
 const show = ref(false);
@@ -14,34 +32,30 @@ const show = ref(false);
 <template>
   <div class="answer-wrapper">
     <div class="answer">
-      <div v-if="party?.answer == 'YES'">
+      <div v-if="agreement === true">
         <img src="../assets/img/strinjam.svg" />
-        Se strinja
+        Se strinjajo
       </div>
-      <div v-if="party?.answer == 'NO'">
+      <div v-if="agreement === false">
         <img src="../assets/img/ne-strinjam.svg" />
-        Se ne strinja
+        Se ne strinjajo
       </div>
-      <div v-if="party?.answer == 'NEUTRAL'">
+      <div v-if="agreement == null">
         <img src="../assets/img/neopredeljen.svg" />
         Brez stališča
       </div>
-      <div v-if="!party">
-        <img src="../assets/img/niso-odgovorili.svg" />
-        Niso odgovorili
-      </div>
-      <button v-if="!show && party?.comment" @click="show = true">
-        Obrazložitev
-        <img src="../assets/img/puscica-trikotnik.svg" />
+      <button v-if="!show && answer?.comment" @click="show = true">
+        Razlaga
+        <img src="../assets/img/puscica-trikotnik.svg" alt="" />
       </button>
-      <button v-if="show && party?.comment" @click="show = false">
+      <button v-if="show && answer?.comment" class="hide" @click="show = false">
         Skrij
-        <img src="../assets/img/krizec-moder.svg" class="hide" />
+        <img src="../assets/img/puscica-trikotnik.svg" alt="" />
       </button>
     </div>
-    <p v-if="show" class="comment">{{ party?.comment }}</p>
+    <p v-if="show" class="comment">{{ answer?.comment }}</p>
   </div>
-  <p v-if="show" class="comment on-mobile">{{ party?.comment }}</p>
+  <p v-if="show" class="comment on-mobile">{{ answer?.comment }}</p>
 </template>
 
 <style scoped lang="scss">
@@ -50,7 +64,7 @@ const show = ref(false);
 
   @media (max-width: 575.98px) {
     width: fit-content;
-    margin-top: 4px;
+    margin-top: 0.25rem;
   }
 
   .answer {
@@ -58,77 +72,99 @@ const show = ref(false);
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
 
     @media (max-width: 575.98px) {
       flex-direction: column;
-      align-items: flex-end;
+      align-items: flex-start;
+      gap: 0.5rem;
     }
 
     & > div {
+      flex: 1;
       display: flex;
       align-items: center;
-      min-width: 115px;
+      gap: 1rem;
+      min-width: 145px;
+
+      @media (max-width: 575.98px) {
+        justify-content: flex-end;
+        min-width: initial;
+      }
 
       img {
-        width: 28px;
-        margin-right: 10px;
-        margin-bottom: 5px;
+        height: 2rem;
 
         @media (max-width: 575.98px) {
-          width: 24px;
+          height: 1.5rem;
         }
       }
     }
 
     & > button {
-      flex-shrink: 0;
-      display: flex;
+      display: inline-flex;
+      gap: 0.25rem;
       align-items: center;
-      gap: 2px;
-      padding: 0;
-      background-color: transparent;
-      border: none;
-      border-bottom: 1px solid #0e3d97;
-      color: #0e3d97;
-      font-size: 12px;
-      line-height: 14px;
+      justify-content: space-between;
+      min-width: 100px;
+      margin-left: 0.5rem;
+      padding-inline: 0.75rem;
+      padding-block: 0.3rem 0.2rem;
+      background: transparent;
+      border: 1px solid #000;
+      color: #000;
+      font-size: 0.875rem;
       font-weight: 400;
       cursor: pointer;
 
       @media (max-width: 575.98px) {
-        margin-top: 8px;
+        min-width: 90px;
+        margin-left: 0;
+        font-size: 0.75rem;
       }
 
       img {
-        width: 10px;
+        width: 0.75rem;
+      }
 
-        &.hide {
-          width: 8px;
+      &.hide {
+        img {
+          transform: rotate(180deg);
         }
+      }
+
+      &:hover {
+        background-color: #fff;
+      }
+
+      &:focus-visible {
+        background-color: #fff;
+        outline: 2px solid #006fc3;
+        outline-offset: 2px;
       }
     }
   }
 }
 
 .comment {
-  padding-top: 18px;
-  font-size: 13px;
-  line-height: 18px;
+  padding-top: 1rem;
+  font-size: 1rem;
+  line-height: 1.5;
   font-weight: 400;
   display: block;
 
   @media (max-width: 575.98px) {
     display: none;
-    font-size: 12px;
-    line-height: 16px;
   }
 
   &.on-mobile {
     display: none;
+    width: 100%;
+    padding-top: 0;
+    font-size: 0.75rem;
 
     @media (max-width: 575.98px) {
       display: block;
-      width: 100%;
     }
   }
 }
