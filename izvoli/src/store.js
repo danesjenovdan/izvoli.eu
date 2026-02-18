@@ -89,6 +89,7 @@ export const useMainStore = defineStore("main", () => {
 
   function restartQuiz() {
     clearData();
+    loadData();
     router.push({ name: "introduction" });
   }
 

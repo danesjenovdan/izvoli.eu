@@ -26,9 +26,11 @@ onMounted(() => {
         alt="Izvoli.si – prva pomoč za državnozborske volitve"
       />
     </RouterLink>
-    <div v-if="store.loaded && store.quizFinished" class="buttons">
+    <div class="buttons">
       <RouterLink
-        v-if="currentRouteName != 'results'"
+        v-if="
+          store.loaded && store.quizFinished && currentRouteName !== 'results'
+        "
         class="show-results"
         :to="{ name: 'results' }"
       >
