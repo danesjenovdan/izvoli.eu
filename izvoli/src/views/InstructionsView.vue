@@ -10,7 +10,7 @@
             <div>Se ne strinjaš?</div>
             <span>Pritisni spodnji gumb ali potegni kartico v levo</span>
           </div>
-          <button type="button" class="disagree">
+          <button type="button" class="disagree" disabled>
             <img src="../assets/img/ne-strinjam.svg" />
           </button>
         </div>
@@ -19,7 +19,7 @@
             <div>Se strinjaš?</div>
             <span>Pritisni spodnji gumb ali potegni kartico v desno</span>
           </div>
-          <button type="button" class="agree">
+          <button type="button" class="agree" disabled>
             <img src="../assets/img/strinjam.svg" />
           </button>
         </div>
@@ -27,7 +27,7 @@
       <div class="buttons">
         <div>
           <div class="instructions">Prejšnja trditev</div>
-          <button type="button" class="back">
+          <button type="button" class="back" disabled>
             <div>
               <img src="../assets/img/puscica-trikotnik.svg" alt="" />
               <img src="../assets/img/puscica-trikotnik.svg" alt="" />
@@ -35,8 +35,8 @@
           </button>
         </div>
         <div>
-          <div class="instructions">Brez stališča</div>
-          <button type="button" class="skip">
+          <div class="instructions">Preskoči</div>
+          <button type="button" class="skip" disabled>
             <div>
               <img src="../assets/img/puscica-trikotnik.svg" alt="" />
               <img src="../assets/img/puscica-trikotnik.svg" alt="" />
@@ -78,39 +78,37 @@
   }
 
   .buttons {
-    background: magenta; // TODO: fix these styles
-
     display: flex;
-    gap: 20px;
-    justify-content: space-evenly;
-    align-items: flex-start;
+    gap: 1.5rem;
+    justify-content: center;
+    align-items: flex-end;
+    margin-top: 2.5rem;
 
     @media (max-width: 575.98px) {
-      gap: 9px;
-      padding-block: 32px;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
     }
 
     & > div {
-      max-width: 110px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       text-align: center;
+    }
 
-      .instructions {
-        margin-bottom: 9px;
-        font-size: 12px;
-        line-height: 14px;
-        font-weight: 500;
+    .instructions {
+      margin-bottom: 9px;
+      font-size: 12px;
+      line-height: 14px;
+      font-weight: 500;
 
-        div {
-          margin-bottom: 4px;
-          font-size: 18px;
-          line-height: 20px;
-          font-weight: 700;
-          text-transform: uppercase;
-        }
-      }
-
-      button {
-        margin-inline: auto;
+      div {
+        margin-bottom: 4px;
+        font-size: 18px;
+        line-height: 20px;
+        font-weight: 700;
+        text-transform: uppercase;
       }
     }
 
@@ -118,22 +116,22 @@
     .disagree,
     .back,
     .skip {
-      background: transparent;
-      border: 2px solid black;
       display: flex;
-      gap: 6px;
       align-items: center;
+      gap: 0.5rem;
       justify-content: flex-start;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid #000;
       cursor: default;
     }
 
     .back,
     .skip {
-      padding: 14px 10px;
+      padding: 0.5rem 0.75rem;
       width: auto;
-      font-size: 10px;
-      line-height: 1;
-      font-weight: 500;
+      font-size: 1rem;
+      line-height: 1.3;
+      font-weight: 400;
       color: inherit;
       text-decoration: none;
 
@@ -142,11 +140,11 @@
       }
 
       img {
-        height: 16px;
+        height: 1rem;
         transform: rotate(90deg);
 
         &:first-of-type {
-          margin-right: -6px;
+          margin-right: -0.375rem;
         }
       }
     }
@@ -161,16 +159,21 @@
 
     .agree,
     .disagree {
-      gap: 10px;
-      background-color: #fff;
-      padding: 20px 18px 20px 21px;
+      gap: 1rem;
+      justify-content: center;
       width: auto;
-      font-size: 18px;
-      line-height: 20px;
-      font-weight: 800;
+      padding: 1.25rem 1.5rem;
+      background-color: #eaf5ff;
+      border-width: 2px;
+      font-size: 1.125rem;
+      line-height: 1.2;
+      font-weight: 700;
+
+      @media (max-width: 575.98px) {
+      }
 
       img {
-        width: 28px;
+        height: 2rem;
       }
     }
   }

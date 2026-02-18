@@ -24,12 +24,16 @@ const show = ref(false);
       </div>
       <div class="buttons">
         <button v-if="!show && answer.comment" @click="show = true">
-          Obrazložitev
-          <img src="../assets/img/puscica-trikotnik.svg" />
+          Razlaga
+          <img src="../assets/img/puscica-trikotnik.svg" alt="" />
         </button>
-        <button v-if="show && answer.comment" @click="show = false">
+        <button
+          v-if="show && answer.comment"
+          class="hide"
+          @click="show = false"
+        >
           Skrij
-          <img src="../assets/img/krizec-moder.svg" class="hide" />
+          <img src="../assets/img/puscica-trikotnik.svg" alt="" />
         </button>
       </div>
     </div>
@@ -39,7 +43,8 @@ const show = ref(false);
 
 <style scoped lang="scss">
 .party-element {
-  padding: 14px 0;
+  padding: 1rem 0.75rem;
+  background-color: #fff;
   border-bottom: 1px solid black;
 
   .head {
@@ -53,17 +58,22 @@ const show = ref(false);
       display: flex;
       gap: 9px;
       align-items: center;
-      font-size: 15px;
-      line-height: 18px;
-      font-weight: 800;
+      font-size: 1rem;
+      line-height: 1.2;
+      font-weight: 700;
+
+      @media (max-width: 575.98px) {
+        font-size: 0.75rem;
+      }
 
       img {
         flex-shrink: 0;
-        width: 36px;
-        height: 36px;
-        object-fit: contain;
-        border-radius: 9999px;
+        width: 2.25rem;
+        height: 2.25rem;
         border: 1px solid black;
+        border-radius: 50%;
+        margin-right: 0.5rem;
+        object-fit: contain;
       }
     }
 
@@ -73,31 +83,60 @@ const show = ref(false);
       text-align: right;
 
       button {
-        padding: 0;
-        background-color: transparent;
-        border: none;
-        border-bottom: 1px solid #0e3d97;
-        color: #0e3d97;
-        font-size: 12px;
-        line-height: 14px;
+        display: inline-flex;
+        gap: 0.25rem;
+        align-items: center;
+        justify-content: space-between;
+        min-width: 100px;
+        margin-left: 0.5rem;
+        padding-inline: 0.75rem;
+        padding-block: 0.3rem 0.2rem;
+        background: transparent;
+        border: 1px solid #000;
+        color: #000;
+        font-size: 0.875rem;
+        font-weight: 400;
         cursor: pointer;
 
-        img {
-          width: 10px;
-          vertical-align: middle;
+        @media (max-width: 575.98px) {
+          min-width: 90px;
+          margin-left: 0;
+          font-size: 0.75rem;
+        }
 
-          &.hide {
-            width: 8px;
+        img {
+          width: 0.75rem;
+        }
+
+        &.hide {
+          img {
+            transform: rotate(180deg);
           }
+        }
+
+        &:hover {
+          background-color: #fff;
+          box-shadow: 0 0 0 1px #000 inset;
+        }
+
+        &:focus-visible {
+          outline: 2px solid #006fc3;
+          outline-offset: 2px;
         }
       }
     }
   }
 
   .comment {
-    margin-top: 10px;
-    font-size: 12px;
-    line-height: 16px;
+    padding-top: 1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    font-weight: 400;
+    display: block;
+
+    @media (max-width: 575.98px) {
+      font-size: 0.75rem;
+    }
   }
 }
 </style>

@@ -135,10 +135,10 @@ const show = ref(false);
 
       &:hover {
         background-color: #fff;
+        box-shadow: 0 0 0 1px #000 inset;
       }
 
       &:focus-visible {
-        background-color: #fff;
         outline: 2px solid #006fc3;
         outline-offset: 2px;
       }

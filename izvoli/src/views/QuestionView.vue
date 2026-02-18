@@ -168,7 +168,10 @@ router.beforeEach(() => {
         </div>
         <div v-if="moreInfo" class="parties">
           <div>
-            <div class="head">Se strinjajo</div>
+            <div class="head">
+              <img src="../assets/img/strinjam.svg" />
+              <span>Se strinjajo</span>
+            </div>
             <PartyElement
               v-for="answer in partiesAgree"
               :key="answer.party_id"
@@ -181,7 +184,10 @@ router.beforeEach(() => {
             </p>
           </div>
           <div>
-            <div class="head">Se ne strinjajo</div>
+            <div class="head">
+              <img src="../assets/img/ne-strinjam.svg" />
+              <span>Se ne strinjajo</span>
+            </div>
             <PartyElement
               v-for="answer in partiesDisagree"
               :key="answer.party_id"
@@ -239,30 +245,27 @@ router.beforeEach(() => {
     }
 
     .buttons {
-      background: magenta; // TODO: fix these styles
-
       display: flex;
-      gap: 20px;
+      gap: 1.5rem;
       justify-content: center;
       align-items: flex-end;
       margin-top: 2.5rem;
 
       @media (max-width: 575.98px) {
-        gap: 9px;
-        margin-top: 32px;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
       }
 
       .agree,
       .disagree,
       .back,
       .skip {
-        background: rgba(255, 255, 255, 0.8);
-        border: 2px solid black;
-        border-radius: 20px;
         display: flex;
-        gap: 6px;
         align-items: center;
+        gap: 0.5rem;
         justify-content: flex-start;
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid #000;
         cursor: pointer;
 
         @media (max-width: 575.98px) {
@@ -270,19 +273,30 @@ router.beforeEach(() => {
             display: none;
           }
         }
+
+        &:hover {
+          background-color: #fff;
+          box-shadow: 0 0 0 1px #000 inset;
+        }
+
+        &:focus-visible {
+          outline: 2px solid #006fc3;
+          outline-offset: 2px;
+        }
       }
 
       .back,
       .skip {
-        padding: 14px 10px;
+        padding: 0.25rem 0.375rem;
         width: 120px;
-        font-size: 10px;
-        line-height: 1;
-        font-weight: 500;
+        font-size: 1rem;
+        line-height: 1.3;
+        font-weight: 400;
         color: inherit;
         text-decoration: none;
 
         @media (max-width: 575.98px) {
+          padding: 0.5rem 0.75rem;
           width: auto;
         }
 
@@ -291,16 +305,12 @@ router.beforeEach(() => {
         }
 
         img {
-          height: 16px;
+          height: 1rem;
           transform: rotate(90deg);
 
           &:first-of-type {
-            margin-right: -6px;
+            margin-right: -0.375rem;
           }
-        }
-
-        &:hover {
-          background-color: #fff;
         }
       }
 
@@ -314,24 +324,43 @@ router.beforeEach(() => {
 
       .agree,
       .disagree {
-        gap: 10px;
-        padding: 20px 9px 20px 18px;
+        gap: 1rem;
+        justify-content: center;
         width: 200px;
-        font-size: 18px;
-        line-height: 20px;
-        font-weight: 800;
+        padding: 0.75rem;
+        background-color: #eaf5ff;
+        border-width: 2px;
+        font-size: 1.125rem;
+        line-height: 1.2;
+        font-weight: 700;
 
         @media (max-width: 575.98px) {
-          padding: 20px 18px 20px 21px;
+          padding: 1.25rem 1.5rem;
           width: auto;
         }
 
         img {
-          width: 28px;
+          height: 2rem;
         }
+      }
 
+      .agree {
         &:hover {
-          background-color: #ffe368;
+          background-color: #f2f8cc;
+          box-shadow:
+            0 0 0 1px #000 inset,
+            0 0 0.25rem 0 #bddc00,
+            0 0 1rem 0 #bddc00 inset;
+        }
+      }
+
+      .disagree {
+        &:hover {
+          background-color: #ffdfdf;
+          box-shadow:
+            0 0 0 1px #000 inset,
+            0 0 0.25rem 0 #ff0000,
+            0 0 1rem 0 #ff0000 inset;
         }
       }
     }
@@ -339,7 +368,7 @@ router.beforeEach(() => {
 
   .more-info {
     border-top: 2px solid black;
-    background-color: #f2f7ff;
+    background-color: #eaf5ff;
     padding-inline: 6rem;
     padding-block: 3.25rem 4rem;
 
@@ -358,12 +387,18 @@ router.beforeEach(() => {
         font-size: 1.325rem;
         line-height: 1.5;
         font-weight: 700;
+
+        @media (max-width: 575.98px) {
+          font-size: 1rem;
+        }
       }
 
       button {
         display: inline-flex;
         gap: 0.25rem;
         align-items: center;
+        justify-content: space-between;
+        min-width: 100px;
         margin-left: 0.5rem;
         padding-inline: 0.75rem;
         padding-block: 0.3rem 0.2rem;
@@ -373,8 +408,13 @@ router.beforeEach(() => {
         font-size: 1rem;
         cursor: pointer;
 
+        @media (max-width: 575.98px) {
+          min-width: 80px;
+          font-size: 0.75rem;
+        }
+
         img {
-          width: 0.75rem;
+          width: 1rem;
         }
 
         &.hide {
@@ -385,10 +425,10 @@ router.beforeEach(() => {
 
         &:hover {
           background-color: #fff;
+          box-shadow: 0 0 0 1px #000 inset;
         }
 
         &:focus-visible {
-          background-color: #fff;
           outline: 2px solid #006fc3;
           outline-offset: 2px;
         }
@@ -396,31 +436,37 @@ router.beforeEach(() => {
     }
 
     .parties {
-      background-color: magenta; // TODO: fix these styles
-
       display: flex;
-      gap: 26px;
-      margin-top: 22px;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
 
       @media (max-width: 575.98px) {
         flex-direction: column;
-        gap: 43px;
+        gap: 2rem;
       }
 
       & > div {
         flex: 1;
 
         .head {
-          padding: 6px 8px;
-          background-color: #e2edff;
-          font-size: 13px;
-          line-height: 18px;
-          font-weight: 600;
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          padding: 1rem 0.75rem;
+          background-color: #eaf5ff;
+          border-bottom: 1px solid #000;
+          font-size: 1.125rem;
+          line-height: 1.2;
+          font-weight: 700;
 
           & + p {
-            padding: 6px 8px;
-            font-size: 13px;
-            line-height: 18px;
+            padding: 1rem 0.75rem;
+            background-color: #fff;
+            border-bottom: 1px solid #000;
+          }
+
+          img {
+            height: 2rem;
           }
         }
       }

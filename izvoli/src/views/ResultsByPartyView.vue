@@ -210,7 +210,7 @@ onMounted(() => {
 
   .more-info {
     border-top: 2px solid #000;
-    background-color: #f2f7ff;
+    background-color: #eaf5ff;
     padding-inline: 6rem;
     padding-block: 3.25rem 4rem;
 
