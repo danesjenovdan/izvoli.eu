@@ -5,7 +5,7 @@ import IntroductionView from "@/views/IntroductionView.vue";
 import LandingView from "@/views/LandingView.vue";
 import PrivacyPolicyView from "@/views/PrivacyPolicyView.vue";
 import QuestionView from "@/views/QuestionView.vue";
-// import ResultsByPartyView from "@/views/ResultsByPartyView.vue";
+import ResultsByPartyView from "@/views/ResultsByPartyView.vue";
 import ResultsView from "@/views/ResultsView.vue";
 
 const router = createRouter({
@@ -53,11 +53,11 @@ const router = createRouter({
       name: "results",
       component: ResultsView,
     },
-    // {
-    //   path: "/rezultati/:id",
-    //   name: "resultsByParty",
-    //   component: ResultsByPartyView,
-    // },
+    {
+      path: "/rezultati/:id",
+      name: "resultsByParty",
+      component: ResultsByPartyView,
+    },
   ],
 });
 

@@ -1,13 +1,12 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
-// import { computed, toRaw } from "vue";
-// import { useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import { useMainStore } from "@/store.js";
 import PartyDonutChart from "@/components/PartyDonutChart.vue";
 import TheLoader from "@/components/TheLoader.vue";
 
 const store = useMainStore();
-// const router = useRouter();
+const router = useRouter();
 
 const topThreeResults = computed(() => {
   return store.results.slice(0, 3);
@@ -31,17 +30,17 @@ function partyName(partyId) {
   return store.quizData.parties.find((p) => p.id === partyId)?.name || "???";
 }
 
-// const compareWithWinningParties = () => {
-//   const parties = [...results.value.map((res) => res.party_id)];
-//   parties.splice(3);
-//   store.commit("setPartiesToCompare", { parties: parties });
-//   router.push({ name: "resultsByParty", params: { id: 1 } });
-// };
+const compareWithTopThreeParties = () => {
+  const parties = [...topThreeResults.value.map((res) => res.party_id)];
+  // store.commit("setPartiesToCompare", { parties: parties });
+  router.push({ name: "resultsByParty", params: { idx: 1 } });
+};
 
-// const compareWithChosenParties = () => {
-//   store.commit("setPartiesToCompare", { parties: chosenParties.value });
-//   router.push({ name: "resultsByParty", params: { id: 1 } });
-// };
+const compareWithChosenParties = () => {
+  const parties = [...chosenParties.value];
+  //   store.commit("setPartiesToCompare", { parties: chosenParties.value });
+  router.push({ name: "resultsByParty", params: { id: 1 } });
+};
 
 const urlCopied = ref(false);
 
@@ -84,7 +83,7 @@ onMounted(() => {
           />
         </div>
         <div class="button-wrapper">
-          <button class="button-go" @click="compareWithWinningParties">
+          <button class="button-go" @click="compareWithTopThreeParties">
             Primerjaj svoje odgovore s temi strankami
             <img src="../assets/img/puscica.svg" alt="" />
           </button>

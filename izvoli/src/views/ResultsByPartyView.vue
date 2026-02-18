@@ -1,42 +1,42 @@
 <script setup>
-import { computed, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
+// import { computed, onMounted } from "vue";
+// import { useRoute, useRouter } from "vue-router";
 import PartyAnswer from "@/components/PartyAnswer.vue";
 import ResultsProgress from "@/components/ResultsProgress.vue";
 
-const route = useRoute();
-const router = useRouter();
-const store = useStore();
+// const route = useRoute();
+// const router = useRouter();
+// const store = useStore();
 
-const questionIndex = computed(() => parseInt(route.params.id, 10) - 1);
-const questionNumber = computed(() => questionIndex.value + 1);
+// const questionIndex = computed(() => parseInt(route.params.id, 10) - 1);
+// const questionNumber = computed(() => questionIndex.value + 1);
 
-const storeInitialized = computed(() => store.getters.getStoreInitialized);
-const questionsList = computed(() => store.getters.getQuestionsList);
-const questionsNo = computed(() => questionsList.value.length);
-const questionId = computed(() => questionsList.value[questionIndex.value]);
-const question = computed(() => store.state.questions[questionId.value]);
-const questionTags = computed(() => {
-  const tagEntries = Object.entries(store.state.questions).map(
-    ([key, value]) => {
-      return [key, value.tag];
-    },
-  );
-  return Object.fromEntries(tagEntries);
-});
-const answers = computed(() => store.getters.getAnswers);
-const parties = computed(() => store.getters.getParties);
-const partiesToCompare = computed(() => store.getters.getPartiesToCompare);
+// const storeInitialized = computed(() => store.getters.getStoreInitialized);
+// const questionsList = computed(() => store.getters.getQuestionsList);
+// const questionsNo = computed(() => questionsList.value.length);
+// const questionId = computed(() => questionsList.value[questionIndex.value]);
+// const question = computed(() => store.state.questions[questionId.value]);
+// const questionTags = computed(() => {
+//   const tagEntries = Object.entries(store.state.questions).map(
+//     ([key, value]) => {
+//       return [key, value.tag];
+//     },
+//   );
+//   return Object.fromEntries(tagEntries);
+// });
+// const answers = computed(() => store.getters.getAnswers);
+// const parties = computed(() => store.getters.getParties);
+// const partiesToCompare = computed(() => store.getters.getPartiesToCompare);
 
-onMounted(() => {
-  if (!storeInitialized.value) {
-    store.dispatch("initializeStore").then((quiz_finished) => {
-      if (quiz_finished) {
-        router.push("/rezultati");
-      }
-    });
-  }
-});
+// onMounted(() => {
+//   if (!storeInitialized.value) {
+//     store.dispatch("initializeStore").then((quiz_finished) => {
+//       if (quiz_finished) {
+//         router.push("/rezultati");
+//       }
+//     });
+//   }
+// });
 </script>
 
 <template>
