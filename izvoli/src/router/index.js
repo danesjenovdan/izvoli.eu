@@ -54,7 +54,7 @@ const router = createRouter({
       component: ResultsView,
     },
     {
-      path: "/rezultati/:id",
+      path: "/rezultati/:idx",
       name: "resultsByParty",
       component: ResultsByPartyView,
     },

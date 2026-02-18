@@ -1,10 +1,11 @@
 <script setup>
 import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { RouterLink } from "vue-router";
+import { useMainStore } from "@/store.js";
 
-const router = useRouter();
+const store = useMainStore();
 
-const props = defineProps({
+defineProps({
   current: {
     type: Number,
     required: true,
@@ -13,31 +14,21 @@ const props = defineProps({
     type: Number,
     required: true,
   },
-  list: {
-    type: Array,
-    required: true,
-  },
-  answers: {
-    type: Object,
-    required: true,
-  },
-  tags: {
-    type: Object,
-    required: true,
-  },
 });
 
+function getQuestionAnswer(index) {
+  const questionId = store.questionOrder[index];
+  return store.quizAnswers[questionId];
+}
+
+function getQuestionTag(index) {
+  const questionId = store.questionOrder[index];
+  const question = store.quizData.questions.find((q) => q.id === questionId);
+  if (!question) return null;
+  return question.list_title || question.title || null;
+}
+
 const tooltip = ref();
-
-function getAnswer(i) {
-  const index = i - 1;
-  return props.answers[props.list[index]];
-}
-
-function getTag(i) {
-  const index = i - 1;
-  return props.tags[props.list[index]];
-}
 
 function showTooltip(event) {
   const circle = event.target;
@@ -67,21 +58,21 @@ function hideTooltip() {
   <div class="results-progress">
     <div class="progress-number">{{ current }}/{{ count }}</div>
     <div class="progress-circles">
-      <div
+      <RouterLink
         v-for="i in count"
         :key="i"
         class="progress-circle"
-        :data-tag="getTag(i)"
+        :data-tag="getQuestionTag(i - 1)"
         :class="{
           active: i === current,
-          agree: getAnswer(i) === 'YES',
-          disagree: getAnswer(i) === 'NO',
-          neutral: !getAnswer(i) || getAnswer(i) === 'NEUTRAL',
+          agree: getQuestionAnswer(i - 1) === true,
+          disagree: getQuestionAnswer(i - 1) === false,
+          neutral: getQuestionAnswer(i - 1) == null,
         }"
-        @click="router.push({ name: 'resultsByParty', params: { id: i } })"
+        :to="{ name: 'resultsByParty', params: { idx: i } }"
         @mouseenter="showTooltip"
         @mouseleave="hideTooltip"
-      ></div>
+      ></RouterLink>
     </div>
     <div ref="tooltip" class="progress-tooltip">
       <span></span>
@@ -91,15 +82,15 @@ function hideTooltip() {
 
 <style scoped lang="scss">
 .results-progress {
-  background-color: #f2f7ff;
+  background-color: #eaf5ff;
   border-bottom: 2px solid black;
   position: relative;
 
   .progress-number {
-    background-color: rgba(#f2f7ff, 0.85);
-    font-size: 12px;
-    line-height: 18px;
-    font-weight: 600;
+    background-color: rgba(#eaf5ff, 0.85);
+    font-size: 0.75rem;
+    line-height: 1.6;
+    font-weight: 700;
     position: absolute;
     top: 0;
     left: 0;
@@ -109,8 +100,7 @@ function hideTooltip() {
     @media (max-width: 575.98px) {
       position: static;
       text-align: center;
-      padding: 6px 0 4px;
-      border-bottom: 2px solid black;
+      padding: 10px 0 7px;
     }
   }
 
@@ -166,10 +156,6 @@ function hideTooltip() {
         }
       }
 
-      &.active {
-        background-color: #ffe468;
-      }
-
       &.agree {
         background-image: url("@/assets/img/strinjam.svg");
       }
@@ -181,6 +167,12 @@ function hideTooltip() {
       &.neutral {
         background-image: url("@/assets/img/neopredeljen.svg");
       }
+
+      &.active {
+        background-color: #bddc00;
+        background-image: none;
+        box-shadow: 0px 0px 5px 0px #65a3ff;
+      }
     }
   }
 
@@ -189,14 +181,15 @@ function hideTooltip() {
     top: 40px;
     left: 0;
     display: none;
+    max-width: 250px;
     padding: 4px 8px;
     background-color: #484848;
     border-radius: 5px;
-    font-size: 11px;
+    font-size: 0.75rem;
     line-height: 1;
     color: white;
     pointer-events: none;
-    white-space: nowrap;
+    text-align: center;
 
     @media (max-width: 575.98px) {
       display: none !important;

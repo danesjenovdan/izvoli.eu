@@ -32,14 +32,14 @@ function partyName(partyId) {
 
 const compareWithTopThreeParties = () => {
   const parties = [...topThreeResults.value.map((res) => res.party_id)];
-  // store.commit("setPartiesToCompare", { parties: parties });
+  store.partiesToCompare = parties;
   router.push({ name: "resultsByParty", params: { idx: 1 } });
 };
 
 const compareWithChosenParties = () => {
   const parties = [...chosenParties.value];
-  //   store.commit("setPartiesToCompare", { parties: chosenParties.value });
-  router.push({ name: "resultsByParty", params: { id: 1 } });
+  store.partiesToCompare = parties;
+  router.push({ name: "resultsByParty", params: { idx: 1 } });
 };
 
 const urlCopied = ref(false);
@@ -112,7 +112,11 @@ onMounted(() => {
                 type="checkbox"
                 :value="result.party_id"
               />
-              <img :src="partyImage(result.party_id)" class="party-image" />
+              <img
+                :src="partyImage(result.party_id)"
+                class="party-image"
+                alt=""
+              />
               {{ partyName(result.party_id) }}
             </label>
 

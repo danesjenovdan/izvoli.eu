@@ -63,7 +63,7 @@ async function onNewsletterSubmit() {
             <div class="with-image">
               <img src="../assets/img/opomnik.png" alt="" />
               <p>
-                <a href="javascript:;" @click.prevent="onCalClick"
+                <a href="javascript:;" role="button" @click.prevent="onCalClick"
                   >Dodaj opomnik za volitve v svoj koledar!</a
                 >
               </p>
