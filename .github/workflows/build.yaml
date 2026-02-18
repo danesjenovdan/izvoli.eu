@@ -28,6 +28,8 @@ jobs:
           DOCKER_BUILD_RECORD_UPLOAD: false
         with:
           context: ./izvoli
+          build-args: |
+            VITE_API_URL_BASE=https://glas-ljudstva.si/api/v2/volitvomat
           push: true
           tags: |
             rg.fr-par.scw.cloud/djnd/izvoli-si:${{ github.sha }}
