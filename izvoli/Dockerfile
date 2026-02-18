@@ -17,6 +17,7 @@ COPY .prettierrc.json eslint.config.js index.html jsconfig.json vite.config.js .
 
 # set env for production build
 ENV NODE_ENV=production
+ARG VITE_API_URL_BASE
 
 # run the build
 RUN npm run build
