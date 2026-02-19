@@ -36,7 +36,11 @@ onMounted(() => {
       >
         Poglej rezultate
       </RouterLink>
-      <button class="restart-quiz" @click="store.restartQuiz">
+      <button
+        v-if="currentRouteName !== 'landing'"
+        class="restart-quiz"
+        @click="store.restartQuiz"
+      >
         Ponovno reši
       </button>
     </div>
