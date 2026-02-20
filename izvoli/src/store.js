@@ -44,27 +44,19 @@ export const useMainStore = defineStore("main", () => {
   }
 
   async function loadData() {
-    const dataString = localStorage.getItem("volitvomat-data");
+    // const dataString = localStorage.getItem("volitvomat-data");
     const questionOrderString = localStorage.getItem(
       "volitvomat-question-order",
     );
     const answersString = localStorage.getItem("volitvomat-answers");
     const finishedString = localStorage.getItem("volitvomat-finished");
 
-    if (dataString) {
-      quizData.value = JSON.parse(dataString);
-    } else {
-      quizData.value = await fetchData();
-      const validIds = [
-        388, 390, 391, 398, 399, 403, 406, 407, 410, 412, 415, 419, 422, 429,
-        437, 438, 439, 442, 443, 445, 447, 331, 335, 338, 347, 360, 364, 374,
-        375, 379,
-      ];
-      quizData.value.questions = quizData.value.questions.filter((q) =>
-        validIds.includes(q.id),
-      );
-      localStorage.setItem("volitvomat-data", JSON.stringify(quizData.value));
-    }
+    // if (dataString) {
+    //   quizData.value = JSON.parse(dataString);
+    // } else {
+    quizData.value = await fetchData();
+    //   localStorage.setItem("volitvomat-data", JSON.stringify(quizData.value));
+    // }
 
     if (questionOrderString) {
       questionOrder.value = JSON.parse(questionOrderString);
