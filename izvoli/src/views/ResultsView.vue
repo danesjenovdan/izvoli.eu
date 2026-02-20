@@ -30,6 +30,10 @@ function partyName(partyId) {
   return store.quizData.parties.find((p) => p.id === partyId)?.name || "???";
 }
 
+function partyOurAnswers(partyId) {
+  return store.quizData.parties.find((p) => p.id === partyId)?.our_answers;
+}
+
 const compareWithTopThreeParties = () => {
   const parties = [...topThreeResults.value.map((res) => res.party_id)];
   store.partiesToCompare = parties;
@@ -120,7 +124,28 @@ onMounted(() => {
               {{ partyName(result.party_id) }}
             </label>
 
-            <div class="progress">
+            <div v-if="partyOurAnswers(result.party_id)" class="our-answers">
+              <div class="alert">
+                <div>
+                  Niso odgovorili ampak smo mi pregledali njihovo stališče
+                </div>
+              </div>
+              <div class="progress">
+                <div
+                  class="progress-bar"
+                  role="progressbar"
+                  :aria-valuenow="result.percentage"
+                  aria-valuemin="0"
+                  :aria-valuemax="100"
+                  :style="{ width: `${result.percentage}%` }"
+                  :class="{
+                    'border-end':
+                      result.percentage > 0 && result.percentage < 100,
+                  }"
+                ></div>
+              </div>
+            </div>
+            <div v-else class="progress">
               <div
                 class="progress-bar"
                 role="progressbar"
@@ -365,6 +390,21 @@ onMounted(() => {
             &.border-end {
               border-right: 1px solid black;
             }
+          }
+        }
+
+        .our-answers {
+          flex: 2;
+
+          .alert {
+            margin-bottom: 0.25rem;
+            color: #d00;
+            font-size: 0.75rem;
+            font-weight: 400;
+          }
+
+          .progress-bar {
+            background-color: #fcc;
           }
         }
 

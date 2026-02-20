@@ -16,7 +16,10 @@ const show = ref(false);
 </script>
 
 <template>
-  <div class="party-element">
+  <div :class="['party-element', { 'our-answers': party.our_answers }]">
+    <div v-if="party.our_answers" class="alert">
+      <div>Niso odgovorili ampak smo mi pregledali njihovo stališče!</div>
+    </div>
     <div class="head">
       <div class="name">
         <img :src="party.image" alt="" />
@@ -46,6 +49,21 @@ const show = ref(false);
   padding: 1rem 0.75rem;
   background-color: #fff;
   border-bottom: 1px solid black;
+
+  &.our-answers {
+    background-color: #fee;
+  }
+
+  .alert {
+    margin-top: -0.25rem;
+    margin-bottom: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    background-color: #fcc;
+    border: 1px solid #d00;
+    color: #d00;
+    font-size: 0.75rem;
+    font-weight: 400;
+  }
 
   .head {
     display: flex;

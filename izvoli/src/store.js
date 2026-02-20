@@ -138,7 +138,8 @@ export const useMainStore = defineStore("main", () => {
               a.question_id === Number(questionId) &&
               a.party_id === Number(partyId),
           );
-          const match = partyAnswer.agreement === quizAnswers.value[questionId];
+          const match =
+            partyAnswer?.agreement === quizAnswers.value[questionId];
           if (match) {
             matchesByParty[partyId].count++;
             matchesByParty[partyId].percentage = Math.round(
@@ -155,7 +156,18 @@ export const useMainStore = defineStore("main", () => {
         count: matchesByParty[partyId].count,
         percentage: matchesByParty[partyId].percentage,
       }))
-      .sort((a, b) => (a.percentage > b.percentage ? -1 : 1));
+      .sort((a, b) => (a.percentage > b.percentage ? -1 : 1))
+      .sort((a, b) => {
+        const partyA = quizData.value.parties.find((p) => p.id === a.party_id);
+        const partyB = quizData.value.parties.find((p) => p.id === b.party_id);
+        if (partyA.our_answers && !partyB.our_answers) {
+          return 1;
+        } else if (!partyA.our_answers && partyB.our_answers) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
 
     results.value = matches;
     resultsCalculated.value = true;
