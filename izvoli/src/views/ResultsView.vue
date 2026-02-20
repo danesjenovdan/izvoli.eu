@@ -46,15 +46,17 @@ const compareWithChosenParties = () => {
   router.push({ name: "resultsByParty", params: { idx: 1 } });
 };
 
-const urlCopied = ref(false);
-
-function copyToClipboard() {
+function onCopyLinkClicked() {
+  const linkEl = document.getElementById("website-link");
+  const buttonEl = document.querySelector(".copy-link-button");
+  linkEl.select();
   navigator.clipboard
-    .writeText("https://izvoli.si/")
+    .writeText(linkEl.value)
     .then(() => {
-      urlCopied.value = true;
-      // eslint-disable-next-line no-alert
-      alert("Povezava je skopirana v odložišče!");
+      buttonEl.textContent = "Skopirano!";
+      setTimeout(() => {
+        buttonEl.textContent = "Kopiraj!";
+      }, 2000);
     })
     .catch(() => {
       // eslint-disable-next-line no-alert
@@ -63,11 +65,10 @@ function copyToClipboard() {
 }
 
 onMounted(() => {
-  // TODO: enable this when live
-  // if (!store.quizFinished) {
-  //   router.push({ name: "introduction" });
-  //   return;
-  // }
+  if (!store.quizFinished) {
+    router.push({ name: "introduction" });
+    return;
+  }
   if (!store.resultsCalculated) {
     store.calculateResults();
   }
@@ -90,6 +91,26 @@ onMounted(() => {
           <button class="button-go" @click="compareWithTopThreeParties">
             Primerjaj svoje odgovore s temi strankami
             <img src="../assets/img/puscica.svg" alt="" />
+          </button>
+        </div>
+      </div>
+      <div class="share-link">
+        <h2 class="title">Deli povezavo še z drugimi!</h2>
+        <div class="link-group">
+          <input
+            id="website-link"
+            type="text"
+            maxlength="20"
+            required=""
+            onfocus="this.select()"
+            value="izvoli.si"
+          />
+          <button
+            type="button"
+            class="copy-link-button"
+            @click="onCopyLinkClicked"
+          >
+            Kopiraj!
           </button>
         </div>
       </div>
@@ -173,14 +194,6 @@ onMounted(() => {
     <div v-else class="loader-container">
       <TheLoader />
     </div>
-
-    <button
-      v-if="store.resultsCalculated"
-      class="share-button-desktop"
-      :class="{ copied: urlCopied }"
-      aria-label="Deli svoj rezultat!"
-      @click="copyToClipboard"
-    ></button>
   </main>
 </template>
 
@@ -423,46 +436,85 @@ onMounted(() => {
       }
     }
   }
-}
 
-.share-button-desktop {
-  width: 200px;
-  height: 200px;
-  background-color: transparent;
-  border: none;
-  background-image: url("../assets/img/deli.svg");
-  background-size: contain;
-  z-index: 1;
-  position: fixed;
-  right: 30px;
-  top: 50%;
-  animation-name: spin;
-  animation-duration: 6000ms;
-  animation-iteration-count: infinite;
-  animation-timing-function: linear;
-  cursor: pointer;
+  .share-link {
+    border-top: 2px solid black;
+    background-color: #fff;
+    padding-inline: 6rem;
+    padding-block: 2rem;
+    text-align: center;
 
-  border-radius: 50%;
+    @media (max-width: 575.98px) {
+      padding-inline: 1.5rem;
+      padding-block: 2rem;
+    }
 
-  &.copied {
-    background-image: url("../assets/img/skopirana.svg");
-    animation-play-state: paused;
-  }
+    h2 {
+      font-size: 1.25rem;
+      line-height: 1.2;
+      font-weight: 700;
 
-  &:focus-visible {
-    animation-play-state: paused;
-    outline: 2px solid #006fc3;
-    outline-offset: 2px;
-  }
-}
+      @media (max-width: 575.98px) {
+        font-size: 1.125rem;
+      }
+    }
 
-@keyframes spin {
-  from {
-    transform: translateY(-50%) rotate(0deg);
-  }
+    .link-group {
+      display: flex;
+      gap: 1rem;
+      max-width: 400px;
+      margin-top: 1.75rem;
+      margin-inline: auto;
 
-  to {
-    transform: translateY(-50%) rotate(360deg);
+      @media (max-width: 575.98px) {
+        flex-direction: column;
+      }
+
+      input[type="text"] {
+        flex: 1;
+        padding: 0.5rem;
+        font: inherit;
+        font-size: 1rem;
+        line-height: 1.2;
+        font-weight: 700;
+        border: 1px solid #000;
+        background-color: #eaf5ff;
+
+        @media (max-width: 575.98px) {
+          font-size: 0.875rem;
+        }
+
+        &:focus-visible {
+          outline: 2px solid #006fc3;
+          outline-offset: 2px;
+        }
+      }
+
+      button {
+        flex: 0.5;
+        display: block;
+        width: 100%;
+        padding-block: 0.40625rem;
+        padding-inline: 0.875rem;
+        background-color: #65a3ff;
+        border: 2px solid #000;
+        font: inherit;
+        font-size: 1rem;
+        font-weight: 700;
+        text-align: left;
+        cursor: pointer;
+
+        &:hover {
+          background-color: #006fc3;
+          color: #fff;
+        }
+
+        &:focus-visible {
+          outline: 2px solid #006fc3;
+          outline-offset: 2px;
+        }
+      }
+    }
   }
 }
 </style>
