@@ -44,37 +44,43 @@ export const useMainStore = defineStore("main", () => {
   }
 
   async function loadData() {
-    const dataString = localStorage.getItem("volitvomat-data");
+    // const dataString = localStorage.getItem("volitvomat-data");
     const questionOrderString = localStorage.getItem(
       "volitvomat-question-order",
     );
     const answersString = localStorage.getItem("volitvomat-answers");
     const finishedString = localStorage.getItem("volitvomat-finished");
 
-    if (dataString) {
-      quizData.value = JSON.parse(dataString);
-    } else {
-      quizData.value = await fetchData();
-      const validIds = [
-        388, 390, 391, 398, 399, 403, 406, 407, 410, 412, 415, 419, 422, 429,
-        437, 438, 439, 442, 443, 445, 447, 331, 335, 338, 347, 360, 364, 374,
-        375, 379,
-      ];
-      quizData.value.questions = quizData.value.questions.filter((q) =>
-        validIds.includes(q.id),
-      );
-      localStorage.setItem("volitvomat-data", JSON.stringify(quizData.value));
-    }
+    // if (dataString) {
+    //   quizData.value = JSON.parse(dataString);
+    // } else {
+    quizData.value = await fetchData();
+    //   localStorage.setItem("volitvomat-data", JSON.stringify(quizData.value));
+    // }
 
-    if (questionOrderString) {
-      questionOrder.value = JSON.parse(questionOrderString);
-    } else {
+    function shuffleAndSaveQuestionOrder() {
       const ids = quizData.value.questions.map((q) => q.id);
       questionOrder.value = shuffleArray(ids);
       localStorage.setItem(
         "volitvomat-question-order",
         JSON.stringify(questionOrder.value),
       );
+    }
+
+    if (questionOrderString) {
+      const questionOrderValue = JSON.parse(questionOrderString);
+      const questionIds = quizData.value.questions
+        .map((q) => q.id)
+        .sort((a, b) => a - b)
+        .join(",");
+      const storedIds = questionOrderValue.sort((a, b) => a - b).join(",");
+      if (questionIds === storedIds) {
+        questionOrder.value = questionOrderValue;
+      } else {
+        shuffleAndSaveQuestionOrder();
+      }
+    } else {
+      shuffleAndSaveQuestionOrder();
     }
 
     if (answersString) {
@@ -132,7 +138,8 @@ export const useMainStore = defineStore("main", () => {
               a.question_id === Number(questionId) &&
               a.party_id === Number(partyId),
           );
-          const match = partyAnswer.agreement === quizAnswers.value[questionId];
+          const match =
+            partyAnswer?.agreement === quizAnswers.value[questionId];
           if (match) {
             matchesByParty[partyId].count++;
             matchesByParty[partyId].percentage = Math.round(
@@ -149,7 +156,18 @@ export const useMainStore = defineStore("main", () => {
         count: matchesByParty[partyId].count,
         percentage: matchesByParty[partyId].percentage,
       }))
-      .sort((a, b) => (a.percentage > b.percentage ? -1 : 1));
+      .sort((a, b) => (a.percentage > b.percentage ? -1 : 1))
+      .sort((a, b) => {
+        const partyA = quizData.value.parties.find((p) => p.id === a.party_id);
+        const partyB = quizData.value.parties.find((p) => p.id === b.party_id);
+        if (partyA.our_answers && !partyB.our_answers) {
+          return 1;
+        } else if (!partyA.our_answers && partyB.our_answers) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
 
     results.value = matches;
     resultsCalculated.value = true;

@@ -43,6 +43,10 @@ function partyName(partyId) {
   return store.quizData.parties.find((p) => p.id === partyId)?.name || "???";
 }
 
+function partyOurAnswers(partyId) {
+  return store.quizData.parties.find((p) => p.id === partyId)?.our_answers;
+}
+
 onMounted(() => {
   if (!store.partiesToCompare.length) {
     router.push({ name: "results" });
@@ -96,7 +100,7 @@ onMounted(() => {
             Se ne strinjam
           </div>
           <div v-if="answer == null">
-            <img src="../assets/img/neopredeljen.svg" alt="" />
+            <img src="../assets/img/niso-odgovorili.svg" alt="" />
             Brez stališča
           </div>
         </div>
@@ -104,8 +108,13 @@ onMounted(() => {
           <div
             v-for="partyId in store.partiesToCompare"
             :key="partyId"
-            class="party"
+            :class="['party', { 'our-answers': partyOurAnswers(partyId) }]"
           >
+            <div v-if="partyOurAnswers(partyId)" class="alert">
+              <div>
+                Niso odgovorili ampak smo mi pregledali njihovo stališče!
+              </div>
+            </div>
             <div class="head">
               <img :src="partyImage(partyId)" class="party-image" alt="" />
               <span>{{ partyName(partyId) }}</span>
@@ -278,6 +287,7 @@ onMounted(() => {
 
       .party {
         display: flex;
+        flex-wrap: wrap;
         gap: 0.5rem;
         align-items: start;
         padding: 1rem 0.75rem;
@@ -286,7 +296,21 @@ onMounted(() => {
 
         @media (max-width: 575.98px) {
           justify-content: space-between;
-          flex-wrap: wrap;
+        }
+
+        &.our-answers {
+          background-color: #fee;
+        }
+
+        .alert {
+          flex-basis: 100%;
+          margin-top: -0.25rem;
+          padding: 0.25rem 0.5rem;
+          background-color: #fcc;
+          border: 1px solid #d00;
+          color: #d00;
+          font-size: 0.75rem;
+          font-weight: 400;
         }
 
         .party-image {

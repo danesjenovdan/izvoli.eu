@@ -42,6 +42,15 @@ const partiesAgree = computed(() => {
         ...a,
         party: store.quizData.parties.find((p) => p.id === a.party_id),
       };
+    })
+    .sort((a, b) => {
+      if (a.party.our_answers && !b.party.our_answers) {
+        return 1;
+      } else if (!a.party.our_answers && b.party.our_answers) {
+        return -1;
+      } else {
+        return 0;
+      }
     });
 });
 
@@ -53,6 +62,15 @@ const partiesDisagree = computed(() => {
         ...a,
         party: store.quizData.parties.find((p) => p.id === a.party_id),
       };
+    })
+    .sort((a, b) => {
+      if (a.party.our_answers && !b.party.our_answers) {
+        return 1;
+      } else if (!a.party.our_answers && b.party.our_answers) {
+        return -1;
+      } else {
+        return 0;
+      }
     });
 });
 

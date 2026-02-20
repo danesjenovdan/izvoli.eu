@@ -41,7 +41,7 @@ const show = ref(false);
         Se ne strinjajo
       </div>
       <div v-if="agreement == null">
-        <img src="../assets/img/neopredeljen.svg" alt="" />
+        <img src="../assets/img/niso-odgovorili.svg" alt="" />
         Brez stališča
       </div>
       <button v-if="!show && answer?.comment" @click="show = true">
@@ -94,6 +94,7 @@ const show = ref(false);
 
       img {
         height: 2rem;
+        max-width: 1.5rem;
 
         @media (max-width: 575.98px) {
           height: 1.5rem;
