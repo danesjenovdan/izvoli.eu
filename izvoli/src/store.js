@@ -58,15 +58,29 @@ export const useMainStore = defineStore("main", () => {
     //   localStorage.setItem("volitvomat-data", JSON.stringify(quizData.value));
     // }
 
-    if (questionOrderString) {
-      questionOrder.value = JSON.parse(questionOrderString);
-    } else {
+    function shuffleAndSaveQuestionOrder() {
       const ids = quizData.value.questions.map((q) => q.id);
       questionOrder.value = shuffleArray(ids);
       localStorage.setItem(
         "volitvomat-question-order",
         JSON.stringify(questionOrder.value),
       );
+    }
+
+    if (questionOrderString) {
+      const questionOrderValue = JSON.parse(questionOrderString);
+      const questionIds = quizData.value.questions
+        .map((q) => q.id)
+        .sort((a, b) => a - b)
+        .join(",");
+      const storedIds = questionOrderValue.sort((a, b) => a - b).join(",");
+      if (questionIds === storedIds) {
+        questionOrder.value = questionOrderValue;
+      } else {
+        shuffleAndSaveQuestionOrder();
+      }
+    } else {
+      shuffleAndSaveQuestionOrder();
     }
 
     if (answersString) {
