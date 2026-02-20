@@ -71,10 +71,14 @@ const show = ref(false);
     justify-content: space-between;
     flex-wrap: wrap;
 
+    @media (max-width: 575.98px) {
+      gap: 0.5rem;
+    }
+
     .name {
       flex: 1;
       display: flex;
-      gap: 9px;
+      gap: 0.5rem;
       align-items: center;
       font-size: 1rem;
       line-height: 1.2;
@@ -92,6 +96,12 @@ const show = ref(false);
         border-radius: 50%;
         margin-right: 0.5rem;
         object-fit: contain;
+
+        @media (max-width: 575.98px) {
+          width: 2rem;
+          height: 2rem;
+          margin-right: 0;
+        }
       }
     }
 

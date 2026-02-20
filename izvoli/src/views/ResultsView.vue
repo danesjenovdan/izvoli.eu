@@ -310,7 +310,7 @@ onMounted(() => {
         align-items: center;
         margin-bottom: 1rem;
 
-        @media (max-width: 575.98px) {
+        @media (max-width: 767.98px) {
           display: grid;
           grid-template-columns: 4fr 1fr;
           margin-bottom: 1.125rem;
@@ -320,15 +320,18 @@ onMounted(() => {
           flex: 1.25;
           display: flex;
           align-items: center;
-          cursor: pointer;
+          min-width: 300px;
+          margin-right: 1.25rem;
           font-size: 1rem;
           line-height: 1.2;
           font-weight: 700;
-          margin-right: 1.25rem;
+          cursor: pointer;
 
-          @media (max-width: 575.98px) {
+          @media (max-width: 767.98px) {
             grid-row: 1;
             grid-column: 1;
+            min-width: auto;
+            margin-right: 0;
             font-size: 0.875rem;
           }
 
@@ -389,7 +392,7 @@ onMounted(() => {
           border: 1px solid #000;
           overflow: hidden;
 
-          @media (max-width: 575.98px) {
+          @media (max-width: 767.98px) {
             grid-row: 2;
             grid-column: 1 / -1;
             margin-left: 2rem;
@@ -418,11 +421,21 @@ onMounted(() => {
         .our-answers {
           flex: 2;
 
+          @media (max-width: 767.98px) {
+            grid-row: 2;
+            grid-column: 1 / -1;
+          }
+
           .alert {
             margin-bottom: 0.25rem;
             color: #d00;
             font-size: 0.75rem;
             font-weight: 400;
+
+            @media (max-width: 767.98px) {
+              margin-left: 2rem;
+              margin-top: 0.5rem;
+            }
           }
 
           .progress-bar {
@@ -432,14 +445,18 @@ onMounted(() => {
 
         .party-percentage {
           flex: 0.25;
+          min-width: 50px;
+          margin-left: 0.5rem;
           text-align: right;
           font-size: 1rem;
-          line-height: 1.2;
+          line-height: 1.25rem;
 
-          @media (max-width: 575.98px) {
+          @media (max-width: 767.98px) {
             grid-row: 1;
             grid-column: 2;
+            min-width: auto;
             font-size: 0.875rem;
+            margin-left: 0;
           }
         }
       }

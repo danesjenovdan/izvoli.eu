@@ -118,7 +118,9 @@ router.beforeEach(() => {
         @card-rejected="saveAnswer(false)"
       >
         <div class="content">
-          <div v-if="workGroup" class="category">{{ workGroup.name }}</div>
+          <div v-if="workGroup" class="category">
+            <span>{{ workGroup.name }}</span>
+          </div>
           <h1 v-if="question.list_title || question.title" class="title">
             {{ question.list_title || question.title }}
           </h1>
@@ -237,14 +239,26 @@ router.beforeEach(() => {
     }
 
     .category {
-      display: inline-block;
+      display: block;
       margin-bottom: 1.25rem;
-      padding: 0.25rem;
-      background-color: #cee9c5;
       font-size: 0.75rem;
-      line-height: 1;
-    }
+      line-height: 1.5;
 
+      @media (max-width: 575.98px) {
+        max-width: 240px;
+        min-height: 2rem;
+        margin-inline: auto;
+        font-size: 0.625rem;
+        text-align: center;
+        text-wrap: balance;
+      }
+
+      span {
+        box-decoration-break: clone;
+        padding: 0.25rem;
+        background-color: #cee9c5;
+      }
+    }
     .title {
       margin-bottom: 1em;
       font-size: 2rem;
@@ -460,7 +474,7 @@ router.beforeEach(() => {
       gap: 1.5rem;
       margin-top: 1.5rem;
 
-      @media (max-width: 575.98px) {
+      @media (max-width: 767.98px) {
         flex-direction: column;
         gap: 2rem;
       }
