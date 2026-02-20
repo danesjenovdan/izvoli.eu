@@ -194,6 +194,15 @@ onMounted(() => {
     <div v-else class="loader-container">
       <TheLoader />
     </div>
+    <div class="restart-buttons">
+      <button
+        v-if="store.resultsCalculated && store.quizFinished"
+        class="restart-quiz"
+        @click="store.restartQuiz"
+      >
+        Ponovno reši
+      </button>
+    </div>
   </main>
 </template>
 
@@ -513,6 +522,63 @@ onMounted(() => {
           outline: 2px solid #006fc3;
           outline-offset: 2px;
         }
+      }
+    }
+  }
+}
+
+.restart-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  a,
+  button {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 11px 6px 14px;
+    background: transparent;
+    background-repeat: no-repeat;
+    background-position: center right 11px;
+    background-size: 21px;
+    border: 2px solid black;
+    font-size: 1rem;
+    line-height: 1.2;
+    font-weight: 700;
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+
+    @media (max-width: 575.98px) {
+      font-size: 0.875rem;
+    }
+
+    &::after {
+      content: "";
+      display: inline-block;
+      width: 1.25rem;
+      height: 1.25rem;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      margin-left: 0.25rem;
+    }
+
+    &:hover {
+      background-color: #fff;
+    }
+
+    &:focus-visible {
+      outline: 2px solid #006fc3;
+      outline-offset: 2px;
+    }
+
+    &.restart-quiz {
+      &::after {
+        background-image: url("../assets/img/reset.svg");
       }
     }
   }
