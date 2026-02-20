@@ -45,7 +45,7 @@ function dashArrayFromRemainderPercentage(percentage) {
 
 const animationDuration = 1500;
 const currentPercentage = ref(0);
-const targetPercentage = ref(props.result.percentage);
+const targetPercentage = computed(() => props.result.percentage);
 
 const dashOffset0 = dashOffsetFromPercentage(0);
 const dashOffset = ref(dashOffsetFromPercentage(currentPercentage.value));
@@ -58,20 +58,25 @@ const easeInOut = (t) => {
   return t > 0.5 ? 4 * Math.pow(t - 1, 3) + 1 : 4 * Math.pow(t, 3);
 };
 
+function clampPercentage(percentage) {
+  return Math.max(0, Math.min(100, percentage));
+}
+
 let startTimestamp = null;
 const stepFunction = (timestamp) => {
   if (targetPercentage.value <= 0) return;
   if (!startTimestamp) startTimestamp = timestamp;
   const progress = timestamp - startTimestamp;
   const newPercentage = easeInOut(Math.min(progress / animationDuration, 1));
-  currentPercentage.value = Math.min(
-    newPercentage * targetPercentage.value,
-    targetPercentage.value,
+  currentPercentage.value = clampPercentage(
+    Math.min(newPercentage * targetPercentage.value, targetPercentage.value),
   );
-  dashOffset.value = dashOffsetFromPercentage(currentPercentage.value + 0.5);
+  dashOffset.value = dashOffsetFromPercentage(
+    clampPercentage(currentPercentage.value + 0.5),
+  );
   dashArray.value = dashArrayFromPercentage(currentPercentage.value);
   dashArrayRemainder.value = dashArrayFromRemainderPercentage(
-    currentPercentage.value + 1,
+    clampPercentage(currentPercentage.value + 1),
   );
   if (progress < animationDuration) {
     window.requestAnimationFrame(stepFunction);
