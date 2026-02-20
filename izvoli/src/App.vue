@@ -26,21 +26,19 @@ onMounted(() => {
         alt="Izvoli.si – prva pomoč za državnozborske volitve"
       />
     </RouterLink>
-    <div class="buttons">
-      <RouterLink
-        v-if="
-          store.loaded && store.quizFinished && currentRouteName !== 'results'
-        "
-        class="show-results"
-        :to="{ name: 'results' }"
-      >
+    <div
+      v-if="
+        store.loaded &&
+        store.quizFinished &&
+        currentRouteName !== 'results' &&
+        currentRouteName !== 'landing'
+      "
+      class="buttons"
+    >
+      <RouterLink class="show-results" :to="{ name: 'results' }">
         Poglej rezultate
       </RouterLink>
-      <button
-        v-if="currentRouteName !== 'landing'"
-        class="restart-quiz"
-        @click="store.restartQuiz"
-      >
+      <button class="restart-quiz" @click="store.restartQuiz">
         Ponovno reši
       </button>
     </div>
@@ -129,14 +127,14 @@ button {
     bottom: 0;
     right: 0;
     display: flex;
-    gap: 10px;
+    gap: 0.5rem;
     flex-direction: column;
     align-items: flex-end;
     justify-content: center;
 
     @media (max-width: 575.98px) {
       position: static;
-      margin-top: 21px;
+      margin-top: 2rem;
       align-items: center;
     }
 

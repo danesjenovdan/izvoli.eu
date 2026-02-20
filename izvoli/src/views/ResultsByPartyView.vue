@@ -62,7 +62,9 @@ onMounted(() => {
         :count="store.questionOrder.length"
       />
       <div class="content">
-        <div v-if="workGroup" class="category">{{ workGroup.name }}</div>
+        <div v-if="workGroup" class="category">
+          <span>{{ workGroup.name }}</span>
+        </div>
         <h1 v-if="question.list_title || question.title" class="title">
           {{ question.list_title || question.title }}
         </h1>
@@ -143,12 +145,25 @@ onMounted(() => {
     }
 
     .category {
-      display: inline-block;
+      display: block;
       margin-bottom: 1.25rem;
-      padding: 0.25rem;
-      background-color: #cee9c5;
       font-size: 0.75rem;
-      line-height: 1;
+      line-height: 1.5;
+
+      @media (max-width: 575.98px) {
+        max-width: 240px;
+        min-height: 2rem;
+        margin-inline: auto;
+        font-size: 0.625rem;
+        text-align: center;
+        text-wrap: balance;
+      }
+
+      span {
+        box-decoration-break: clone;
+        padding: 0.25rem;
+        background-color: #cee9c5;
+      }
     }
 
     .title {
@@ -182,12 +197,19 @@ onMounted(() => {
       top: 5.5rem;
 
       @media (max-width: 575.98px) {
-        top: 1.75rem;
+        top: 2rem;
+        width: 2rem;
+        height: 2rem;
       }
 
       img {
         width: 1.3125rem;
         height: 1.3125rem;
+
+        @media (max-width: 575.98px) {
+          width: 1rem;
+          height: 1rem;
+        }
       }
 
       &.hidden {

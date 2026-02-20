@@ -46,15 +46,17 @@ const compareWithChosenParties = () => {
   router.push({ name: "resultsByParty", params: { idx: 1 } });
 };
 
-const urlCopied = ref(false);
-
-function copyToClipboard() {
+function onCopyLinkClicked() {
+  const linkEl = document.getElementById("website-link");
+  const buttonEl = document.querySelector(".copy-link-button");
+  linkEl.select();
   navigator.clipboard
-    .writeText("https://izvoli.si/")
+    .writeText(linkEl.value)
     .then(() => {
-      urlCopied.value = true;
-      // eslint-disable-next-line no-alert
-      alert("Povezava je skopirana v odložišče!");
+      buttonEl.textContent = "Skopirano!";
+      setTimeout(() => {
+        buttonEl.textContent = "Kopiraj!";
+      }, 2000);
     })
     .catch(() => {
       // eslint-disable-next-line no-alert
@@ -63,11 +65,10 @@ function copyToClipboard() {
 }
 
 onMounted(() => {
-  // TODO: enable this when live
-  // if (!store.quizFinished) {
-  //   router.push({ name: "introduction" });
-  //   return;
-  // }
+  if (!store.quizFinished) {
+    router.push({ name: "introduction" });
+    return;
+  }
   if (!store.resultsCalculated) {
     store.calculateResults();
   }
@@ -90,6 +91,26 @@ onMounted(() => {
           <button class="button-go" @click="compareWithTopThreeParties">
             Primerjaj svoje odgovore s temi strankami
             <img src="../assets/img/puscica.svg" alt="" />
+          </button>
+        </div>
+      </div>
+      <div class="share-link">
+        <h2 class="title">Deli povezavo še z drugimi!</h2>
+        <div class="link-group">
+          <input
+            id="website-link"
+            type="text"
+            maxlength="20"
+            required=""
+            onfocus="this.select()"
+            value="izvoli.si"
+          />
+          <button
+            type="button"
+            class="copy-link-button"
+            @click="onCopyLinkClicked"
+          >
+            Kopiraj!
           </button>
         </div>
       </div>
@@ -173,14 +194,15 @@ onMounted(() => {
     <div v-else class="loader-container">
       <TheLoader />
     </div>
-
-    <button
-      v-if="store.resultsCalculated"
-      class="share-button-desktop"
-      :class="{ copied: urlCopied }"
-      aria-label="Deli svoj rezultat!"
-      @click="copyToClipboard"
-    ></button>
+    <div class="restart-buttons">
+      <button
+        v-if="store.resultsCalculated && store.quizFinished"
+        class="restart-quiz"
+        @click="store.restartQuiz"
+      >
+        Ponovno reši
+      </button>
+    </div>
   </main>
 </template>
 
@@ -288,7 +310,7 @@ onMounted(() => {
         align-items: center;
         margin-bottom: 1rem;
 
-        @media (max-width: 575.98px) {
+        @media (max-width: 767.98px) {
           display: grid;
           grid-template-columns: 4fr 1fr;
           margin-bottom: 1.125rem;
@@ -298,15 +320,18 @@ onMounted(() => {
           flex: 1.25;
           display: flex;
           align-items: center;
-          cursor: pointer;
+          min-width: 300px;
+          margin-right: 1.25rem;
           font-size: 1rem;
           line-height: 1.2;
           font-weight: 700;
-          margin-right: 1.25rem;
+          cursor: pointer;
 
-          @media (max-width: 575.98px) {
+          @media (max-width: 767.98px) {
             grid-row: 1;
             grid-column: 1;
+            min-width: auto;
+            margin-right: 0;
             font-size: 0.875rem;
           }
 
@@ -367,7 +392,7 @@ onMounted(() => {
           border: 1px solid #000;
           overflow: hidden;
 
-          @media (max-width: 575.98px) {
+          @media (max-width: 767.98px) {
             grid-row: 2;
             grid-column: 1 / -1;
             margin-left: 2rem;
@@ -396,11 +421,21 @@ onMounted(() => {
         .our-answers {
           flex: 2;
 
+          @media (max-width: 767.98px) {
+            grid-row: 2;
+            grid-column: 1 / -1;
+          }
+
           .alert {
             margin-bottom: 0.25rem;
             color: #d00;
             font-size: 0.75rem;
             font-weight: 400;
+
+            @media (max-width: 767.98px) {
+              margin-left: 2rem;
+              margin-top: 0.5rem;
+            }
           }
 
           .progress-bar {
@@ -410,59 +445,159 @@ onMounted(() => {
 
         .party-percentage {
           flex: 0.25;
+          min-width: 50px;
+          margin-left: 0.5rem;
           text-align: right;
           font-size: 1rem;
-          line-height: 1.2;
+          line-height: 1.25rem;
 
-          @media (max-width: 575.98px) {
+          @media (max-width: 767.98px) {
             grid-row: 1;
             grid-column: 2;
+            min-width: auto;
             font-size: 0.875rem;
+            margin-left: 0;
           }
+        }
+      }
+    }
+  }
+
+  .share-link {
+    border-top: 2px solid black;
+    background-color: #fff;
+    padding-inline: 6rem;
+    padding-block: 2rem;
+    text-align: center;
+
+    @media (max-width: 575.98px) {
+      padding-inline: 1.5rem;
+      padding-block: 2rem;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      line-height: 1.2;
+      font-weight: 700;
+
+      @media (max-width: 575.98px) {
+        font-size: 1.125rem;
+      }
+    }
+
+    .link-group {
+      display: flex;
+      gap: 1rem;
+      max-width: 400px;
+      margin-top: 1.75rem;
+      margin-inline: auto;
+
+      @media (max-width: 575.98px) {
+        flex-direction: column;
+      }
+
+      input[type="text"] {
+        flex: 1;
+        padding: 0.5rem;
+        font: inherit;
+        font-size: 1rem;
+        line-height: 1.2;
+        font-weight: 700;
+        border: 1px solid #000;
+        background-color: #eaf5ff;
+
+        @media (max-width: 575.98px) {
+          font-size: 0.875rem;
+        }
+
+        &:focus-visible {
+          outline: 2px solid #006fc3;
+          outline-offset: 2px;
+        }
+      }
+
+      button {
+        flex: 0.5;
+        display: block;
+        width: 100%;
+        padding-block: 0.40625rem;
+        padding-inline: 0.875rem;
+        background-color: #65a3ff;
+        border: 2px solid #000;
+        font: inherit;
+        font-size: 1rem;
+        font-weight: 700;
+        text-align: left;
+        cursor: pointer;
+
+        &:hover {
+          background-color: #006fc3;
+          color: #fff;
+        }
+
+        &:focus-visible {
+          outline: 2px solid #006fc3;
+          outline-offset: 2px;
         }
       }
     }
   }
 }
 
-.share-button-desktop {
-  width: 200px;
-  height: 200px;
-  background-color: transparent;
-  border: none;
-  background-image: url("../assets/img/deli.svg");
-  background-size: contain;
-  z-index: 1;
-  position: fixed;
-  right: 30px;
-  top: 50%;
-  animation-name: spin;
-  animation-duration: 6000ms;
-  animation-iteration-count: infinite;
-  animation-timing-function: linear;
-  cursor: pointer;
+.restart-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-  border-radius: 50%;
+  a,
+  button {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 11px 6px 14px;
+    background: transparent;
+    background-repeat: no-repeat;
+    background-position: center right 11px;
+    background-size: 21px;
+    border: 2px solid black;
+    font-size: 1rem;
+    line-height: 1.2;
+    font-weight: 700;
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
 
-  &.copied {
-    background-image: url("../assets/img/skopirana.svg");
-    animation-play-state: paused;
-  }
+    @media (max-width: 575.98px) {
+      font-size: 0.875rem;
+    }
 
-  &:focus-visible {
-    animation-play-state: paused;
-    outline: 2px solid #006fc3;
-    outline-offset: 2px;
-  }
-}
+    &::after {
+      content: "";
+      display: inline-block;
+      width: 1.25rem;
+      height: 1.25rem;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      margin-left: 0.25rem;
+    }
 
-@keyframes spin {
-  from {
-    transform: translateY(-50%) rotate(0deg);
-  }
+    &:hover {
+      background-color: #fff;
+    }
 
-  to {
-    transform: translateY(-50%) rotate(360deg);
+    &:focus-visible {
+      outline: 2px solid #006fc3;
+      outline-offset: 2px;
+    }
+
+    &.restart-quiz {
+      &::after {
+        background-image: url("../assets/img/reset.svg");
+      }
+    }
   }
 }
 </style>
