@@ -33,7 +33,7 @@ onBeforeUnmount(() => {
         ujema.
       </p>
       <p>
-        V Izvoli.si je zbranih 40 zahtev, na katere lahko podaš svoj odgovor. Na
+        V Izvoli.si je zbranih 30 zahtev, na katere lahko podaš svoj odgovor. Na
         podlagi rezultatov izveš, katera izmed sodelujočih strank najbolj
         ustreza tvojim stališčem, lahko pa tudi podrobneje raziščeš, na katerih
         točkah so razhajanja največja in zakaj.
