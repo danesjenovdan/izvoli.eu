@@ -222,6 +222,7 @@ button {
   text-decoration: none;
   transition: transform 0.15s ease-in-out;
   cursor: pointer;
+  will-change: transform, border-width;
 
   @media (max-width: 575.98px) {
     min-width: 140px;
@@ -243,6 +244,7 @@ button {
 
   &:hover {
     transform: scale(0.95);
+    border-width: 3px;
   }
 
   &:focus-visible {
