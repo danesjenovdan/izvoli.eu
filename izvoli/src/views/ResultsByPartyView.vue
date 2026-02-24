@@ -113,9 +113,7 @@ onMounted(() => {
             :class="['party', { 'our-answers': partyOurAnswers(partyId) }]"
           >
             <div v-if="partyOurAnswers(partyId)" class="alert">
-              <div>
-                Niso odgovorili ampak smo mi pregledali njihovo stališče!
-              </div>
+              <div>Niso odgovorili – naša ocena.</div>
             </div>
             <div class="head">
               <img :src="partyImage(partyId)" class="party-image" alt="" />

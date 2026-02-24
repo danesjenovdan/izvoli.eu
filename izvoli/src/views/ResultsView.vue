@@ -147,9 +147,7 @@ onMounted(() => {
 
             <div v-if="partyOurAnswers(result.party_id)" class="our-answers">
               <div class="alert">
-                <div>
-                  Niso odgovorili ampak smo mi pregledali njihovo stališče
-                </div>
+                <div>Niso odgovorili – naša ocena.</div>
               </div>
               <div class="progress">
                 <div

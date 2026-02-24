@@ -18,7 +18,7 @@ const show = ref(false);
 <template>
   <div :class="['party-element', { 'our-answers': party.our_answers }]">
     <div v-if="party.our_answers" class="alert">
-      <div>Niso odgovorili ampak smo mi pregledali njihovo stališče!</div>
+      <div>Niso odgovorili – naša ocena.</div>
     </div>
     <div class="head">
       <div class="name">

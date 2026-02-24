@@ -2,166 +2,131 @@
   <main class="container">
     <div class="rich-text">
       <h1>O aplikaciji in metodologiji</h1>
-      <h2>Kaj je aplikacija Izvoli.eu</h2>
+      <h2>Kaj je aplikacija Izvoli.si</h2>
       <p>
-        Volilna aplikacija Izvoli.eu seznanja ljudi s političnimi stališči
-        strank oz. list in jim pomaga sprejeti odločitev na volitvah v Evropski
-        parlament. Skozi interaktiven proces uporabnikom in uporabnicam pokaže
-        stopnjo ujemanja njihovih stališč o pomembnih evropskih tematikah s
-        stališči kandidatnih list. Obenem lahko preverijo tudi ujemanje s
-        stališči list v vseh drugih državah članicah EU.
+        Volilna aplikacija Izvoli.si seznanja ljudi s političnimi stališči
+        strank oz. list in jim pomaga sprejeti odločitev na volitvah v Državni
+        zbor, 22. marca 2026. Skozi interaktiven proces uporabnikom in
+        uporabnicam pokaže stopnjo ujemanja njihovih stališč o pomembnih
+        družbenih tematikah s stališči kandidatnih list. Za procesom priprave
+        aplikacije stojijo organizacije, združene v civilni iniciativi Glas
+        ljudstva (več o iniciativi je na voljo
+        <a
+          target="_blank"
+          rel="noopener noreferrer nofollow"
+          href="https://glas-ljudstva.si/pogosta-vprasanja/"
+          >tukaj</a
+        >).
       </p>
       <h2>Kako smo določili izjave</h2>
       <p>
-        V okviru vseevropske koalicije VoteMatch Europe smo nacionalne
-        partnerske organizacije oblikovale 22 izjav. Septembra lani smo pričele
-        usklajevati ključne tematike na podlagi lastnih raziskav področij, ki
-        bodo v prihodnjem obdobju pomembno vplivala na Evropsko unijo, nato pa
-        smo v začetku leta 2024 skupaj sestavile seznam 25 izjav, ki pokrivajo
-        širok spekter aktualnih tem in vprašanj.
+        V okviru civilne iniciative Glas ljudstva, ki združuje več kot 100
+        civilnodružbenih organizacij ter več tisoč posameznic in posameznikov z
+        vseh družbenih področij in iz celotne Slovenije, smo izpeljali
+        večmesečni proces zbiranja zahtev za politične stranke.
       </p>
       <p>
-        8 izjav smo na Danes je nov dan oblikovali v sodelovanju z mladimi v
-        Sloveniji. Organizirali smo delavnici na Gimnaziji Kranj in Gimnaziji
-        Ormož, kjer je 60 mladih skozi debato izoblikovalo izhodišča za izjave.
-        Na podlagi teh izhodišč smo oblikovali seznam predlogov 27 izjav, ki smo
-        jih v obliki vprašalnika objavili na spletu. Svoj glas za izjave, ki se
-        jim zdijo najbolj pomembne, je oddalo 222 mladih. Na podlagi rezultatov
-        smo v končni nabor izjav vključili 5 izjav, ki so prejele največ glasov,
-        in dodatne 3 izjave, ki so se kot ključne izkazale v debatah z mladimi.
+        Zahteve so bile oblikovane od spodaj navzgor − na ljudskih skupščinah,
+        spletu, preko programskih usmeritev organizacij in dela strokovnjakov.
+        Ljudje iz celotne Slovenije so posredovali svoje predloge in komentarje,
+        izkupiček pa je bil jasen in glasen − ljudje vedo, kaj hočejo, saj so
+        prispevali kar 774 predlogov zahtev.
       </p>
       <p>
-        Skupaj aplikacija Izvoli.eu torej vključuje 30 izjav, saj smo ocenili,
-        da nekaj tistih, pripravljenih v okviru vseevropske koalicije, za
-        slovensko okolje ni primernih.
+        Rezultat tega procesa intenzivnega kolektivnega sodelovanja, preverjanja
+        in usklajevanja je bil 42 strokovnih zahtev s skupaj 120 konkretnimi
+        ukrepi, ki naslavljajo ključne izzive za prihodnost Slovenije in hkrati
+        predstavljajo nabor vprašanj, pomembnih za volivce_ke pri odločanju na
+        prihajajočih volitvah: vladavina prava, človekove pravice, kultura,
+        mediji, socialna država, zdravstvo, stanovanja, dostojno delo, pravičen
+        zeleni prehod in zaščita narave, mirovna politika in globalna
+        pravičnost.
       </p>
       <p>
-        Pri izbiranju tematik smo bili pozorni na njihovo relevantnost in
-        razumljivost za veliko različnih ljudi, pa tudi, da imajo do njih
-        kandidatne liste jasna različna stališča. Poleg tega je bilo v procesu
-        izbire ključno, da so izjave relevantne za trenutno evropsko politiko –
-        da npr. igrajo pomembno vlogo v volilni kampanji oziroma so prisotne v
-        političnih ali javnih debatah in da je odločanje o njih sploh v
-        pristojnosti Evropskega parlamenta.
+        Vabilo, naj izpolnijo vprašalnik in tako predstavijo svoja stališča, smo
+        poslali vsem strankam, ki so vpisane v register strank in ki imajo javno
+        dostopne kontaktne podatke. Tako smo skupno povabili več kot 70
+        političnih strank, med njimi so tudi vse, ki so trenutno v parlamentu.
+        Nekaj strank je sporočilo, da na državnozborskih volitvah ne nameravajo
+        kandidirati, številne se na vabilo sploh niso odzvale, nekatere so
+        sodelovanje zavrnile.
       </p>
       <p>
-        Da bi zagotovili čim bolj uravnotežen in široko primeren nabor izjav, je
-        bilo v oblikovanje vključenih veliko različnih mnenj ter udeležencev in
-        udeleženk. Ker so mladi prevečkrat izključeni iz političnih debat, smo
-        posebno pozornost namenili izjavam, ki so pomembne njim. S sodelovanjem
-        pri oblikovanju izjav jih želimo opolnomočiti za prihodnje aktivno
-        delovanje.
+        Odgovori na vse zahteve so na voljo na
+        <a
+          target="_blank"
+          rel="noopener noreferrer nofollow"
+          href="http://glas-ljudstva.si/drzavnozborske-volitve-2026"
+          >glas-ljudstva.si/drzavnozborske-volitve-2026</a
+        >.
+      </p>
+      <p>
+        Med vsemi 120 ukrepi smo nato izbrali 30 izjav, ki smo jih vključili v
+        predvolilni kviz na aplikaciji Izvoli.si.
+      </p>
+      <p>
+        Pri izbiranju 30 izjav smo bili pozorni na njihovo relevantnost in
+        razumljivost, pa tudi, da imajo do njih kandidatne liste jasna različna
+        stališča.
+      </p>
+      <p>
+        Poleg tega smo za večjo informiranost volivk in volivcev v kviz
+        vključili tudi stališča strank, ki so sodelovanje zavrnile. Odgovore smo
+        pridobili iz javno objavljenih programov in programskih usmeritev, ki so
+        bile dostopne na dan objave kviza - 25. 2. 2026, in sicer s strokovnim
+        pregledom in brez rabe umetne inteligence. Med temi smo izbrali vse
+        stranke in kandidatne liste, ki jim zadnje raziskave javnega mnenja
+        kažejo možnost vstopa v parlament.
       </p>
       <h2>Sodelovanje kandidatnih list in političnih strank</h2>
       <p>
-        K sodelovanju smo povabili vse stranke in kandidatne liste, ki
-        kandidirajo na volitvah v Evropski parlament v Sloveniji.
+        K sodelovanju smo povabili vse stranke in kandidatne liste, ki so
+        vpisane v register strank in ki imajo javno dostopne kontaktne podatke.
       </p>
       <p>
         Stranke in kandidatne liste so na svoje uradne e-naslove prejele spletni
-        vprašalnik z vsemi izjavami. Same so bile odgovorne, da določijo, če se
-        bodo do izjav opredelile, kdo bo to storil in kako bodo določile skupna
+        vprašalnik z vsemi izjavami. Same so sprejele odločitev, ali se bodo do
+        izjav opredelile, kdo bo to storil in kako bodo določile skupna
         stališča.
       </p>
       <p>
         Glede vsake izjave se je mogoče opredeliti z »DA« v primeru strinjanja,
-        z “NE” v primeru nestrinjanja ali z “NEOPREDELJENO”, če se lista ne želi
-        opredeliti. Za vsako od izjav lahko lista poda tudi krajšo (do 500
-        znakov) obrazložitev mnenja.
+        z »NE« v primeru nestrinjanja, pri čemer je lahko pri odgovoru NE
+        stranka/lista podala tudi krajšo obrazložitev mnenja.
       </p>
       <p>
         Vsa stališča list in njihove obrazložitve, prikazane v aplikaciji, so
-        pridobljena od list in niso bila spremenjena s strani Danes je nov dan.
+        posredovale kandidatne liste in niso bila spremenjena.
       </p>
       <p>
         Vsa stališča kandidatnih list so zbrana
         <a
           target="_blank"
-          href="https://drive.google.com/drive/u/2/folders/1ZOR0drn9EtlmR1nLnyeFWxl79RuFGsF3"
+          rel="noopener noreferrer nofollow"
+          href="https://glas-ljudstva.si/drzavnozborske-volitve-2026/"
           >na tem mestu</a
         >.
       </p>
+      <p>
+        Poleg tega smo za večjo informiranost volivk in volivcev v kviz
+        vključili tudi stališča strank, ki so sodelovanje zavrnile. Odgovore smo
+        pridobili iz javno objavljenih programov in programskih usmeritev, ki so
+        bile dostopne na dan objave kviza - 25. 2. 2026, in sicer s strokovnim
+        pregledom in brez rabe umetne inteligence. Med temi smo izbrali vse
+        stranke in kandidatne liste, ki jim zadnje raziskave javnega mnenja
+        kažejo možnost vstopa v parlament.
+      </p>
       <h2>Kako so izračunani rezultati</h2>
       <p>
-        Izvoli.eu izračuna medsebojno odvisnost in bližino stališč uporabnikov
-        in uporabnic s položaji kandidatnih list.
+        Izvoli.si izračuna medsebojno odvisnost in bližino stališč uporabnikov
+        in uporabnic s stališči kandidatnih list.
       </p>
       <p>
         Če se uporabnik oz. uporabnica popolnoma strinja s stališčem kandidatne
-        liste, mu Izvoli.eu dodeli dve točki. Pri tem kot ujemanje upoštevamo
-        tudi odgovor “Brez stališča”, če je enako odgovorila tudi stranka oz.
-        lista. Če se stališče uporabnika oz. uporabnice razlikuje od stališča
-        kandidatne liste, točk ne dodelimo.
+        liste, mu Izvoli.si dodeli dve točki. Če se stališče uporabnika oz.
+        uporabnice razlikuje od stališča kandidatne liste, točk ne dodelimo.
       </p>
-      <p>Izvoli.eu prikazuje ujemanja s kandidatno listo v odstotkih.</p>
-      <h2>Spremembe v podatkih po objavi aplikacije</h2>
-      <p>
-        Ker Piratska stranka Slovenije ni zbrala dovolj podpisov, da bi lahko
-        vložila uradno kandidaturo, smo njene odgovore 9. 5. odstranili iz
-        aplikacije.
-      </p>
-      <p>
-        Po objavi aplikacije Izvoli.eu je stranka NSi 10. 5. prosila za
-        spremembo stališč pri 4 trditvah, do katerih se prej ni opredelila.
-        Spremembe so:
-      </p>
-      <ul>
-        <li>
-          Evropska unija bi si morala prizadevati za uvedbo štiridnevnega
-          delovnega tedna. (Se ne strinja)
-        </li>
-        <li>
-          Evropska unija bi morala s priporočili, ukrepi in drugimi metodami
-          preprečevati špekulativne naložbe v stanovanja. (Se ne strinja)
-        </li>
-        <li>
-          Evropska unija bi morala zagotoviti, da je posilstvo na podlagi
-          neprivolitve kaznivo dejanje v vseh državah članicah. (Se strinja)
-        </li>
-        <li>
-          Evropska unija bi morala pripraviti ukrepe, ki spodbujajo postavljanje
-          zgornje meje cen osnovnih življenjskih potrebščin v državah članicah.
-          (Se ne strinja)
-        </li>
-      </ul>
-      <p>Prav tako je stranka NSi podala dodatne obrazložitve pri trditvah:</p>
-      <ul>
-        <li>
-          Evropska unija bi morala vztrajati pri zamrzniti evropskih sredstev za
-          države članice, ki kršijo njene zakone in vrednote.
-        </li>
-        <li>
-          Zvišati bi morali davek na uvoz kitajskih električnih avtomobilov.
-        </li>
-        <li>
-          Evropska unija bi morala omejiti razvojno pomoč državam, ki ne
-          sprejemajo nazaj zavrnjenih prosilcev za azil.
-        </li>
-        <li>
-          Na embalaži vseh živil, ki so naprodaj v Evropski uniji, bi moral biti
-          označen njihov vpliv na okolje.
-        </li>
-      </ul>
-      <p>
-        15. 5. smo dodali dodatno obrazložitev pri trditvi “Evropska unija bi
-        morala zagotoviti, da je posilstvo na podlagi neprivolitve kaznivo
-        dejanje v vseh državah članicah”.
-      </p>
-      <h2>Kaj je Votematch EU</h2>
-      <p>
-        Votematch Europe je prostovoljna mreža organizacij iz držav članic EU,
-        katere namen je boljša informiranost javnosti pred volitvami v Evropski
-        parlament.
-      </p>
-      <p>
-        Vsaka nacionalna partnerska organizacija izdela svojo aplikacijo za
-        pomoč pri odločanju, v katero vključi vsaj 15 od skupnih 25 izjav.
-        Partnerice zbirajo odgovore list v posameznih državah, ta stališča pa so
-        vključena v skupno vseevropsko aplikacijo VoteMatch Europe. S to
-        aplikacijo lahko volivci in volivke ugotovijo, stališča katerih
-        političnih strank v drugih državah članicah EU najbolje ustrezajo
-        njihovim lastnim.
-      </p>
+      <p>Izvoli.si prikazuje ujemanja s kandidatnimi listami v odstotkih.</p>
     </div>
   </main>
 </template>
@@ -171,16 +136,53 @@
   h1,
   h2,
   h3,
-  h4,
-  h5,
-  h6 {
-    margin-top: 1.5em;
+  h4 {
+    margin-top: 1em;
+    line-height: 1.2;
+  }
+
+  h1 {
+    font-size: 2.25rem;
+
+    @media (max-width: 575.98px) {
+      font-size: 1.675rem;
+    }
+  }
+
+  h2 {
+    font-size: 1.75rem;
+
+    @media (max-width: 575.98px) {
+      font-size: 1.375rem;
+    }
+  }
+
+  h3 {
+    font-size: 1.5rem;
+
+    @media (max-width: 575.98px) {
+      font-size: 1.125rem;
+    }
+  }
+
+  h4 {
+    font-size: 1.125rem;
+
+    @media (max-width: 575.98px) {
+      font-size: 1rem;
+    }
   }
 
   p,
   ul,
   ol {
     margin-top: 1em;
+    font-size: 1.125rem;
+    line-height: 1.6;
+
+    @media (max-width: 575.98px) {
+      font-size: 1rem;
+    }
   }
 
   ul,
@@ -203,12 +205,17 @@
   }
 
   a {
-    font-weight: 700;
+    display: inline-block;
     color: inherit;
 
     &:hover {
-      text-decoration-color: #ffd100;
+      text-decoration-color: #006fc3;
       text-decoration-thickness: 2px;
+    }
+
+    &:focus-visible {
+      outline: 2px solid #006fc3;
+      outline-offset: 2px;
     }
   }
 }

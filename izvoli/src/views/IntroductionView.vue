@@ -1,4 +1,26 @@
-<script setup></script>
+<script setup>
+import { ref, onMounted, onBeforeUnmount, computed } from "vue";
+import { RouterLink } from "vue-router";
+
+const isMobile = ref(window.innerWidth <= 575.98);
+
+const routerTo = computed(() => {
+  if (isMobile.value) return { name: "instructions" };
+  else return { name: "question", params: { idx: 1 } };
+});
+
+function calcMobile() {
+  isMobile.value = window.innerWidth <= 575.98;
+}
+
+onMounted(() => {
+  window.addEventListener("resize", calcMobile);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", calcMobile);
+});
+</script>
 
 <template>
   <main class="container">
@@ -21,7 +43,7 @@
         prijatelji, saj jim lahko tako olajšaš odločitev.
       </p>
       <div class="button-wrapper">
-        <RouterLink :to="{ name: 'instructions' }" class="button-go">
+        <RouterLink :to="routerTo" class="button-go">
           Vstopi <img src="../assets/img/puscica.svg" alt="" />
         </RouterLink>
       </div>

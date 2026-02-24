@@ -111,7 +111,9 @@ async function onNewsletterSubmit() {
               >
             </p>
             <p>
-              <RouterLink :to="{ name: 'about' }">Metodologija</RouterLink>
+              <RouterLink :to="{ name: 'about' }"
+                >O aplikaciji in metodologiji</RouterLink
+              >
             </p>
           </div>
         </div>
@@ -263,8 +265,6 @@ footer {
         a {
           display: inline-block;
           color: inherit;
-
-          display: none; // TODO: enable when page is live
 
           &:hover {
             text-decoration-color: #006fc3;
