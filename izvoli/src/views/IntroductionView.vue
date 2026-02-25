@@ -51,6 +51,7 @@ onBeforeUnmount(() => {
         na pozive civilne družbe niso odgovorile, zato smo za njih na podlagi
         njihovih predvolilnih programov podali ocene.
       </p>
+      <p>Tvoji odgovori bodo shranjeni samo na tvoji napravi.</p>
       <div class="button-wrapper">
         <RouterLink :to="routerTo" class="button-go">
           Začni <img src="../assets/img/puscica.svg" alt="" />
