@@ -1,5 +1,6 @@
 <script setup>
 import { computed, ref } from "vue";
+import { useRouter } from "vue-router";
 import { useMainStore } from "@/store.js";
 
 const props = defineProps({
@@ -13,6 +14,7 @@ const props = defineProps({
   },
 });
 
+const router = useRouter();
 const store = useMainStore();
 
 const answer = computed(() => {
@@ -27,6 +29,12 @@ const agreement = computed(() => {
 });
 
 const show = ref(false);
+
+router.beforeEach(() => {
+  if (show.value) {
+    show.value = false;
+  }
+});
 </script>
 
 <template>

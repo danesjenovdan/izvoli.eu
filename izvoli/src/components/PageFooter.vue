@@ -74,7 +74,7 @@ async function onNewsletterSubmit() {
       <div class="col">
         <div class="border">
           <div class="content newsletter">
-            <p><strong>Prijavi se na Glas ljudstva novice</strong></p>
+            <p><strong>Ostani na tekočem z delom Glasu ljudstva!</strong></p>
             <form @submit.prevent="onNewsletterSubmit">
               <label for="newsletter-email">Vpiši svoj e-naslov</label>
               <input
@@ -82,7 +82,7 @@ async function onNewsletterSubmit() {
                 v-model="newsletterEmail"
                 type="email"
                 name="newsletter-email"
-                placeholder="ime@email.si"
+                placeholder="ime@e-naslov.si"
                 required
               />
               <label for="newsletter-agree" class="newsletter-agree">
@@ -92,8 +92,9 @@ async function onNewsletterSubmit() {
                   type="checkbox"
                   required
                 />
-                Strinjam se, da mi Danes je nov dan občasno pošlje elektronsko
-                sporočilo.
+                Z oddajo se strinjaš, da Danes je nov dan tvoj e-naslov hrani in
+                ti občasno pošlje elektronsko sporočilo z vsebino, vezano na
+                Glas ljudstva.
               </label>
               <button type="submit" :disabled="newsletterLoading">
                 Prijavi me
