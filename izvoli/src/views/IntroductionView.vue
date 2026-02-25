@@ -26,25 +26,34 @@ onBeforeUnmount(() => {
   <main class="container">
     <div class="body">
       <p class="lead">
-        Politične stranke, med katerimi bomo izbirali na volitvah 22. 3. 2026,
-        imajo različne programe in prioritete. Ker želimo volivkam in volivcem
-        olajšati odločitev, smo razvili Izvoli.si, s pomočjo katerega lahko vsak
-        preveri, s katerimi strankami se po stališčih in prepričanjih najbolj
-        ujema.
+        Preveri, katera stranka se najbolj ujema s tvojimi stališči!
+      </p>
+      <p class="lead">
+        Na državnozborskih volitvah 22. marca izbiraš prihodnost. Politične
+        stranke imajo zelo različne programe in prioritete. Volilni pripomoček
+        Izvoli.si ti pomaga izbrati tisto, ki ti je najbližje.
       </p>
       <p>
-        V Izvoli.si je zbranih 30 zahtev, na katere lahko podaš svoj odgovor. Na
-        podlagi rezultatov izveš, katera izmed sodelujočih strank najbolj
-        ustreza tvojim stališčem, lahko pa tudi podrobneje raziščeš, na katerih
-        točkah so razhajanja največja in zakaj.
+        V volilnem kvizu je zbranih 30 (od skupno 130 zahtev), ki jih je civilna
+        iniciativa
+        <a
+          href="https://glas-ljudstva.si/"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Glas ljudstva</a
+        >
+        pred volitvami zbrala in naslovila na vse politične stranke, ki na
+        volitvah kandidirajo. Stranke so se lahko do njih opredelile tako, da so
+        se zavezale k njihovi uresničitvi ali pa se z njimi niso strinjale.
       </p>
       <p>
-        In za konec: ne pozabi deliti povezave do Izvoli.si s prijateljicami in
-        prijatelji, saj jim lahko tako olajšaš odločitev.
+        Zaveze je podalo osem strank oziroma volilnih list. Štiri večje stranke
+        na pozive civilne družbe niso odgovorile, zato smo za njih na podlagi
+        njihovih predvolilnih programov podali ocene.
       </p>
       <div class="button-wrapper">
         <RouterLink :to="routerTo" class="button-go">
-          Vstopi <img src="../assets/img/puscica.svg" alt="" />
+          Začni <img src="../assets/img/puscica.svg" alt="" />
         </RouterLink>
       </div>
     </div>
@@ -74,6 +83,21 @@ onBeforeUnmount(() => {
 
     &:not(:last-child) {
       margin-bottom: 1em;
+    }
+
+    a {
+      display: inline-block;
+      color: inherit;
+
+      &:hover {
+        text-decoration-color: #006fc3;
+        text-decoration-thickness: 2px;
+      }
+
+      &:focus-visible {
+        outline: 2px solid #006fc3;
+        outline-offset: 2px;
+      }
     }
   }
 
