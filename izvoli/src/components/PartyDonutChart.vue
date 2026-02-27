@@ -17,6 +17,12 @@ const partyName = computed(
     "???",
 );
 
+const ourAnswers = computed(
+  () =>
+    store.quizData.parties.find((p) => p.id === props.result.party_id)
+      ?.our_answers || false,
+);
+
 const partyImage = computed(
   () =>
     store.quizData.parties.find((p) => p.id === props.result.party_id)?.image ||
@@ -143,6 +149,7 @@ onBeforeUnmount(() => {
       />
     </svg>
     <p class="party-name">{{ partyName }}</p>
+    <p v-if="ourAnswers" class="alert">Niso odgovorili – naša ocena.</p>
     <p class="party-percentage">{{ result.percentage }} %</p>
   </div>
 </template>
@@ -191,6 +198,14 @@ onBeforeUnmount(() => {
     @media (max-width: 575.98px) {
       font-size: 0.875rem;
     }
+  }
+
+  .alert {
+    margin-top: -0.25rem;
+    margin-bottom: 0.5rem;
+    color: #d00;
+    font-size: 0.75rem;
+    font-weight: 400;
   }
 }
 </style>

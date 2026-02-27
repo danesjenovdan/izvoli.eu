@@ -156,18 +156,7 @@ export const useMainStore = defineStore("main", () => {
         count: matchesByParty[partyId].count,
         percentage: matchesByParty[partyId].percentage,
       }))
-      .sort((a, b) => (a.percentage > b.percentage ? -1 : 1))
-      .sort((a, b) => {
-        const partyA = quizData.value.parties.find((p) => p.id === a.party_id);
-        const partyB = quizData.value.parties.find((p) => p.id === b.party_id);
-        if (partyA.our_answers && !partyB.our_answers) {
-          return 1;
-        } else if (!partyA.our_answers && partyB.our_answers) {
-          return -1;
-        } else {
-          return 0;
-        }
-      });
+      .sort((a, b) => (a.percentage > b.percentage ? -1 : 1));
 
     results.value = matches;
     resultsCalculated.value = true;
