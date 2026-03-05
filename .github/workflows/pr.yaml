@@ -11,6 +11,13 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v6
 
+      - name: Pull request to izvoli-si-simple
+        uses: repo-sync/pull-request@v2
+        with:
+          destination_branch: "izvoli-si-simple"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          pr_title: "Pulling ${{ github.ref }} into izvoli-si-simple"
+
       - name: Pull request to izvoli-si-k8s
         uses: repo-sync/pull-request@v2
         with:
