@@ -25,12 +25,15 @@ export const useMainStore = defineStore("main", () => {
 
   const partiesToCompare = ref([]);
 
+  const originalVersionLink = "https://izvoli.si";
+  const simpleVersionLink = "https://preprosto.izvoli.si";
+
   const isSimpleVersion = ref(false);
   const simpleToggleLink = computed(() => {
     if (isSimpleVersion.value) {
-      return "https://izvoli.si/";
+      return originalVersionLink;
     }
-    return "https://preprosto.izvoli.si/";
+    return simpleVersionLink;
   });
 
   function clearData() {
@@ -183,6 +186,8 @@ export const useMainStore = defineStore("main", () => {
     results,
     resultsCalculated,
     partiesToCompare,
+    originalVersionLink,
+    simpleVersionLink,
     isSimpleVersion,
     simpleToggleLink,
     clearData,

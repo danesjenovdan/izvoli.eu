@@ -1,12 +1,24 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount, computed } from "vue";
-import { RouterLink } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
+import { useMainStore } from "@/store.js";
+
+const router = useRouter();
+const store = useMainStore();
 
 const isMobile = ref(window.innerWidth <= 575.98);
 
 const routerTo = computed(() => {
   if (isMobile.value) return { name: "instructions" };
   else return { name: "question", params: { idx: 1 } };
+});
+
+const originalVersionStartLink = computed(() => {
+  return store.originalVersionLink + router.resolve(routerTo.value).href;
+});
+
+const simpleVersionStartLink = computed(() => {
+  return store.simpleVersionLink + router.resolve(routerTo.value).href;
 });
 
 function calcMobile() {
@@ -52,10 +64,33 @@ onBeforeUnmount(() => {
         njihovih predvolilnih programov podali ocene.
       </p>
       <p>Tvoji odgovori bodo shranjeni samo na tvoji napravi.</p>
-      <div class="button-wrapper">
-        <RouterLink :to="routerTo" class="button-go">
-          Začni <img src="../assets/img/puscica.svg" alt="" />
-        </RouterLink>
+      <div class="buttons-wrapper">
+        <div>
+          <span>Izvirna različica</span>
+          <a
+            v-if="store.isSimpleVersion"
+            :href="originalVersionStartLink"
+            class="button-go"
+          >
+            Vstopi <img src="../assets/img/puscica.svg" alt="" />
+          </a>
+          <RouterLink v-else :to="routerTo" class="button-go">
+            Vstopi <img src="../assets/img/puscica.svg" alt="" />
+          </RouterLink>
+        </div>
+        <div>
+          <span>Različica v lažje razumljivem jeziku</span>
+          <a
+            v-if="!store.isSimpleVersion"
+            :href="simpleVersionStartLink"
+            class="button-go"
+          >
+            Vstopi <img src="../assets/img/puscica.svg" alt="" />
+          </a>
+          <RouterLink v-else :to="routerTo" class="button-go">
+            Vstopi <img src="../assets/img/puscica.svg" alt="" />
+          </RouterLink>
+        </div>
       </div>
     </div>
   </main>
@@ -64,11 +99,11 @@ onBeforeUnmount(() => {
 <style lang="scss" scoped>
 .body {
   padding-inline: 6rem;
-  padding-block: 4.5rem;
+  padding-top: 4.5rem;
 
   @media (max-width: 575.98px) {
     padding-inline: 1.5rem;
-    padding-block: 2rem;
+    padding-top: 2rem;
   }
 
   p {
@@ -102,12 +137,52 @@ onBeforeUnmount(() => {
     }
   }
 
-  .button-wrapper {
-    margin-top: 3.5rem;
-    text-align: center;
+  .buttons-wrapper {
+    display: flex;
+    margin-top: 3rem;
+    margin-inline: -6rem;
+    border-top: 2px solid #000;
 
     @media (max-width: 575.98px) {
-      margin-top: 1.5rem;
+      flex-direction: column;
+      margin-top: 2rem;
+      margin-inline: -1.5rem;
+    }
+
+    div {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding-top: 1.5rem;
+      padding-bottom: 2.5rem;
+
+      @media (max-width: 575.98px) {
+        padding-bottom: 1.5rem;
+      }
+
+      &:first-child {
+        border-right: 2px solid #000;
+
+        @media (max-width: 575.98px) {
+          border-right: none;
+          border-bottom: 2px solid #000;
+        }
+      }
+
+      span {
+        display: block;
+        max-width: 13rem;
+        margin-bottom: 1rem;
+        font-size: 1.3125rem;
+        font-weight: 700;
+        text-align: center;
+
+        @media (max-width: 575.98px) {
+          font-size: 1.125rem;
+        }
+      }
     }
   }
 }
