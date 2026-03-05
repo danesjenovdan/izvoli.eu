@@ -42,6 +42,25 @@ onMounted(() => {
         Ponovno reši
       </button>
     </div>
+    <div
+      v-else-if="
+        store.loaded &&
+        !store.quizFinished &&
+        currentRouteName !== 'introduction' &&
+        currentRouteName !== 'landing'
+      "
+      class="buttons simple-toggle"
+    >
+      <div>
+        <img src="./assets/img/toggle-arrows.svg" alt="" />
+        Preklopi na
+      </div>
+      <a class="toggle-version" :href="store.simpleToggleLink">
+        {{
+          store.isSimpleVersion ? "Izvirno različico" : "Lažje razumljiv jezik"
+        }}
+      </a>
+    </div>
   </header>
   <RouterView v-if="store.loaded" />
   <main v-else class="loader-container">
@@ -192,6 +211,37 @@ button {
       &.restart-quiz {
         &::after {
           background-image: url("./assets/img/reset.svg");
+        }
+      }
+    }
+
+    &.simple-toggle {
+      align-items: flex-start;
+      gap: 0.25rem;
+
+      @media (max-width: 575.98px) {
+        align-items: center;
+      }
+
+      div {
+        display: flex;
+        align-items: center;
+        font-weight: 700;
+
+        img {
+          width: 1.125rem;
+          height: 1.125rem;
+          margin-right: 0.125rem;
+        }
+      }
+
+      .toggle-version {
+        padding: 6px 11px;
+        font-size: 0.875rem;
+        font-weight: 400;
+
+        &::after {
+          display: none;
         }
       }
     }
