@@ -55,12 +55,7 @@ onMounted(() => {
         <img src="./assets/img/toggle-arrows.svg" alt="" />
         Preklopi na
       </div>
-      <a
-        class="toggle-version"
-        :href="store.simpleToggleLink"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <a class="toggle-version" :href="store.simpleToggleLink">
         {{
           store.isSimpleVersion ? "Izvirno različico" : "Lažje razumljiv jezik"
         }}
