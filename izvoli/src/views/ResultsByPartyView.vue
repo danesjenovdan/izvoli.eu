@@ -26,8 +26,8 @@ const workGroup = computed(() => {
 });
 
 const descriptionHtml = computed(() => {
-  if (!question.value || !question.value.description) return "";
-  return marked.parse(question.value.description);
+  if (!question.value || !question.value.simple_description) return "";
+  return marked.parse(question.value.simple_description);
 });
 
 const answer = computed(() => {
@@ -65,8 +65,8 @@ onMounted(() => {
         <div v-if="workGroup" class="category">
           <span>{{ workGroup.name }}</span>
         </div>
-        <h1 v-if="question.list_title || question.title" class="title">
-          {{ question.list_title || question.title }}
+        <h1 v-if="question.simple_title || question.title" class="title">
+          {{ question.simple_title || question.title }}
         </h1>
         <!-- eslint-disable vue/no-v-html -->
         <div

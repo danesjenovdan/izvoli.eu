@@ -25,7 +25,7 @@ function getQuestionTag(index) {
   const questionId = store.questionOrder[index];
   const question = store.quizData.questions.find((q) => q.id === questionId);
   if (!question) return null;
-  return question.list_title || question.title || null;
+  return question.simple_title || question.title || null;
 }
 
 const tooltip = ref();
