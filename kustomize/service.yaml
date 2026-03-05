@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: izvoli-si
+  name: izvoli-si-simple
 spec:
   selector:
-    app: izvoli-si
+    app: izvoli-si-simple
   ports:
     - protocol: TCP
       port: 80

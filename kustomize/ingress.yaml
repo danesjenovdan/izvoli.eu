@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: izvoli-si
+  name: izvoli-si-simple
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-production"
 spec:
@@ -9,7 +9,7 @@ spec:
   tls:
     - hosts:
         - preprosto.izvoli.si
-      secretName: izvoli-si-tls
+      secretName: izvoli-si-simple-tls
   rules:
     - host: preprosto.izvoli.si
       http:
@@ -18,6 +18,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: izvoli-si
+                name: izvoli-si-simple
                 port:
                   number: 80

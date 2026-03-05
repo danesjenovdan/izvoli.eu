@@ -2,7 +2,7 @@ name: Build and publish Docker image
 on:
   push:
     branches:
-      - "izvoli-si-k8s"
+      - "izvoli-si-simple-k8s"
 jobs:
   push_to_registry:
     name: Build and push Docker image to registry
@@ -32,8 +32,8 @@ jobs:
             VITE_API_URL_BASE=https://glas-ljudstva.si/api/v2/volitvomat
           push: true
           tags: |
-            rg.fr-par.scw.cloud/djnd/izvoli-si:${{ github.sha }}
-            rg.fr-par.scw.cloud/djnd/izvoli-si:latest
+            rg.fr-par.scw.cloud/djnd/izvoli-si-simple:${{ github.sha }}
+            rg.fr-par.scw.cloud/djnd/izvoli-si-simple:latest
 
       - name: Update image versions in kustomize/kustomization.yaml
         run: |

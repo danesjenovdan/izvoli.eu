@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: izvoli-si
+  name: izvoli-si-simple
   labels:
-    app: izvoli-si
+    app: izvoli-si-simple
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: izvoli-si
+      app: izvoli-si-simple
   template:
     metadata:
       labels:
-        app: izvoli-si
+        app: izvoli-si-simple
     spec:
       containers:
-        - name: izvoli-si
-          image: izvoli-si
+        - name: izvoli-si-simple
+          image: izvoli-si-simple
           ports:
             - containerPort: 80
           resources:
