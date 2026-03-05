@@ -103,7 +103,7 @@ onMounted(() => {
             maxlength="20"
             required=""
             onfocus="this.select()"
-            value="izvoli.si"
+            value="preprosto.izvoli.si"
           />
           <button
             type="button"
