@@ -4,7 +4,6 @@ metadata:
   name: izvoli-si-simple
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-production"
-    nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
 spec:
   ingressClassName: nginx
   tls:
