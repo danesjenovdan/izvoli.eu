@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import { useRouter } from "vue-router";
 
@@ -25,6 +25,14 @@ export const useMainStore = defineStore("main", () => {
 
   const partiesToCompare = ref([]);
 
+  const isSimpleVersion = ref(false);
+  const simpleToggleLink = computed(() => {
+    if (isSimpleVersion.value) {
+      return "https://izvoli.si/";
+    }
+    return "https://preprosto.izvoli.si/";
+  });
+
   function clearData() {
     loaded.value = false;
 
@@ -44,6 +52,10 @@ export const useMainStore = defineStore("main", () => {
   }
 
   async function loadData() {
+    if (window.location.hostname === "preprosto.izvoli.si") {
+      isSimpleVersion.value = true;
+    }
+
     // const dataString = localStorage.getItem("volitvomat-data");
     const questionOrderString = localStorage.getItem(
       "volitvomat-question-order",
@@ -171,6 +183,8 @@ export const useMainStore = defineStore("main", () => {
     results,
     resultsCalculated,
     partiesToCompare,
+    isSimpleVersion,
+    simpleToggleLink,
     clearData,
     loadData,
     fetchData,
