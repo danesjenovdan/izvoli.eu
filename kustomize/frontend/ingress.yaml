@@ -1,14 +1,33 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: sl-trailing-slash
+spec:
+  redirectRegex:
+    regex: ^https?://([^/]+)(/sl)$
+    replacement: https://${1}${2}/
+    permanent: true
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: rewrite-target
+spec:
+  replacePathRegex:
+    regex: ^/sl(/|$)(.*)
+    replacement: /$2
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: izvoli-frontend
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-production"
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      rewrite ^(/sl)$ $1/ redirect; # add trailing slash
+    traefik.ingress.kubernetes.io/router.middlewares: izvoli-eu-sl-trailing-slash@kubernetescrd,default-rewrite-target@kubernetescrd
+    traefik.ingress.kubernetes.io/router.middlewares: izvoli-eu-rewrite-target@kubernetescrd,default-rewrite-target@kubernetescrd
+
 spec:
-  ingressClassName: nginx
+  ingressClassName: traefik
   tls:
     - hosts:
         - izvoli.eu
