@@ -21,7 +21,6 @@ metadata:
   name: izvoli
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-production"
-    nginx.ingress.kubernetes.io/ssl-ciphers: "ALL:!aNULL:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP"
 spec:
   ingressClassName: traefik
   tls:
@@ -46,7 +45,7 @@ metadata:
   name: izvoli-nginx
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-production"
-    traefik.ingress.kubernetes.io/router.middlewares: izvoli-eu-sl-trailing-slash@kubernetescrd,default-rewrite-target@kubernetescrd,default-cors@kubernetescrd
+    traefik.ingress.kubernetes.io/router.middlewares: izvoli-eu-cors@kubernetescrd
 spec:
   ingressClassName: traefik
   tls:
