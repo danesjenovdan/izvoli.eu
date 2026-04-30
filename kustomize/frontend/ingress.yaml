@@ -1,0 +1,42 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: add-trailing-slash
+spec:
+  redirectRegex:
+    regex: (/sl)(\?.*)?$
+    replacement: ${1}/${2}
+    permanent: false
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: strip-prefix
+spec:
+  stripPrefix:
+    prefixes:
+      - /sl
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: izvoli-frontend
+  annotations:
+    # do not put cert manager here, backend ingress will handle it
+    traefik.ingress.kubernetes.io/router.middlewares: |
+      traefik-redirect-to-https@kubernetescrd,
+      izvoli-eu-add-trailing-slash@kubernetescrd,
+      izvoli-eu-strip-prefix@kubernetescrd
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: izvoli.eu
+      http:
+        paths:
+          - path: /sl
+            pathType: Prefix
+            backend:
+              service:
+                name: izvoli-frontend
+                port:
+                  number: 80

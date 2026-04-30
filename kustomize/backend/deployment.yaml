@@ -1,0 +1,128 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: izvoli
+  labels:
+    app: izvoli
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: izvoli
+  template:
+    metadata:
+      labels:
+        app: izvoli
+    spec:
+      securityContext:
+        fsGroup: 1000
+      volumes:
+        - name: izvoli-storage
+          emptyDir: {}
+      initContainers:
+        - name: collectstatic
+          image: izvoli
+          volumeMounts:
+            - name: izvoli-storage
+              mountPath: /storage
+          command:
+            - python
+            - manage.py
+            - collectstatic
+            - --no-input
+          env:
+            - name: DJANGO_SETTINGS_MODULE
+              value: izvoli.settings
+            - name: DJANGO_STATIC_ROOT
+              value: "/storage/static"
+            - name: DJANGO_STATIC_URL_BASE
+              value: "https://files.izvoli.eu/static/"
+          envFrom:
+            - secretRef:
+                name: izvoli-credentials
+          resources:
+            requests:
+              memory: 200Mi
+              cpu: 100m
+            limits:
+              memory: 200Mi
+              cpu: 100m
+        - name: migrate
+          image: izvoli
+          volumeMounts:
+            - name: izvoli-storage
+              mountPath: /storage
+          command:
+            - python
+            - manage.py
+            - migrate
+            - --no-input
+          env:
+            - name: DJANGO_SETTINGS_MODULE
+              value: izvoli.settings
+            - name: DJANGO_STATIC_ROOT
+              value: "/storage/static"
+            - name: DJANGO_STATIC_URL_BASE
+              value: "https://files.izvoli.eu/static/"
+          envFrom:
+            - secretRef:
+                name: izvoli-credentials
+          resources:
+            requests:
+              memory: 200Mi
+              cpu: 100m
+            limits:
+              memory: 200Mi
+              cpu: 100m
+      containers:
+        - name: izvoli
+          image: izvoli
+          volumeMounts:
+            - name: izvoli-storage
+              mountPath: /storage
+          command:
+            - gunicorn
+            - izvoli.wsgi:application
+            - -b
+            - 0.0.0.0:8000
+            - --log-level
+            - DEBUG
+            - --workers
+            - "1"
+            - --threads
+            - "3"
+            - --timeout
+            - "90"
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DJANGO_SETTINGS_MODULE
+              value: izvoli.settings
+            - name: DJANGO_STATIC_ROOT
+              value: "/storage/static"
+            - name: DJANGO_STATIC_URL_BASE
+              value: "https://files.izvoli.eu/static/"
+          envFrom:
+            - secretRef:
+                name: izvoli-credentials
+          resources:
+            requests:
+              memory: 500Mi
+              cpu: 200m
+            limits:
+              memory: 500Mi
+              cpu: 500m
+        - name: izvoli-nginx
+          image: nginx:alpine
+          volumeMounts:
+            - name: izvoli-storage
+              mountPath: /usr/share/nginx/html
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: 100Mi
+              cpu: 100m
+            limits:
+              memory: 100Mi
+              cpu: 100m
