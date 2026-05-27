@@ -312,28 +312,13 @@ function animateRecord($target, stop) {
 }
 
 $('#submit-email').on('click', function () {
-  fetch("https://podpri.lb.djnd.si/api/subscribe/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: $('#email').val(),
-        segment_id: 10,
-      }),
-    })
-    .then((res) => {
-      if (res.ok) {
-        return res.text();
-      }
-      throw new Error("Response not ok");
-    })
-    .then((res) => {
-      alert('Hvala za prijavo!')
-    })
-    .catch((error) => {
-      alert('Ups, nekaj je šlo narobe. :( Če se napaka ne odpravi sama, pošlji mail na vsi@danesjenovdan.si.')
-    });
+  const campaign_slug = "glas-ljudstva";
+  const segment_id = 10;
+  const email = $('#email').val();
+
+  let url = `https://moj.djnd.si/${campaign_slug}/prijava?segment_id=${segment_id}`;
+  url += `&email=${encodeURIComponent(email)}`;
+  window.open(`${url}`, `_blank`);
 });
 
 function party_quiz_radio_click(myRadio) {
@@ -348,7 +333,7 @@ const initialFormValues = {}
 let submitted = false;
 
 $('.demand-quiz-form').submit(function( event ) {
-  submitted = true  
+  submitted = true
 });
 
 $( document ).ready(function() {
