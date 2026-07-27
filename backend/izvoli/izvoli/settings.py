@@ -163,20 +163,16 @@ LOGIN_URL = "/login/"
 CORS_ALLOW_ALL_ORIGINS = True
 
 if sentry_url := os.getenv("DJANGO_SENTRY_URL", False):
+    # imports should only happen if necessary
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
 
     sentry_sdk.init(
-        dsn=sentry_url,
-        integrations=[
-            DjangoIntegration(),
-        ],
-        # Set traces_sample_rate to 1.0 to capture 100%
-        # of transactions for performance monitoring.
-        traces_sample_rate=float(os.getenv('SENTRY_TRACES_SAMPLE_RATE', 0.001)),
-        # Set profiles_sample_rate to 1.0 to profile 100%
-        # of sampled transactions.
-        # We recommend adjusting this value in production.
-        profiles_sample_rate=float(os.getenv('SENTRY_TRACES_SAMPLE_RATE', 0.001)),
+        sentry_url,
+        integrations=[DjangoIntegration()],
         send_default_pii=True,
+        max_request_body_size="always",
+        traces_sample_rate=0,
+        send_client_reports=False,
+        auto_session_tracking=False,
     )
