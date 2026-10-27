@@ -1,4 +1,5 @@
-version: '3'
+volumes:
+  pgdata:
 
 services:
   backend:
@@ -35,15 +36,12 @@ services:
       - backend
 
   db:
-    image: postgres:latest
+    image: postgres:16-alpine
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: izvoli
+      POSTGRES_DB: izvoli_eu
+      POSTGRES_USER: izvoli_eu
+      POSTGRES_PASSWORD: changeme
     ports:
       - 5432:5432
     volumes:
       - pgdata:/var/lib/postgresql/data
-
-volumes:
-  pgdata:
