@@ -86,9 +86,9 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "HOST": os.getenv("DJANGO_DATABASE_HOST", "db"),
         "PORT": os.getenv("DJANGO_DATABASE_PORT", "5432"),
-        "NAME": os.getenv("DJANGO_DATABASE_NAME", "izvoli"),
-        "USER": os.getenv("DJANGO_DATABASE_USERNAME", "postgres"),
-        "PASSWORD": os.getenv("DJANGO_DATABASE_PASSWORD", "postgres"),
+        "NAME": os.getenv("DJANGO_DATABASE_NAME", "izvoli_eu"),
+        "USER": os.getenv("DJANGO_DATABASE_USERNAME", "izvoli_eu"),
+        "PASSWORD": os.getenv("DJANGO_DATABASE_PASSWORD", "changeme"),
     }
 }
 
