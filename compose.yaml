@@ -1,6 +1,3 @@
-volumes:
-  postgres-data:
-
 services:
   izvoli:
     build:
@@ -11,10 +8,10 @@ services:
     environment:
       - VITE_API_URL_BASE=https://glas-ljudstva.si/api/v2/volitvomat
     volumes:
-      - ./izvoli/public:/app/public:delegated,rw
-      - ./izvoli/src:/app/src:delegated,rw
-      - ./izvoli/.prettierrc.json:/app/.prettierrc.json:delegated,rw
-      - ./izvoli/eslint.config.js:/app/eslint.config.js:delegated,rw
-      - ./izvoli/index.html:/app/index.html:delegated,rw
-      - ./izvoli/jsconfig.json:/app/jsconfig.json:delegated,rw
-      - ./izvoli/vite.config.js:/app/vite.config.js:delegated,rw
+      - ./izvoli/public:/app/public
+      - ./izvoli/src:/app/src
+      - ./izvoli/.prettierrc.json:/app/.prettierrc.json
+      - ./izvoli/eslint.config.js:/app/eslint.config.js
+      - ./izvoli/index.html:/app/index.html
+      - ./izvoli/jsconfig.json:/app/jsconfig.json
+      - ./izvoli/vite.config.js:/app/vite.config.js
